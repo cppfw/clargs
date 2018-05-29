@@ -2,26 +2,23 @@
 
 #include <vector>
 #include <functional>
+#include <unordered_map>
 
 namespace clargs{
 
 class Args{
 public:
-	Args(const std::string& programOneLineDescription);
-	
-	Args(const Args&) = delete;
-	Args& operator=(const Args&) = delete;
-	
+	Args();
 	
 	void add(
-			const std::string& shortKey,
+			char shortKey,
 			const std::string& longKey,
 			const std::string& description,
 			std::function<void(std::string&& value)>&& valueHandler
 		);
 	
 	void add(
-			const std::string& shortKey,
+			char shortKey,
 			const std::string& longKey,
 			const std::string& description,
 			std::function<void()>&& valueHandler
@@ -37,8 +34,17 @@ public:
 	 */
 	std::vector<std::string> parse(int argc, char** argv);
 	
-private:
+	/**
+	 * @brief Get description of the arguments.
+	 * @return Formatted description of the arguments.
+	 */
+	std::string description();
 	
+private:
+	std::unordered_map<std::string, std::function<void(std::string&&)>> valueArgs;
+	std::unordered_map<std::string, std::function<void()>> boolArgs;
+	
+	std::vector<std::string> argDescriptions;
 };
 
 }
