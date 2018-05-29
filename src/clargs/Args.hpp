@@ -17,10 +17,46 @@ public:
 	
 	void add(
 			char shortKey,
+			std::string&& description,
+			std::function<void(std::string&& value)>&& valueHandler
+		)
+	{
+		this->add(shortKey, std::string(), std::move(description), std::move(valueHandler));
+	}
+	
+	void add(
+			std::string&& longKey,
+			std::string&& description,
+			std::function<void(std::string&& value)>&& valueHandler
+		)
+	{
+		this->add('\0', std::move(longKey), std::move(description), std::move(valueHandler));
+	}
+	
+	void add(
+			char shortKey,
 			std::string&& longKey,
 			std::string&& description,
 			std::function<void()>&& valueHandler
 		);
+	
+	void add(
+			char shortKey,
+			std::string&& description,
+			std::function<void()>&& valueHandler
+		)
+	{
+		this->add(shortKey, std::string(), std::move(description), std::move(valueHandler));
+	}
+	
+		void add(
+			std::string&& longKey,
+			std::string&& description,
+			std::function<void()>&& valueHandler
+		)
+	{
+		this->add('\0', std::move(longKey), std::move(description), std::move(valueHandler));
+	}
 	
 	/**
 	 * @brief Parse command line arguments.

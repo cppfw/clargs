@@ -19,7 +19,10 @@ template <bool b> void Args::addDescription(char shortKey, const std::string& lo
 	}
 	
 	if(longKey.size() != 0){
-		ss << ", --" << longKey;
+		if(shortKey != 0){
+			ss << ", ";
+		}
+		ss << "--" << longKey;
 		if(!b){
 			ss << "=VALUE";
 		}
@@ -34,7 +37,7 @@ template <bool b> void Args::addDescription(char shortKey, const std::string& lo
 		ss << std::string(descriptionNewlineThreshold_c - keysLength, ' ');
 	}
 	
-	ss << "  " << description << std::endl;
+	ss << "  " << description << "." << std::endl;
 	
 	this->argDescriptions.emplace_back(ss.str());
 }
@@ -104,4 +107,9 @@ std::string Args::description() {
 	}
 	
 	return ss.str();
+}
+
+std::vector<std::string> Args::parse(int argc, char** argv) {
+	//TODO:
+	return {};
 }
