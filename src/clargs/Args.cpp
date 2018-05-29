@@ -95,3 +95,13 @@ void Args::add(
 	mappingScopeExit.reset();
 	descriptionScopeExit.reset();
 }
+
+std::string Args::description() {
+	std::stringstream ss;
+	
+	for(auto& s : this->argDescriptions){
+		ss << s;
+	}
+	
+	return ss.str();
+}
