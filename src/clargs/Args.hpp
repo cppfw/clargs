@@ -4,7 +4,16 @@
 #include <functional>
 #include <unordered_map>
 
+#include <utki/Exc.hpp>
+
 namespace clargs{
+
+class UnknownArgumentExc : public utki::Exc{
+public:
+	UnknownArgumentExc(const std::string& message) :
+			utki::Exc(message)
+	{}
+};
 
 class Args{
 public:
@@ -87,7 +96,6 @@ private:
 	template <bool b> void addDescription(char shortKey, const std::string& longKey, std::string&& description);
 	
 	void parseLongKeyArgument(const std::string& arg);
-	void handleShortKey(char key, std::string&& value);
 };
 
 }

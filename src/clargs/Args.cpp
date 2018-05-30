@@ -121,14 +121,42 @@ std::vector<std::string> Args::parse(int argc, char** argv) {
 	//first argument is the filename of the executable
 	
 	for(int i = 1; i < argc; ++i){
-		std::string a(argv[i]);
+		std::string arg(argv[i]);
 		
-		if(a.find(longKeyPrefix_c) == 0 && a.size() > longKeyPrefix_c.size()){
-			this->parseLongKeyArgument(a);
-		}else if(a.find("-") == 0 && a.size() >= shortKeyArgumentLength){
-			auto key = a[1];
+		if(arg.find(longKeyPrefix_c) == 0 && arg.size() > longKeyPrefix_c.size()){
+			this->parseLongKeyArgument(arg);
+		}else if(arg.find("-") == 0 && arg.size() >= shortKeyArgumentLength){
+			auto key = arg[1];
+			
+			std::string actualKey;
+			{
+				auto iter = this->shortToLongMap.find(key);
+				if(iter != this->shortToLongMap.end()){
+					actualKey = iter->second;
+				}else{
+					actualKey = std::string(key, 1);
+				}
+			}
+
+			{
+				auto iter = this->boolArgs.find(actualKey);
+				if(iter != this->boolArgs.end()){
+					ASSERT(iter->second)
+					iter->second();
+					continue;
+				}
+			}
+
+			auto iter = this->valueArgs.find(actualKey);
+			if(iter == this->valueArgs.end()){
+				std::stringstream ss;
+				ss << "Unknown argument: " << arg;
+				throw UnknownArgumentExc(ss.str());
+			}
+			ASSERT(iter->second)
+			
 			std::string value;
-			if(a.size() == shortKeyArgumentLength){
+			if(arg.size() == shortKeyArgumentLength){
 				//value is the next argument
 				++i;
 				if(i == argc){
@@ -136,29 +164,42 @@ std::vector<std::string> Args::parse(int argc, char** argv) {
 				}
 				value = argv[i];
 			}else{
-				ASSERT(a.size() > shortKeyArgumentLength)
-				value = a.substr(shortKeyArgumentLength);
+				ASSERT(arg.size() > shortKeyArgumentLength)
+				value = arg.substr(shortKeyArgumentLength);
 			}
-			this->handleShortKey(key, std::move(value));
+			iter->second(std::move(value));
 		}else{
-			extras.emplace_back(std::move(a));
+			extras.emplace_back(std::move(arg));
 		}
 	}
 	
 	return extras;
 }
 
-void Args::handleShortKey(char key, std::string&& value) {
-	//TODO:
-}
 
 void Args::parseLongKeyArgument(const std::string& arg) {
 	auto eqPos = arg.find("=");
 	if(eqPos != std::string::npos){
 		auto value = arg.substr(eqPos + 1);
 		auto key = arg.substr(longKeyPrefix_c.size(), eqPos - longKeyPrefix_c.size());
-		//TODO:
+		
+		auto i = this->valueArgs.find(key);
+		if(i != this->valueArgs.end()){
+			ASSERT(i->second)
+			i->second(std::move(value));
+			return;
+		}
+	}else{
+		auto key = arg.substr(longKeyPrefix_c.size());
+		auto i = this->boolArgs.find(key);
+		if(i != this->boolArgs.end()){
+			ASSERT(i->second)
+			i->second();
+			return;
+		}
 	}
-	//TODO:
+	std::stringstream ss;
+	ss << "Unknown argument: " << arg;
+	throw UnknownArgumentExc(ss.str());
 }
 
