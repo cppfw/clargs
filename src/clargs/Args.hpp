@@ -74,17 +74,20 @@ public:
 	 */
 	std::string description();
 	
-private:
-	std::string addShortToLongMapping(char shortKey, std::string&& longKey);
-	
-	template <bool b> void addDescription(char shortKey, const std::string& longKey, std::string&& description);
-	
+private:	
 	std::unordered_map<std::string, std::function<void(std::string&&)>> valueArgs;
 	std::unordered_map<std::string, std::function<void()>> boolArgs;
 	
 	std::unordered_map<char, std::string> shortToLongMap;
 	
 	std::vector<std::string> argDescriptions;
+	
+	std::string addShortToLongMapping(char shortKey, std::string&& longKey);
+	
+	template <bool b> void addDescription(char shortKey, const std::string& longKey, std::string&& description);
+	
+	void parseLongKeyArgument(const std::string& arg);
+	void handleShortKey(char key, std::string&& value);
 };
 
 }

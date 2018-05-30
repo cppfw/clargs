@@ -109,7 +109,56 @@ std::string Args::description() {
 	return ss.str();
 }
 
-std::vector<std::string> Args::parse(int argc, char** argv) {
-	//TODO:
-	return {};
+namespace{
+const std::string longKeyPrefix_c("--");
 }
+
+std::vector<std::string> Args::parse(int argc, char** argv) {
+	std::vector<std::string> extras;
+	
+	const unsigned shortKeyArgumentLength = 2;
+	
+	//first argument is the filename of the executable
+	
+	for(int i = 1; i < argc; ++i){
+		std::string a(argv[i]);
+		
+		if(a.find(longKeyPrefix_c) == 0 && a.size() > longKeyPrefix_c.size()){
+			this->parseLongKeyArgument(a);
+		}else if(a.find("-") == 0 && a.size() >= shortKeyArgumentLength){
+			auto key = a[1];
+			std::string value;
+			if(a.size() == shortKeyArgumentLength){
+				//value is the next argument
+				++i;
+				if(i == argc){
+					break;
+				}
+				value = argv[i];
+			}else{
+				ASSERT(a.size() > shortKeyArgumentLength)
+				value = a.substr(shortKeyArgumentLength);
+			}
+			this->handleShortKey(key, std::move(value));
+		}else{
+			extras.emplace_back(std::move(a));
+		}
+	}
+	
+	return extras;
+}
+
+void Args::handleShortKey(char key, std::string&& value) {
+	//TODO:
+}
+
+void Args::parseLongKeyArgument(const std::string& arg) {
+	auto eqPos = arg.find("=");
+	if(eqPos != std::string::npos){
+		auto value = arg.substr(eqPos + 1);
+		auto key = arg.substr(longKeyPrefix_c.size(), eqPos - longKeyPrefix_c.size());
+		//TODO:
+	}
+	//TODO:
+}
+
