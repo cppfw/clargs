@@ -37,7 +37,13 @@ template <bool b> void Args::addDescription(char shortKey, const std::string& lo
 		ss << std::string(descriptionNewlineThreshold_c - keysLength, ' ');
 	}
 	
-	ss << "  " << description << "." << std::endl;
+	ss << "  " << description;
+	
+	if(description.rbegin() != description.rend() && *description.rbegin() != '.'){
+		ss << ".";
+	}
+	
+	ss << std::endl;
 	
 	this->argDescriptions.emplace_back(ss.str());
 }
@@ -52,6 +58,7 @@ std::string Args::addShortToLongMapping(char shortKey, std::string&& longKey) {
 		}
 	}else{
 		k = shortKey;
+//		TRACE(<< "k = " << k << std::endl)
 	}
 	return k;
 }
@@ -134,7 +141,7 @@ std::vector<std::string> Args::parse(int argc, char** argv) {
 				if(iter != this->shortToLongMap.end()){
 					actualKey = iter->second;
 				}else{
-					actualKey = std::string(key, 1);
+					actualKey = std::string(1, key);
 				}
 			}
 
@@ -202,4 +209,3 @@ void Args::parseLongKeyArgument(const std::string& arg) {
 	ss << "Unknown argument: " << arg;
 	throw UnknownArgumentExc(ss.str());
 }
-

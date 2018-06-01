@@ -1,0 +1,11 @@
+  -a, --add-something                   adds something to somewhere.
+  -r VALUE, --remove-something=VALUE    removes something from somewhere.
+                                        
+  --key-without-short-one=VALUE         a key which has no short version, only the long one.
+  -b VALUE                              a key which has only a short version and does not have a long version.
+a = true
+removeSomething = 10
+keyWithoutShortOne = trololo
+keyWithoutLongOne = hello
+extrra1
+extra/321jh

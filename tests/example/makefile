@@ -30,11 +30,9 @@ define this_rules
 test:: $(prorab_this_name)
 	@myci-running-test.sh $(this_test)
 	$(prorab_echo)cp $(d)../../src/*.dll . || true
-	$(prorab_echo)for f in $(this_svgs); do \
-	    echo "checking file $$$$f.svg..." && \
-	    LD_LIBRARY_PATH=$(d)../../src $(d)./checksvg $$$$f.svg $$$$f.png; \
-	    if [ $$$$? -ne 0 ]; then myci-error.sh "rendered SVG did not match etalon sample"; exit 1; fi \
-	done
+	$(prorab_echo)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo > $(d)out.txt
+	$(prorab_echo)cmp out.txt out.txt.cmp; \
+	    if [ $$$$? -ne 0 ]; then myci-error.sh "test program output was not as expected"; exit 1; fi
 	@myci-passed.sh
 endef
 $(eval $(this_rules))
