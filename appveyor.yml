@@ -1,0 +1,46 @@
+branches:
+  only:
+    - master
+
+
+os: Visual Studio 2015
+version: "{branch}-{build}"
+
+clone_folder: c:\projects\build
+
+environment:
+  MYCI_GIT_USERNAME: igagis
+  MYCI_GIT_ACCESS_TOKEN:
+    secure: mpW6B2ols1a2FkshjKjryBuvBt8A1TpU9WGn+/d6PIQiZlzA0Rpo1ETKpmy0bnvX
+  DEPS: make,gcc-g++,myci,utki
+
+install:
+  - cmd: C:\cygwin64\setup-x86_64.exe -g -q -X -s http://igagis.crabdance.com -s http://cygwin.mirror.constant.com -P cygport,calm,%DEPS%
+  - cmd: C:\cygwin\setup-x86.exe -g -q -X -s http://igagis.crabdance.com -s http://cygwin.mirror.constant.com -P cygport,calm,%DEPS%
+
+before_build:
+  - cmd: xcopy /S C:\projects\build C:\cygwin64\home\appveyor\
+  - cmd: xcopy /S C:\projects\build C:\cygwin\home\appveyor\
+
+build_script:
+# cyggport downloads tagged sources from github, so use cygport only for tagged commits, otherwise build with just make.
+  - cmd: if "%APPVEYOR_REPO_TAG%"=="true" (
+            C:\cygwin64\bin\bash -e -l -c "myci-apply-version.sh -v `myci-deb-version.sh debian/changelog` cygwin/*.in" &&
+            C:\cygwin64\bin\bash -e -l -c "cygport cygwin/*.cygport download" &&
+            C:\cygwin64\bin\bash -e -l -c "cygport cygwin/*.cygport all" &&
+            C:\cygwin\bin\bash -e -l -c "myci-apply-version.sh -v `myci-deb-version.sh debian/changelog` cygwin/*.in" &&
+            C:\cygwin\bin\bash -e -l -c "cygport cygwin/*.cygport download" &&
+            C:\cygwin\bin\bash -e -l -c "cygport cygwin/*.cygport all"
+        ) else (
+            C:\cygwin64\bin\bash -e -l -c "make" &&
+            C:\cygwin\bin\bash -e -l -c "make"
+        )
+
+test_script:
+  - cmd: C:\cygwin64\bin\bash -e -l -c "PATH=$PATH:~/src make test"
+  - cmd: C:\cygwin\bin\bash -e -l -c "PATH=$PATH:~/src make test"
+
+deploy_script:
+  - cmd: C:\cygwin64\bin\bash -e -l -c "make install"
+  - cmd: C:\cygwin\bin\bash -e -l -c "make install"
+  - cmd: if "%APPVEYOR_REPO_TAG%"=="true" (C:\cygwin64\bin\bash -e -l -c "myci-deploy-cygwin.sh -r igagis/cygwin-repo" && C:\cygwin\bin\bash -e -l -c "myci-deploy-cygwin.sh -r igagis/cygwin-repo") else (echo Skipping deploy because not a tagged commit.)
