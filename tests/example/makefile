@@ -31,7 +31,7 @@ test:: $(prorab_this_name)
 	@myci-running-test.sh $(this_test)
 	$(prorab_echo)cp $(d)../../src/*.dll . || true
 	$(prorab_echo)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo > $(d)out.txt
-	$(prorab_echo)cmp out.txt out.txt.cmp; \
+	$(prorab_echo)cmp $(d)out.txt $(d)out.txt.cmp; \
 	    if [ $$$$? -ne 0 ]; then myci-error.sh "test program output was not as expected"; exit 1; fi
 	@myci-passed.sh
 endef
