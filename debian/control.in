@@ -1,0 +1,36 @@
+Source: libclargs
+Section: libs
+Priority: extra
+Maintainer: Ivan Gagis <igagis@gmail.com>
+Build-Depends: debhelper (>= 9), prorab, prorab-extra, myci,
+		libc6-dev, libutki-dev
+Build-Depends-Indep: doxygen
+Standards-Version: 3.9.2
+
+Package: libclargs$(soname)
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Cross-platform command line arguments parser library in C++.
+ Library for easy parsing of command line arguments.
+
+Package: libclargs$(soname)-dbg
+Section: debug
+Architecture: any
+Depends: libclargs$(soname) (= ${binary:Version}), ${misc:Depends}
+Description: debugging symbols for libclargs$(soname) package.
+
+Package: libclargs-dev
+Section: libdevel
+Architecture: any
+Depends: libclargs$(soname) (= ${binary:Version}), libclargs$(soname)-dbg (= ${binary:Version}), ${misc:Depends}
+Suggests: libclargs-doc
+Description: Cross-platform command line arguments parser library in C++.
+ Library for easy parsing of command line arguments.
+
+Package: libclargs-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Description: documentation for libclargs library.
+ For more details see description to libclargs-dev package.
