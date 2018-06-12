@@ -1,3 +1,9 @@
+libclargs (0.1.2) unstable; urgency=medium
+
+  * deployment keys fixed
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 12 Jun 2018 16:03:53 +0300
+
 libclargs (0.1.1) unstable; urgency=medium
 
   * first release
