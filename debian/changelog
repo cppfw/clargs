@@ -1,3 +1,9 @@
+libclargs (0.1.1) unstable; urgency=medium
+
+  * first release
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 12 Jun 2018 14:50:49 +0300
+
 libclargs (0.1.0) unstable; urgency=low
 
   * Initial release
