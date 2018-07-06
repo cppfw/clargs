@@ -8,6 +8,8 @@
 
 namespace clargs{
 
+//TODO: doxygen
+
 class UnknownArgumentExc : public utki::Exc{
 public:
 	UnknownArgumentExc(const std::string& message) :
@@ -58,7 +60,7 @@ public:
 		this->add(shortKey, std::string(), std::move(description), std::move(valueHandler));
 	}
 	
-		void add(
+	void add(
 			std::string&& longKey,
 			std::string&& description,
 			std::function<void()>&& valueHandler
@@ -66,6 +68,24 @@ public:
 	{
 		this->add('\0', std::move(longKey), std::move(description), std::move(valueHandler));
 	}
+	
+	
+	
+	
+	void add(
+			char shortKey,
+			std::string&& longKey,
+			std::string&& description,
+			std::function<void(long)>&& valueHandler
+		);
+	
+	void add(
+			char shortKey,
+			std::string&& longKey,
+			std::string&& description,
+			std::function<void(double)>&& valueHandler
+		);
+	
 	
 	/**
 	 * @brief Parse command line arguments.

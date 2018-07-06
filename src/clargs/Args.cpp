@@ -209,3 +209,24 @@ void Args::parseLongKeyArgument(const std::string& arg) {
 	ss << "Unknown argument: " << arg;
 	throw UnknownArgumentExc(ss.str());
 }
+
+
+void Args::add(
+		char shortKey,
+		std::string&& longKey,
+		std::string&& description,
+		std::function<void(long)>&& valueHandler
+	)
+{
+	//TODO:
+}
+
+void Args::add(
+		char shortKey,
+		std::string&& longKey,
+		std::string&& description,
+		std::function<void(double)>&& valueHandler
+	)
+{
+	//TODO:
+}
