@@ -55,7 +55,7 @@ template <bool b> void Args::addArgument(
 		std::function<void(std::string&& value)>&& valueHandler
 	)
 {
-	this->addDescription<true>(shortKey, longKey, std::move(description));
+	this->addDescription<b>(shortKey, longKey, std::move(description));
 	utki::ScopeExit descriptionScopeExit([this](){this->argDescriptions.pop_back();});
 	
 	auto k = this->addShortToLongMapping(shortKey, std::move(longKey));
