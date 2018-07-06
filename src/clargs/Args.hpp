@@ -70,23 +70,6 @@ public:
 	}
 	
 	
-	
-	
-	void add(
-			char shortKey,
-			std::string&& longKey,
-			std::string&& description,
-			std::function<void(long)>&& valueHandler
-		);
-	
-	void add(
-			char shortKey,
-			std::string&& longKey,
-			std::string&& description,
-			std::function<void(double)>&& valueHandler
-		);
-	
-	
 	/**
 	 * @brief Parse command line arguments.
 	 * Parses the command line arguments as they passed in to main() function.
@@ -103,9 +86,9 @@ public:
 	 */
 	std::string description();
 	
-private:	
+private:
 	std::unordered_map<std::string, std::function<void(std::string&&)>> valueArgs;
-	std::unordered_map<std::string, std::function<void()>> boolArgs;
+	std::unordered_map<std::string, std::function<void(std::string&&)>> boolArgs;
 	
 	std::unordered_map<char, std::string> shortToLongMap;
 	
@@ -114,6 +97,13 @@ private:
 	std::string addShortToLongMapping(char shortKey, std::string&& longKey);
 	
 	template <bool b> void addDescription(char shortKey, const std::string& longKey, std::string&& description);
+	
+	template <bool b> void addArgument(
+			char shortKey,
+			std::string&& longKey,
+			std::string&& description,
+			std::function<void(std::string&& value)>&& valueHandler
+		);
 	
 	void parseLongKeyArgument(const std::string& arg);
 };

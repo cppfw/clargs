@@ -48,6 +48,31 @@ template <bool b> void Args::addDescription(char shortKey, const std::string& lo
 	this->argDescriptions.emplace_back(ss.str());
 }
 
+template <bool b> void Args::addArgument(
+		char shortKey,
+		std::string&& longKey,
+		std::string&& description,
+		std::function<void(std::string&& value)>&& valueHandler
+	)
+{
+	this->addDescription<true>(shortKey, longKey, std::move(description));
+	utki::ScopeExit descriptionScopeExit([this](){this->argDescriptions.pop_back();});
+	
+	auto k = this->addShortToLongMapping(shortKey, std::move(longKey));
+	utki::ScopeExit mappingScopeExit([this, shortKey](){
+		this->shortToLongMap.erase(shortKey);
+	});
+	
+	if(b){
+		this->boolArgs.insert(std::make_pair(std::move(k), std::move(valueHandler)));
+	}else{
+		this->valueArgs.insert(std::make_pair(std::move(k), std::move(valueHandler)));
+	}
+	
+	mappingScopeExit.reset();
+	descriptionScopeExit.reset();
+}
+
 std::string Args::addShortToLongMapping(char shortKey, std::string&& longKey) {
 	std::string k;
 	if(longKey.size() != 0){
@@ -61,49 +86,6 @@ std::string Args::addShortToLongMapping(char shortKey, std::string&& longKey) {
 //		TRACE(<< "k = " << k << std::endl)
 	}
 	return k;
-}
-
-
-void Args::add(
-		char shortKey,
-		std::string&& longKey,
-		std::string&& description,
-		std::function<void(std::string&&)>&& valueHandler
-	)
-{
-	this->addDescription<false>(shortKey, longKey, std::move(description));
-	utki::ScopeExit descriptionScopeExit([this](){this->argDescriptions.pop_back();});
-	
-	auto k = this->addShortToLongMapping(shortKey, std::move(longKey));
-	utki::ScopeExit mappingScopeExit([this, shortKey](){
-		this->shortToLongMap.erase(shortKey);
-	});
-	
-	this->valueArgs.insert(std::make_pair(std::move(k), std::move(valueHandler)));
-	
-	mappingScopeExit.reset();
-	descriptionScopeExit.reset();
-}
-
-void Args::add(
-		char shortKey,
-		std::string&& longKey,
-		std::string&& description,
-		std::function<void()>&& valueHandler
-	)
-{
-	this->addDescription<true>(shortKey, longKey, std::move(description));
-	utki::ScopeExit descriptionScopeExit([this](){this->argDescriptions.pop_back();});
-	
-	auto k = this->addShortToLongMapping(shortKey, std::move(longKey));
-	utki::ScopeExit mappingScopeExit([this, shortKey](){
-		this->shortToLongMap.erase(shortKey);
-	});
-	
-	this->boolArgs.insert(std::make_pair(std::move(k), std::move(valueHandler)));
-	
-	mappingScopeExit.reset();
-	descriptionScopeExit.reset();
 }
 
 std::string Args::description() {
@@ -149,7 +131,7 @@ std::vector<std::string> Args::parse(int argc, char** argv) {
 				auto iter = this->boolArgs.find(actualKey);
 				if(iter != this->boolArgs.end()){
 					ASSERT(iter->second)
-					iter->second();
+					iter->second(std::string());
 					continue;
 				}
 			}
@@ -201,7 +183,7 @@ void Args::parseLongKeyArgument(const std::string& arg) {
 		auto i = this->boolArgs.find(key);
 		if(i != this->boolArgs.end()){
 			ASSERT(i->second)
-			i->second();
+			i->second(std::string());
 			return;
 		}
 	}
@@ -210,23 +192,24 @@ void Args::parseLongKeyArgument(const std::string& arg) {
 	throw UnknownArgumentExc(ss.str());
 }
 
-
-void Args::add(
-		char shortKey,
-		std::string&& longKey,
-		std::string&& description,
-		std::function<void(long)>&& valueHandler
-	)
-{
-	//TODO:
+void Args::add(char shortKey, std::string&& longKey, std::string&& description, std::function<void(std::string&&)>&& valueHandler) {
+	this->addArgument<false>(shortKey, std::move(longKey), std::move(description), std::move(valueHandler));
 }
 
+
 void Args::add(
 		char shortKey,
 		std::string&& longKey,
 		std::string&& description,
-		std::function<void(double)>&& valueHandler
+		std::function<void()>&& valueHandler
 	)
 {
-	//TODO:
+	this->addArgument<true>(
+			shortKey,
+			std::move(longKey),
+			std::move(description),
+			[valueHandler](std::string&&){ //TODO: use move capture when C++14 is taken into use
+				valueHandler();
+			}
+		);
 }
