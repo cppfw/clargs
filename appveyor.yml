@@ -20,8 +20,8 @@ install:
   # - ps: Import-Module CoApp
 
 before_build:
-  - nuget restore msvs_solution/msvs_solution.sln
-  - nuget update msvs_solution/msvs_solution.sln
+  # - nuget restore msvs_solution/msvs_solution.sln
+  # - nuget update msvs_solution/msvs_solution.sln
 
 build_script:
   - C:\msys64\usr\bin\bash -lc "cd /c/build/ && myci-apply-version.sh -v `myci-deb-version.sh debian/changelog` msys2/PKGBUILD.in"
