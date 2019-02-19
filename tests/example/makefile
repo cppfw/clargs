@@ -18,7 +18,7 @@ ifeq ($(os), macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
     this_ldlibs += -lc++
 else ifeq ($(os),windows)
-    
+
 endif
 
 $(eval $(prorab-build-app))
@@ -30,9 +30,9 @@ define this_rules
 test:: $(prorab_this_name)
 	@myci-running-test.sh $(this_test)
 	$(prorab_echo)cp $(d)../../src/*.dll . || true
-	$(prorab_echo)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo > $(d)out.txt
+	$(prorab_echo)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo > $(d)out.txt 2>&1
 	$(prorab_echo)cmp $(d)out.txt $(d)out.txt.cmp; \
-	    if [ $$$$? -ne 0 ]; then myci-error.sh "test program output was not as expected"; exit 1; fi
+        if [ $$$$? -ne 0 ]; then echo "out.txt = "; cat $(d)out.txt; myci-error.sh "test program output was not as expected"; exit 1; fi
 	@myci-passed.sh
 endef
 $(eval $(this_rules))
