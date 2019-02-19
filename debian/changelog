@@ -1,3 +1,9 @@
+libclargs (0.1.5) unstable; urgency=medium
+
+  * fixing msys2 build
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 19 Feb 2019 19:11:37 +0200
+
 libclargs (0.1.4) unstable; urgency=medium
 
   * fixing build
