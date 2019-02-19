@@ -30,7 +30,7 @@ define this_rules
 test:: $(prorab_this_name)
 	@myci-running-test.sh $(this_test)
 	$(prorab_echo)cp $(d)../../src/*.dll . || true
-	$(prorab_echo)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo | sed 's/\r//' > $(d)out.txt
+	$(prorab_echo)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo | sed 's/\x0D//' > $(d)out.txt
 	$(prorab_echo)cmp $(d)out.txt $(d)out.txt.cmp; \
         if [ $$$$? -ne 0 ]; then echo "out.txt = "; cat $(d)out.txt; myci-error.sh "test program output was not as expected"; exit 1; fi
 	@myci-passed.sh
