@@ -23,7 +23,7 @@ Description: debugging symbols for libclargs$(soname) package.
 Package: libclargs-dev
 Section: libdevel
 Architecture: any
-Depends: libclargs$(soname) (= ${binary:Version}), libclargs$(soname)-dbg (= ${binary:Version}), ${misc:Depends}
+Depends: libutki-dev, libclargs$(soname) (= ${binary:Version}), libclargs$(soname)-dbg (= ${binary:Version}), ${misc:Depends}
 Suggests: libclargs-doc
 Description: Cross-platform command line arguments parser library in C++.
  Library for easy parsing of command line arguments.
