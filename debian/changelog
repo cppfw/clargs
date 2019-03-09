@@ -1,3 +1,9 @@
+libclargs (0.1.6) unstable; urgency=medium
+
+  * doxygen docs added
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 09 Mar 2019 18:59:29 +0200
+
 libclargs (0.1.5) unstable; urgency=medium
 
   * fixing msys2 build
