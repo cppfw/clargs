@@ -8,8 +8,9 @@
 
 namespace clargs{
 
-//TODO: doxygen
-
+/**
+ * @brief Unknown argument passed to command line.
+ */
 class UnknownArgumentExc : public utki::Exc{
 public:
 	UnknownArgumentExc(const std::string& message) :
@@ -17,8 +18,24 @@ public:
 	{}
 };
 
+/**
+ * @brief Parser of command line arguments.
+ * This class represents a parser of command line arguments.
+ * It holds information about all known command line arguments with corresponding
+ * handler functions. When parsing command line aruments it calls user supplied callback
+ * functions for each encountered known argument from command line.
+ */
 class Args{
 public:
+	/**
+	 * @brief Register command line argument.
+	 * Registers command line agrument which has short one-letter name,
+	 * long dash-separated name, description, and an argument value handling function.
+	 * @param shortKey - one letter argument name.
+	 * @param longKey - long, dash separated argument name.
+	 * @param description - argument description.
+	 * @param valueHandler - callback function which is called to handle value of the argument.
+	 */
 	void add(
 			char shortKey,
 			std::string&& longKey,
@@ -26,6 +43,14 @@ public:
 			std::function<void(std::string&& value)>&& valueHandler
 		);
 	
+	/**
+	 * @brief Register command line argument.
+	 * Registers command line agrument which has short one-letter name,
+	 * description, and an argument value handling function.
+	 * @param shortKey - one letter argument name.
+	 * @param description - argument description.
+	 * @param valueHandler - callback function which is called to handle value of the argument.
+	 */
 	void add(
 			char shortKey,
 			std::string&& description,
@@ -35,6 +60,14 @@ public:
 		this->add(shortKey, std::string(), std::move(description), std::move(valueHandler));
 	}
 	
+	/**
+	 * @brief Register command line argument.
+	 * Registers command line agrument which has
+	 * long dash-separated name, description, and an argument value handling function.
+	 * @param longKey - long, dash separated argument name.
+	 * @param description - argument description.
+	 * @param valueHandler - callback function which is called to handle value of the argument.
+	 */
 	void add(
 			std::string&& longKey,
 			std::string&& description,
@@ -44,6 +77,16 @@ public:
 		this->add('\0', std::move(longKey), std::move(description), std::move(valueHandler));
 	}
 	
+	/**
+	 * @brief Register command line argument.
+	 * Registers command line agrument which has short one-letter name,
+	 * long dash-separated name, description, and an argument presence handling function.
+	 * This argument does not have a value.
+	 * @param shortKey - one letter argument name.
+	 * @param longKey - long, dash separated argument name.
+	 * @param description - argument description.
+	 * @param valueHandler - callback function which is called to handle the argument presence in the command line.
+	 */
 	void add(
 			char shortKey,
 			std::string&& longKey,
@@ -51,6 +94,15 @@ public:
 			std::function<void()>&& valueHandler
 		);
 	
+	/**
+	 * @brief Register command line argument.
+	 * Registers command line agrument which has short one-letter name,
+	 * description, and an argument presence handling function.
+	 * This argument does not have a value.
+	 * @param shortKey - one letter argument name.
+	 * @param description - argument description.
+	 * @param valueHandler - callback function which is called to handle the argument presence in the command line.
+	 */
 	void add(
 			char shortKey,
 			std::string&& description,
@@ -60,6 +112,15 @@ public:
 		this->add(shortKey, std::string(), std::move(description), std::move(valueHandler));
 	}
 	
+	/**
+	 * @brief Register command line argument.
+	 * Registers command line agrument which has
+	 * long dash-separated name, description, and an argument presence handling function.
+	 * This argument does not have a value.
+	 * @param longKey - long, dash separated argument name.
+	 * @param description - argument description.
+	 * @param valueHandler - callback function which is called to handle the argument presence in the command line.
+	 */
 	void add(
 			std::string&& longKey,
 			std::string&& description,
@@ -82,7 +143,7 @@ public:
 	
 	/**
 	 * @brief Get description of the arguments.
-	 * @return Formatted description of the arguments.
+	 * @return Formatted description of all the registered arguments.
 	 */
 	std::string description();
 	
