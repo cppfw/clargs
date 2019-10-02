@@ -11,9 +11,9 @@ namespace clargs{
 /**
  * @brief Unknown argument passed to command line.
  */
-class UnknownArgumentExc : public utki::Exc{
+class unknown_argument_exc_t : public utki::Exc{
 public:
-	UnknownArgumentExc(const std::string& message) :
+	unknown_argument_exc_t(const std::string& message) :
 			utki::Exc(message)
 	{}
 };
@@ -25,112 +25,112 @@ public:
  * handler functions. When parsing command line aruments it calls user supplied callback
  * functions for each encountered known argument from command line.
  */
-class Args{
+class args_t{
 public:
 	/**
 	 * @brief Register command line argument.
 	 * Registers command line agrument which has short one-letter name,
 	 * long dash-separated name, description, and an argument value handling function.
-	 * @param shortKey - one letter argument name.
-	 * @param longKey - long, dash separated argument name.
+	 * @param short_key - one letter argument name.
+	 * @param long_key - long, dash separated argument name.
 	 * @param description - argument description.
-	 * @param valueHandler - callback function which is called to handle value of the argument.
+	 * @param value_handler - callback function which is called to handle value of the argument.
 	 */
 	void add(
-			char shortKey,
-			std::string&& longKey,
+			char short_key,
+			std::string&& long_key,
 			std::string&& description,
-			std::function<void(std::string&& value)>&& valueHandler
+			std::function<void(std::string&& value)>&& value_handler
 		);
-	
+
 	/**
 	 * @brief Register command line argument.
 	 * Registers command line agrument which has short one-letter name,
 	 * description, and an argument value handling function.
-	 * @param shortKey - one letter argument name.
+	 * @param short_key - one letter argument name.
 	 * @param description - argument description.
-	 * @param valueHandler - callback function which is called to handle value of the argument.
+	 * @param value_handler - callback function which is called to handle value of the argument.
 	 */
 	void add(
-			char shortKey,
+			char short_key,
 			std::string&& description,
-			std::function<void(std::string&& value)>&& valueHandler
+			std::function<void(std::string&& value)>&& value_handler
 		)
 	{
-		this->add(shortKey, std::string(), std::move(description), std::move(valueHandler));
+		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
 	}
-	
+
 	/**
 	 * @brief Register command line argument.
 	 * Registers command line agrument which has
 	 * long dash-separated name, description, and an argument value handling function.
-	 * @param longKey - long, dash separated argument name.
+	 * @param long_key - long, dash separated argument name.
 	 * @param description - argument description.
-	 * @param valueHandler - callback function which is called to handle value of the argument.
+	 * @param value_handler - callback function which is called to handle value of the argument.
 	 */
 	void add(
-			std::string&& longKey,
+			std::string&& long_key,
 			std::string&& description,
-			std::function<void(std::string&& value)>&& valueHandler
+			std::function<void(std::string&& value)>&& value_handler
 		)
 	{
-		this->add('\0', std::move(longKey), std::move(description), std::move(valueHandler));
+		this->add('\0', std::move(long_key), std::move(description), std::move(value_handler));
 	}
-	
+
 	/**
 	 * @brief Register command line argument.
 	 * Registers command line agrument which has short one-letter name,
 	 * long dash-separated name, description, and an argument presence handling function.
 	 * This argument does not have a value.
-	 * @param shortKey - one letter argument name.
-	 * @param longKey - long, dash separated argument name.
+	 * @param short_key - one letter argument name.
+	 * @param long_key - long, dash separated argument name.
 	 * @param description - argument description.
-	 * @param valueHandler - callback function which is called to handle the argument presence in the command line.
+	 * @param value_handler - callback function which is called to handle the argument presence in the command line.
 	 */
 	void add(
-			char shortKey,
-			std::string&& longKey,
+			char short_key,
+			std::string&& long_key,
 			std::string&& description,
-			std::function<void()>&& valueHandler
+			std::function<void()>&& value_handler
 		);
-	
+
 	/**
 	 * @brief Register command line argument.
 	 * Registers command line agrument which has short one-letter name,
 	 * description, and an argument presence handling function.
 	 * This argument does not have a value.
-	 * @param shortKey - one letter argument name.
+	 * @param short_key - one letter argument name.
 	 * @param description - argument description.
-	 * @param valueHandler - callback function which is called to handle the argument presence in the command line.
+	 * @param value_handler - callback function which is called to handle the argument presence in the command line.
 	 */
 	void add(
-			char shortKey,
+			char short_key,
 			std::string&& description,
-			std::function<void()>&& valueHandler
+			std::function<void()>&& value_handler
 		)
 	{
-		this->add(shortKey, std::string(), std::move(description), std::move(valueHandler));
+		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
 	}
-	
+
 	/**
 	 * @brief Register command line argument.
 	 * Registers command line agrument which has
 	 * long dash-separated name, description, and an argument presence handling function.
 	 * This argument does not have a value.
-	 * @param longKey - long, dash separated argument name.
+	 * @param long_key - long, dash separated argument name.
 	 * @param description - argument description.
-	 * @param valueHandler - callback function which is called to handle the argument presence in the command line.
+	 * @param value_handler - callback function which is called to handle the argument presence in the command line.
 	 */
 	void add(
-			std::string&& longKey,
+			std::string&& long_key,
 			std::string&& description,
-			std::function<void()>&& valueHandler
+			std::function<void()>&& value_handler
 		)
 	{
-		this->add('\0', std::move(longKey), std::move(description), std::move(valueHandler));
+		this->add('\0', std::move(long_key), std::move(description), std::move(value_handler));
 	}
-	
-	
+
+
 	/**
 	 * @brief Parse command line arguments.
 	 * Parses the command line arguments as they passed in to main() function.
@@ -140,33 +140,33 @@ public:
 	 * @return list of non-key arguments.
 	 */
 	std::vector<std::string> parse(int argc, char** argv);
-	
+
 	/**
 	 * @brief Get description of the arguments.
 	 * @return Formatted description of all the registered arguments.
 	 */
 	std::string description();
-	
+
 private:
 	std::unordered_map<std::string, std::function<void(std::string&&)>> valueArgs;
 	std::unordered_map<std::string, std::function<void(std::string&&)>> boolArgs;
-	
+
 	std::unordered_map<char, std::string> shortToLongMap;
-	
+
 	std::vector<std::string> argDescriptions;
-	
-	std::string addShortToLongMapping(char shortKey, std::string&& longKey);
-	
-	template <bool b> void addDescription(char shortKey, const std::string& longKey, std::string&& description);
-	
-	template <bool b> void addArgument(
-			char shortKey,
-			std::string&& longKey,
+
+	std::string add_short_to_long_mapping(char short_key, std::string&& long_key);
+
+	template <bool b> void add_description(char short_key, const std::string& long_key, std::string&& description);
+
+	template <bool b> void add_argument(
+			char short_key,
+			std::string&& long_key,
 			std::string&& description,
-			std::function<void(std::string&& value)>&& valueHandler
+			std::function<void(std::string&& value)>&& value_handler
 		);
-	
-	void parseLongKeyArgument(const std::string& arg);
+
+	void parse_long_key_argument(const std::string& arg);
 };
 
 }

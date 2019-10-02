@@ -28,17 +28,17 @@ this_test := $(word $(words $(this_dirs)),$(this_dirs))
 
 define this_rules
 test:: $(prorab_this_name)
-	@myci-running-test.sh $(this_test)
-	$(prorab_echo)cp $(d)../../src/*.dll . || true
-	$(prorab_echo)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo | sed 's/\x0D//' > $(d)out.txt
-	$(prorab_echo)cmp $(d)out.txt $(d)out.txt.cmp; \
+$(.RECIPEPREFIX)@myci-running-test.sh $(this_test)
+$(.RECIPEPREFIX)$(Q)cp $(d)../../src/*.dll . > /dev/null 2>&1 || true
+$(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo | sed 's/\x0D//' > $(d)out.txt
+$(.RECIPEPREFIX)$(Q)cmp $(d)out.txt $(d)out.txt.cmp; \
         if [ $$$$? -ne 0 ]; then echo "out.txt = "; cat $(d)out.txt; myci-error.sh "test program output was not as expected"; exit 1; fi
 	@myci-passed.sh
 endef
 $(eval $(this_rules))
 
 
-#add dependency on libclargs
+# add dependency on libclargs
 $(prorab_this_name): $(abspath $(d)../../src/libclargs$(soext))
 
-$(eval $(call prorab-include,$(d)../../src/makefile))
+$(eval $(call prorab-try-include,$(d)../../src/makefile))

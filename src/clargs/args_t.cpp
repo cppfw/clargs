@@ -2,22 +2,22 @@
 
 #include <utki/util.hpp>
 
-#include "Args.hpp"
+#include "args_t.hpp"
 
 using namespace clargs;
 
 
-template <bool b> void Args::addDescription(char shortKey, const std::string& longKey, std::string&& description) {
+template <bool b> void args_t::add_description(char shortKey, const std::string& longKey, std::string&& description) {
 	std::stringstream ss;
 	ss << "  ";
-	
+
 	if(shortKey != 0){
 		ss << '-' << shortKey;
 		if(!b){
 			ss << " VALUE";
 		}
 	}
-	
+
 	if(longKey.size() != 0){
 		if(shortKey != 0){
 			ss << ", ";
@@ -29,55 +29,55 @@ template <bool b> void Args::addDescription(char shortKey, const std::string& lo
 	}
 
 	const unsigned descriptionNewlineThreshold_c = 38;
-	
+
 	unsigned keysLength = ss.tellp();
 	if(keysLength > descriptionNewlineThreshold_c){
 		ss << std::endl << std::string(descriptionNewlineThreshold_c, ' ');
 	}else{
 		ss << std::string(descriptionNewlineThreshold_c - keysLength, ' ');
 	}
-	
+
 	ss << "  " << description;
-	
+
 	if(description.rbegin() != description.rend() && *description.rbegin() != '.'){
 		ss << ".";
 	}
-	
+
 	ss << std::endl;
-	
+
 	this->argDescriptions.emplace_back(ss.str());
 }
 
-template <bool b> void Args::addArgument(
+template <bool b> void args_t::add_argument(
 		char shortKey,
 		std::string&& longKey,
 		std::string&& description,
 		std::function<void(std::string&& value)>&& valueHandler
 	)
 {
-	this->addDescription<b>(shortKey, longKey, std::move(description));
+	this->add_description<b>(shortKey, longKey, std::move(description));
 	utki::ScopeExit descriptionScopeExit([this](){this->argDescriptions.pop_back();});
-	
-	auto k = this->addShortToLongMapping(shortKey, std::move(longKey));
+
+	auto k = this->add_short_to_long_mapping(shortKey, std::move(longKey));
 	utki::ScopeExit mappingScopeExit([this, shortKey](){
 		this->shortToLongMap.erase(shortKey);
 	});
-	
+
 	if(b){
 		this->boolArgs.insert(std::make_pair(std::move(k), std::move(valueHandler)));
 	}else{
 		this->valueArgs.insert(std::make_pair(std::move(k), std::move(valueHandler)));
 	}
-	
+
 	mappingScopeExit.reset();
 	descriptionScopeExit.reset();
 }
 
-std::string Args::addShortToLongMapping(char shortKey, std::string&& longKey) {
+std::string args_t::add_short_to_long_mapping(char shortKey, std::string&& longKey) {
 	std::string k;
 	if(longKey.size() != 0){
 		k = std::move(longKey);
-		
+
 		if(shortKey != 0){
 			this->shortToLongMap.insert(std::make_pair(shortKey, k));
 		}
@@ -88,13 +88,13 @@ std::string Args::addShortToLongMapping(char shortKey, std::string&& longKey) {
 	return k;
 }
 
-std::string Args::description() {
+std::string args_t::description() {
 	std::stringstream ss;
-	
+
 	for(auto& s : this->argDescriptions){
 		ss << s;
 	}
-	
+
 	return ss.str();
 }
 
@@ -102,21 +102,21 @@ namespace{
 const std::string longKeyPrefix_c("--");
 }
 
-std::vector<std::string> Args::parse(int argc, char** argv) {
+std::vector<std::string> args_t::parse(int argc, char** argv) {
 	std::vector<std::string> extras;
-	
+
 	const unsigned shortKeyArgumentLength = 2;
-	
+
 	//first argument is the filename of the executable
-	
+
 	for(int i = 1; i < argc; ++i){
 		std::string arg(argv[i]);
-		
+
 		if(arg.find(longKeyPrefix_c) == 0 && arg.size() > longKeyPrefix_c.size()){
-			this->parseLongKeyArgument(arg);
+			this->parse_long_key_argument(arg);
 		}else if(arg.find("-") == 0 && arg.size() >= shortKeyArgumentLength){
 			auto key = arg[1];
-			
+
 			std::string actualKey;
 			{
 				auto iter = this->shortToLongMap.find(key);
@@ -140,10 +140,10 @@ std::vector<std::string> Args::parse(int argc, char** argv) {
 			if(iter == this->valueArgs.end()){
 				std::stringstream ss;
 				ss << "Unknown argument: " << arg;
-				throw UnknownArgumentExc(ss.str());
+				throw unknown_argument_exc_t(ss.str());
 			}
 			ASSERT(iter->second)
-			
+
 			std::string value;
 			if(arg.size() == shortKeyArgumentLength){
 				//value is the next argument
@@ -161,17 +161,17 @@ std::vector<std::string> Args::parse(int argc, char** argv) {
 			extras.emplace_back(std::move(arg));
 		}
 	}
-	
+
 	return extras;
 }
 
 
-void Args::parseLongKeyArgument(const std::string& arg) {
+void args_t::parse_long_key_argument(const std::string& arg) {
 	auto eqPos = arg.find("=");
 	if(eqPos != std::string::npos){
 		auto value = arg.substr(eqPos + 1);
 		auto key = arg.substr(longKeyPrefix_c.size(), eqPos - longKeyPrefix_c.size());
-		
+
 		auto i = this->valueArgs.find(key);
 		if(i != this->valueArgs.end()){
 			ASSERT(i->second)
@@ -189,22 +189,22 @@ void Args::parseLongKeyArgument(const std::string& arg) {
 	}
 	std::stringstream ss;
 	ss << "Unknown argument: " << arg;
-	throw UnknownArgumentExc(ss.str());
+	throw unknown_argument_exc_t(ss.str());
 }
 
-void Args::add(char shortKey, std::string&& longKey, std::string&& description, std::function<void(std::string&&)>&& valueHandler) {
-	this->addArgument<false>(shortKey, std::move(longKey), std::move(description), std::move(valueHandler));
+void args_t::add(char shortKey, std::string&& longKey, std::string&& description, std::function<void(std::string&&)>&& valueHandler) {
+	this->add_argument<false>(shortKey, std::move(longKey), std::move(description), std::move(valueHandler));
 }
 
 
-void Args::add(
+void args_t::add(
 		char shortKey,
 		std::string&& longKey,
 		std::string&& description,
 		std::function<void()>&& valueHandler
 	)
 {
-	this->addArgument<true>(
+	this->add_argument<true>(
 			shortKey,
 			std::move(longKey),
 			std::move(description),
