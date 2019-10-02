@@ -1,3 +1,9 @@
+libclargs (0.2.0) unstable; urgency=medium
+
+  * naming convention changed
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 02 Oct 2019 19:13:35 +0300
+
 libclargs (0.1.7) unstable; urgency=medium
 
   * deploy to bionic
