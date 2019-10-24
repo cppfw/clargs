@@ -25,7 +25,7 @@ public:
  * handler functions. When parsing command line aruments it calls user supplied callback
  * functions for each encountered known argument from command line.
  */
-class args{
+class arguments{
 public:
 	/**
 	 * @brief Register command line argument.
@@ -134,7 +134,7 @@ public:
 	/**
 	 * @brief Parse command line arguments.
 	 * Parses the command line arguments as they passed in to main() function.
-	 * First argument is the filename of the executable.
+	 * Zeroth argument is the filename of the executable.
 	 * @param argc - number of arguments.
 	 * @param argv - array of arguments.
 	 * @return list of non-key arguments.
