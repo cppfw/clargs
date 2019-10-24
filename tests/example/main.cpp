@@ -1,11 +1,11 @@
-#include "../../src/clargs/args_t.hpp"
+#include "../../src/clargs/args.hpp"
 
 #include <iostream>
 
 using namespace std;
 
 int main(int argc, char** argv){
-	clargs::args_t args;
+	clargs::args args;
 
 	bool a = false;
 

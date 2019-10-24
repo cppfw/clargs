@@ -11,9 +11,9 @@ namespace clargs{
 /**
  * @brief Unknown argument passed to command line.
  */
-class unknown_argument_exc_t : public utki::Exc{
+class unknown_argument_exception : public utki::Exc{
 public:
-	unknown_argument_exc_t(const std::string& message) :
+	unknown_argument_exception(const std::string& message) :
 			utki::Exc(message)
 	{}
 };
@@ -25,7 +25,7 @@ public:
  * handler functions. When parsing command line aruments it calls user supplied callback
  * functions for each encountered known argument from command line.
  */
-class args_t{
+class args{
 public:
 	/**
 	 * @brief Register command line argument.
