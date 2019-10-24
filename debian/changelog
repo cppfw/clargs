@@ -1,3 +1,9 @@
+libclargs (0.2.1) unstable; urgency=medium
+
+  * removing _t suffix from names
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 24 Oct 2019 18:01:56 +0300
+
 libclargs (0.2.0) unstable; urgency=medium
 
   * naming convention changed
