@@ -1,3 +1,9 @@
+libclargs (0.2.2) unstable; urgency=medium
+
+  * rename args to arguments
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 24 Oct 2019 19:00:52 +0300
+
 libclargs (0.2.1) unstable; urgency=medium
 
   * removing _t suffix from names
