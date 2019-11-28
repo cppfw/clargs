@@ -1,9 +1,3 @@
-# build only master branch and version tags
-branches:
-  only:
-  - master
-  - /^\d*\.\d*\.\d*$/
-
 sudo: required
 
 services:
@@ -12,6 +6,9 @@ services:
 language: cpp
 dist: xenial
 os: linux
+
+git:
+  autocrlf: false
 
 addons:
   apt:
@@ -23,13 +20,21 @@ addons:
     - binfmt-support
     - qemu-user-static
     - myci
+  homebrew:
+    update: true
+    taps:
+    - igagis/tap
+    packages:
+    - myci
 
 matrix:
   include:
     - name: macosx
       os: osx
       compiler: clang
-      osx_image: xcode8.3
+      osx_image: xcode11
+    - name: msys2
+      os: windows
 
 
 env:
@@ -44,6 +49,7 @@ env:
   - OS_REL=xenial OS=ubuntu DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
   - OS_REL=bionic OS=ubuntu DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
   - OS_REL=stretch OS=debian DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
+  - OS_REL=buster OS=debian DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
   - OS_REL=stretch OS=raspbian DOCKER_IMAGE=igagis/$OS:$OS_REL PACKAGE_TYPE=deb
 
 
@@ -61,18 +67,28 @@ before_install:
     fi;
   fi
 - if [ "$TRAVIS_JOB_NAME" == "macosx" ]; then
-    rvm install ruby-2.3.3 &&
-    rvm use ruby-2.3.3 &&
-
-    brew update > /dev/null &&
-    brew tap igagis/tap &&
-    brew update > /dev/null &&
-    brew install prorab prorab-extra myci libutki;
+    brew install prorab prorab-extra libutki;
   fi
+- if [ "$TRAVIS_JOB_NAME" == "msys2" ]; then
+    choco upgrade --no-progress -y msys2 &&
+    export msys2="/c/tools/msys64/msys2_shell.cmd -defterm -no-start -msys -here -c" &&
+    $msys2 "echo -e '[igagis_msys]\\nSigLevel = Optional TrustAll\\nServer = https://dl.bintray.com/igagis/msys2/msys' >> /etc/pacman.conf" &&
+    $msys2 "echo -e '[igagis_mingw64]\\nSigLevel = Optional TrustAll\\nServer = https://dl.bintray.com/igagis/msys2/mingw64' >> /etc/pacman.conf" &&
+    $msys2 "echo -e '[igagis_mingw32]\\nSigLevel = Optional TrustAll\\nServer = https://dl.bintray.com/igagis/msys2/mingw32' >> /etc/pacman.conf" &&
+    $msys2 "pacman --noconfirm --ask 20 --sync --refresh --refresh --sysupgrade --sysupgrade" &&
+    $msys2 "pacman --noconfirm --ask 20 --sync --refresh --refresh --sysupgrade --sysupgrade" &&
+    $msys2 "pacman -Sy --noconfirm myci mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain msys2-devel";
+  fi
+
 
 install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ -z "$TRAVIS_JOB_NAME" ]; then
     docker exec ccc myci-deb-install-build-deps.sh;
+  fi
+
+before_script:
+- if [ "$TRAVIS_JOB_NAME" == "msys2" ]; then
+    $msys2 "myci-apply-version.sh -v \$(myci-deb-version.sh debian/changelog) msys2/PKGBUILD.in";
   fi
 
 script:
@@ -80,7 +96,18 @@ script:
     docker exec ccc dpkg-buildpackage -us -uc;
   fi
 - if [ "$TRAVIS_JOB_NAME" == "macosx" ]; then
-    make && make test;
+    make &&
+    make test;
+  fi
+# running MSYS2 script from deployment provider did not work for some reason, so we do it here if the commit is a tagged one.
+- if [ "$TRAVIS_JOB_NAME" == "msys2" ]; then
+    $msys2 "(cd msys2 && makepkg --syncdeps --noconfirm --skipinteg)" &&
+    $msys2 "(cd msys2 && makepkg-mingw --syncdeps --noconfirm --skipinteg)" &&
+    if [ ! -z "$TRAVIS_TAG" ]; then
+      $msys2 "myci-deploy-pacman-bintray.sh -u igagis -r msys2 -p msys -d igagis_msys msys2/lib$PACKAGE_NAME*.tar.xz" &&
+      $msys2 "myci-deploy-pacman-bintray.sh -u igagis -r msys2 -p mingw64 -d igagis_mingw64 msys2/mingw-w64-x86_64-*-any.pkg.tar.xz" &&
+      $msys2 "myci-deploy-pacman-bintray.sh -u igagis -r msys2 -p mingw32 -d igagis_mingw32 msys2/mingw-w64-i686-*-any.pkg.tar.xz";
+    fi;
   fi
 
 deploy:
