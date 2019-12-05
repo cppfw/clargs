@@ -1,3 +1,9 @@
+libclargs (0.2.4) unstable; urgency=medium
+
+  * do not install test app
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 05 Dec 2019 14:08:33 +0200
+
 libclargs (0.2.3) unstable; urgency=medium
 
   * deploy to msys2 from travis
