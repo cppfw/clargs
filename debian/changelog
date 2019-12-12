@@ -1,3 +1,9 @@
+libclargs (0.2.5) unstable; urgency=medium
+
+  * renamed main class to parser
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 13 Dec 2019 00:09:10 +0200
+
 libclargs (0.2.4) unstable; urgency=medium
 
   * do not install test app
