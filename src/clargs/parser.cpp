@@ -2,12 +2,12 @@
 
 #include <utki/util.hpp>
 
-#include "arguments.hpp"
+#include "parser.hpp"
 
 using namespace clargs;
 
 
-template <bool b> void arguments::add_description(char shortKey, const std::string& longKey, std::string&& description) {
+template <bool b> void parser::add_description(char shortKey, const std::string& longKey, std::string&& description) {
 	std::stringstream ss;
 	ss << "  ";
 
@@ -48,7 +48,7 @@ template <bool b> void arguments::add_description(char shortKey, const std::stri
 	this->argDescriptions.emplace_back(ss.str());
 }
 
-template <bool b> void arguments::add_argument(
+template <bool b> void parser::add_argument(
 		char shortKey,
 		std::string&& longKey,
 		std::string&& description,
@@ -73,7 +73,7 @@ template <bool b> void arguments::add_argument(
 	descriptionScopeExit.reset();
 }
 
-std::string arguments::add_short_to_long_mapping(char shortKey, std::string&& longKey) {
+std::string parser::add_short_to_long_mapping(char shortKey, std::string&& longKey) {
 	std::string k;
 	if(longKey.size() != 0){
 		k = std::move(longKey);
@@ -88,7 +88,7 @@ std::string arguments::add_short_to_long_mapping(char shortKey, std::string&& lo
 	return k;
 }
 
-std::string arguments::description() {
+std::string parser::description() {
 	std::stringstream ss;
 
 	for(auto& s : this->argDescriptions){
@@ -102,7 +102,7 @@ namespace{
 const std::string longKeyPrefix_c("--");
 }
 
-std::vector<std::string> arguments::parse(int argc, char** argv) {
+std::vector<std::string> parser::parse(int argc, char** argv) {
 	std::vector<std::string> extras;
 
 	const unsigned shortKeyArgumentLength = 2;
@@ -166,7 +166,7 @@ std::vector<std::string> arguments::parse(int argc, char** argv) {
 }
 
 
-void arguments::parse_long_key_argument(const std::string& arg) {
+void parser::parse_long_key_argument(const std::string& arg) {
 	auto eqPos = arg.find("=");
 	if(eqPos != std::string::npos){
 		auto value = arg.substr(eqPos + 1);
@@ -192,12 +192,12 @@ void arguments::parse_long_key_argument(const std::string& arg) {
 	throw unknown_argument_exception(ss.str());
 }
 
-void arguments::add(char shortKey, std::string&& longKey, std::string&& description, std::function<void(std::string&&)>&& valueHandler) {
+void parser::add(char shortKey, std::string&& longKey, std::string&& description, std::function<void(std::string&&)>&& valueHandler) {
 	this->add_argument<false>(shortKey, std::move(longKey), std::move(description), std::move(valueHandler));
 }
 
 
-void arguments::add(
+void parser::add(
 		char shortKey,
 		std::string&& longKey,
 		std::string&& description,

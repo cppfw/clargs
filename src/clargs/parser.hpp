@@ -4,17 +4,16 @@
 #include <functional>
 #include <unordered_map>
 
-#include <utki/Exc.hpp>
+#include <utki/exception.hpp>
 
 namespace clargs{
 
 /**
  * @brief Unknown argument passed to command line.
  */
-class unknown_argument_exception : public utki::Exc{
-public:
+struct unknown_argument_exception : public utki::exception{
 	unknown_argument_exception(const std::string& message) :
-			utki::Exc(message)
+			utki::exception(message)
 	{}
 };
 
@@ -25,7 +24,7 @@ public:
  * handler functions. When parsing command line aruments it calls user supplied callback
  * functions for each encountered known argument from command line.
  */
-class arguments{
+class parser{
 public:
 	/**
 	 * @brief Register command line argument.

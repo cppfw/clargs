@@ -1,11 +1,11 @@
-#include "../../src/clargs/arguments.hpp"
+#include "../../src/clargs/parser.hpp"
 
 #include <iostream>
 
 using namespace std;
 
 int main(int argc, char** argv){
-	clargs::arguments args;
+	clargs::parser args;
 
 	bool a = false;
 
