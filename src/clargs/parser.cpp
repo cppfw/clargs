@@ -43,18 +43,18 @@ void parser::push_back_description(
 
 	const unsigned description_newline_threshold = 38;
 
-	unsigned keysLength = ss.tellp();
-	if(keysLength > description_newline_threshold){
+	unsigned keys_length = ss.tellp();
+	if(keys_length > description_newline_threshold){
 		ss << std::endl << std::string(description_newline_threshold, ' ');
 	}else{
-		ss << std::string(description_newline_threshold - keysLength, ' ');
+		ss << std::string(description_newline_threshold - keys_length, ' ');
 	}
 
 	ss << "  " << description;
 
 	ss << std::endl;
 
-	this->argument_descriptions.emplace_back(ss.str());
+	this->argument_descriptions.push_back(ss.str());
 }
 
 void parser::add_argument(
@@ -74,12 +74,12 @@ void parser::add_argument(
 			is_boolean,
 			boolean_handler != nullptr
 		);
-	utki::scope_exit descriptionScopeExit([this](){
+	utki::scope_exit description_scope_exit([this](){
 		this->argument_descriptions.pop_back();
 	});
 
 	auto k = this->add_short_to_long_mapping(short_key, std::move(long_key));
-	utki::scope_exit mappingScopeExit([this, short_key](){
+	utki::scope_exit mapping_scope_exit([this, short_key](){
 		this->short_to_long_map.erase(short_key);
 	});
 
@@ -98,11 +98,11 @@ void parser::add_argument(
 			ss << "long key '" << k << "'";
 		}
 		ss << " already exists";
-		throw std::invalid_argument(ss.str());
+		throw utki::invalid_state(ss.str());
 	}
 
-	mappingScopeExit.reset();
-	descriptionScopeExit.reset();
+	mapping_scope_exit.reset();
+	description_scope_exit.reset();
 }
 
 std::string parser::add_short_to_long_mapping(char short_key, std::string&& long_key) {
@@ -122,7 +122,6 @@ std::string parser::add_short_to_long_mapping(char short_key, std::string&& long
 		if(short_key != 0){
 			auto i = this->short_to_long_map.insert(std::make_pair(short_key, ret));
 			if(!i.second){
-				//TODO: rewise checking that argument already exists
 				std::stringstream ss;
 				ss << "argument with short key '" << short_key << "' already exists";
 				throw utki::invalid_state(ss.str());
@@ -208,10 +207,10 @@ std::vector<std::string> parser::parse(int argc, char** argv) {
 
 
 void parser::parse_long_key_argument(const std::string& arg) {
-	auto eqPos = arg.find("=");
-	if(eqPos != std::string::npos){
-		auto value = arg.substr(eqPos + 1);
-		auto key = arg.substr(long_key_prefix.size(), eqPos - long_key_prefix.size());
+	auto equals_pos = arg.find("=");
+	if(equals_pos != std::string::npos){
+		auto value = arg.substr(equals_pos + 1);
+		auto key = arg.substr(long_key_prefix.size(), equals_pos - long_key_prefix.size());
 
 		auto i = this->arguments.find(key);
 		if(i != this->arguments.end()){
