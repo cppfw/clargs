@@ -12,14 +12,14 @@ this_cxxflags += -std=c++11
 
 this_srcs += main.cpp
 
-this_clargs_lib := $(d)../../src/build/libclargs$(dot_so)
+this_clargs_lib = $(d)../../src/build/libclargs$(dot_so)
 
 this_ldlibs += $(this_clargs_lib) -lstdc++
 
 ifeq ($(os), macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
     this_ldlibs += -lc++
-else ifeq ($(os),windows)
+else ifeq ($(os), windows)
 
 endif
 

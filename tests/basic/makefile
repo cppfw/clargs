@@ -12,7 +12,7 @@ this_cxxflags += -std=c++11
 
 this_srcs += main.cpp
 
-this_clargs_lib := $(d)../../src/build/libclargs$(dot_so)
+this_clargs_lib = $(d)../../src/build/libclargs$(dot_so)
 
 this_ldlibs += $(this_clargs_lib) -lstdc++
 
