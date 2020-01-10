@@ -42,6 +42,7 @@ $(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src $(d)./tests \
         --key-without-short-one=trololo \
         --key-with-optional-value=qwerty \
         --another-key-with-optional-value \
+        --key-empty-value= \
         \
         | sed 's/\x0D//' > $(d)out.txt
 $(.RECIPEPREFIX)$(Q)cmp $(d)out.txt $(d)out.txt.cmp; \

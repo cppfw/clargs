@@ -13,6 +13,7 @@ int main(int argc, char** argv){
 
 	std::string keyWithoutShortOne;
 	std::string keyWithoutLongOne;
+	std::string key_empty_value = "ASSERT_should_be_empty!";
 	std::string key_with_optional_value;
 	std::string another_key_with_optional_value;
 
@@ -20,6 +21,7 @@ int main(int argc, char** argv){
 	args.add('r', "remove-something", "removes something from somewhere", [&removeSomething](std::string&& s){removeSomething = std::move(s);});
 	args.add("key-without-short-one", "a key which has no short version, only the long one", [&keyWithoutShortOne](std::string&& s){keyWithoutShortOne = std::move(s);});
 	args.add('b', "a key which has only a short version and does not have a long version", [&keyWithoutLongOne](std::string&& s){keyWithoutLongOne = std::move(s);});
+	args.add("key-empty-value", "a key to test passing in an empty value", [&key_empty_value](std::string&& v){key_empty_value = std::move(v);});
 	args.add(
 			"key-with-optional-value",
 			"a key which has optional value",
@@ -41,6 +43,7 @@ int main(int argc, char** argv){
 	std::cout << "removeSomething = " << removeSomething << std::endl;
 	std::cout << "keyWithoutShortOne = " << keyWithoutShortOne << std::endl;
 	std::cout << "keyWithoutLongOne = " << keyWithoutLongOne << std::endl;
+	std::cout << "key_empty_value = " << key_empty_value << std::endl;
 	std::cout << "key_with_optional_value = " << key_with_optional_value << std::endl;
 	std::cout << "another_key_with_optional_value = " << another_key_with_optional_value << std::endl;
 
