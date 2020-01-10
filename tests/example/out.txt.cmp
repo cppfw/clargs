@@ -1,11 +1,16 @@
   -a, --add-something                   adds something to somewhere
   -r, --remove-something=VALUE          removes something from somewhere
-                                        
       --key-without-short-one=VALUE     a key which has no short version, only the long one
   -b VALUE                              a key which has only a short version and does not have a long version
+      --key-with-optional-value[=VALUE]
+                                        a key which has optional value
+      --another-key-with-optional-value[=VALUE]
+                                        a key which has optional value, another one
 a = true
 removeSomething = 10
 keyWithoutShortOne = trololo
 keyWithoutLongOne = hello
+key_with_optional_value = qwerty
+another_key_with_optional_value = another_key_with_optional_value_DEFAULT_VALUE
 extrra1
 extra/321jh

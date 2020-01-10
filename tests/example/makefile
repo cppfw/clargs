@@ -32,7 +32,18 @@ define this_rules
 test:: $(prorab_this_name)
 $(.RECIPEPREFIX)@myci-running-test.sh $(this_test)
 $(.RECIPEPREFIX)$(Q)cp $(d)../../src/*.dll . > /dev/null 2>&1 || true
-$(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src $(d)./tests -a -r10 -b hello extrra1 extra/321jh --key-without-short-one=trololo | sed 's/\x0D//' > $(d)out.txt
+$(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src $(d)./tests \
+        -a \
+        -r10 \
+        -b \
+        hello \
+        extrra1 \
+        extra/321jh \
+        --key-without-short-one=trololo \
+        --key-with-optional-value=qwerty \
+        --another-key-with-optional-value \
+        \
+        | sed 's/\x0D//' > $(d)out.txt
 $(.RECIPEPREFIX)$(Q)cmp $(d)out.txt $(d)out.txt.cmp; \
         if [ $$$$? -ne 0 ]; then echo "out.txt = "; cat $(d)out.txt; myci-error.sh "test program output was not as expected"; exit 1; fi
 	@myci-passed.sh

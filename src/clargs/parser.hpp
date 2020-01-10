@@ -9,15 +9,6 @@
 namespace clargs{
 
 /**
- * @brief Unknown argument passed to command line.
- */
-struct unknown_argument_exception : public utki::exception{
-	unknown_argument_exception(const std::string& message) :
-			utki::exception(message)
-	{}
-};
-
-/**
  * @brief Parser of command line arguments.
  * This class represents a parser of command line arguments.
  * It holds information about all known command line arguments with corresponding
@@ -25,6 +16,14 @@ struct unknown_argument_exception : public utki::exception{
  * functions for each encountered known argument from command line.
  */
 class parser{
+	//TODO: remove
+	void add(
+			char short_key,
+			std::string&& long_key,
+			std::string&& description,
+			std::function<void(std::string&&)>&& value_handler,
+			std::function<void()>&& boolean_handler
+		);
 public:
 	/**
 	 * @brief Register command line argument.
@@ -39,8 +38,12 @@ public:
 			char short_key,
 			std::string&& long_key,
 			std::string&& description,
-			std::function<void(std::string&& value)>&& value_handler
-		);
+			std::function<void(std::string&&)>&& value_handler
+		)
+	{
+		//TODO: call to add_Argument directly
+		this->add(short_key, std::move(long_key), std::move(description), std::move(value_handler), nullptr);
+	}
 
 	/**
 	 * @brief Register command line argument.
@@ -53,7 +56,7 @@ public:
 	void add(
 			char short_key,
 			std::string&& description,
-			std::function<void(std::string&& value)>&& value_handler
+			std::function<void(std::string&&)>&& value_handler
 		)
 	{
 		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
@@ -66,14 +69,17 @@ public:
 	 * @param long_key - long, dash separated argument name.
 	 * @param description - argument description.
 	 * @param value_handler - callback function which is called to handle value of the argument.
+	 * @param default_value_handler - callback function which is called when the argument has not value given.
 	 */
 	void add(
 			std::string&& long_key,
 			std::string&& description,
-			std::function<void(std::string&& value)>&& value_handler
+			std::function<void(std::string&&)>&& value_handler,
+			std::function<void()>&& default_value_handler = nullptr
 		)
 	{
-		this->add('\0', std::move(long_key), std::move(description), std::move(value_handler));
+		//TODO: call to add_argument directly
+		this->add('\0', std::move(long_key), std::move(description), std::move(value_handler), std::move(default_value_handler));
 	}
 
 	/**
@@ -84,13 +90,13 @@ public:
 	 * @param short_key - one letter argument name.
 	 * @param long_key - long, dash separated argument name.
 	 * @param description - argument description.
-	 * @param value_handler - callback function which is called to handle the argument presence in the command line.
+	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
 	void add(
 			char short_key,
 			std::string&& long_key,
 			std::string&& description,
-			std::function<void()>&& value_handler
+			std::function<void()>&& boolean_handler
 		);
 
 	/**
@@ -100,15 +106,15 @@ public:
 	 * This argument does not have a value.
 	 * @param short_key - one letter argument name.
 	 * @param description - argument description.
-	 * @param value_handler - callback function which is called to handle the argument presence in the command line.
+	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
 	void add(
 			char short_key,
 			std::string&& description,
-			std::function<void()>&& value_handler
+			std::function<void()>&& boolean_handler
 		)
 	{
-		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
+		this->add(short_key, std::string(), std::move(description), std::move(boolean_handler));
 	}
 
 	/**
@@ -140,6 +146,8 @@ public:
 	 */
 	std::vector<std::string> parse(int argc, char** argv);
 
+	//TODO: use parse(utki::span)
+
 	/**
 	 * @brief Get description of the arguments.
 	 * @return Formatted description of all the registered arguments.
@@ -147,22 +155,33 @@ public:
 	std::string description();
 
 private:
-	std::unordered_map<std::string, std::function<void(std::string&&)>> valueArgs;
-	std::unordered_map<std::string, std::function<void(std::string&&)>> boolArgs;
+	struct argument_callbacks{
+		std::function<void(std::string&&)> value_handler;
+		std::function<void()> boolean_handler;
+	};
 
-	std::unordered_map<char, std::string> shortToLongMap;
+	std::unordered_map<std::string, argument_callbacks> arguments;
 
-	std::vector<std::string> argDescriptions;
+	std::unordered_map<char, std::string> short_to_long_map;
+
+	std::vector<std::string> argument_descriptions;
 
 	std::string add_short_to_long_mapping(char short_key, std::string&& long_key);
 
-	template <bool b> void add_description(char short_key, const std::string& long_key, std::string&& description);
+	void push_back_description(
+			char short_key,
+			const std::string& long_key,
+			std::string&& description,
+			bool is_boolean,
+			bool is_value_optional
+		);
 
-	template <bool b> void add_argument(
+	void add_argument(
 			char short_key,
 			std::string&& long_key,
 			std::string&& description,
-			std::function<void(std::string&& value)>&& value_handler
+			std::function<void(std::string&&)>&& value_handler,
+			std::function<void()>&& boolean_handler
 		);
 
 	void parse_long_key_argument(const std::string& arg);
