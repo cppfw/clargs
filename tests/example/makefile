@@ -33,7 +33,7 @@ this_test := $(word $(words $(this_dirs)),$(this_dirs))
 define this_rules
 test:: $(prorab_this_name)
 $(.RECIPEPREFIX)@myci-running-test.sh $(this_test)
-$(.RECIPEPREFIX)$(Q)cp $(d)../../src/*.dll . > /dev/null 2>&1 || true
+$(.RECIPEPREFIX)$(Q)cp $(d)../../src/build/*.dll . > /dev/null 2>&1 || true
 $(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src/build $(d)./tests \
         -a \
         -r10 \
