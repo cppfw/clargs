@@ -6,42 +6,45 @@
 
 using namespace clargs;
 
-
-template <bool b> void parser::add_description(char shortKey, const std::string& longKey, std::string&& description) {
+template <bool is_boolean> void parser::add_description(
+		char shortKey,
+		const std::string& longKey,
+		std::string&& description
+	)
+{
 	std::stringstream ss;
 	ss << "  ";
 
-	if(shortKey != 0){
+	if(shortKey != '\0'){
 		ss << '-' << shortKey;
-		if(!b){
+		if(!is_boolean && longKey.empty()){
 			ss << " VALUE";
 		}
 	}
 
-	if(longKey.size() != 0){
-		if(shortKey != 0){
+	if(!longKey.empty()){
+		if(shortKey != '\0'){
 			ss << ", ";
+		}else{
+			ss << "    ";
 		}
+		
 		ss << "--" << longKey;
-		if(!b){
+		if(!is_boolean){
 			ss << "=VALUE";
 		}
 	}
 
-	const unsigned descriptionNewlineThreshold_c = 38;
+	const unsigned description_newline_threshold = 38;
 
 	unsigned keysLength = ss.tellp();
-	if(keysLength > descriptionNewlineThreshold_c){
-		ss << std::endl << std::string(descriptionNewlineThreshold_c, ' ');
+	if(keysLength > description_newline_threshold){
+		ss << std::endl << std::string(description_newline_threshold, ' ');
 	}else{
-		ss << std::string(descriptionNewlineThreshold_c - keysLength, ' ');
+		ss << std::string(description_newline_threshold - keysLength, ' ');
 	}
 
 	ss << "  " << description;
-
-	if(description.rbegin() != description.rend() && *description.rbegin() != '.'){
-		ss << ".";
-	}
 
 	ss << std::endl;
 
