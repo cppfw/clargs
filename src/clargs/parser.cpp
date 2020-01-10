@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include <utki/util.hpp>
+#include <utki/exception.hpp>
 
 #include "parser.hpp"
 
@@ -145,15 +145,15 @@ namespace{
 const std::string long_key_prefix("--");
 }
 
-std::vector<std::string> parser::parse(int argc, char** argv) {
+std::vector<std::string> parser::parse(const utki::span<const char*> args) {
 	std::vector<std::string> extras;
 
 	const unsigned short_key_argument_size = 2;
 
 	// first argument is the filename of the executable
 
-	for(int i = 1; i < argc; ++i){
-		std::string arg(argv[i]);
+	for(size_t i = 1; i < args.size(); ++i){
+		std::string arg(args[i]);
 
 		if(arg.size() >= long_key_prefix.size() && arg.find(long_key_prefix) == 0){
 			this->parse_long_key_argument(arg);
@@ -188,10 +188,10 @@ std::vector<std::string> parser::parse(int argc, char** argv) {
 			if(arg.size() == short_key_argument_size){
 				// value is the next argument
 				++i;
-				if(i == argc){
+				if(i == args.size()){
 					break;
 				}
-				value = argv[i];
+				value = args[i];
 			}else{
 				ASSERT(arg.size() > short_key_argument_size)
 				value = arg.substr(short_key_argument_size);

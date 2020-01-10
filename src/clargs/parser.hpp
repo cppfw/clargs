@@ -4,7 +4,7 @@
 #include <functional>
 #include <unordered_map>
 
-#include <utki/exception.hpp>
+#include <utki/span.hpp>
 
 namespace clargs{
 
@@ -146,6 +146,14 @@ public:
 		this->add('\0', std::move(long_key), std::move(description), std::move(value_handler));
 	}
 
+	/**
+	 * @brief Parse command line arguments.
+	 * Parses the command line arguments as they passed in to main() function.
+	 * Zeroth argument is the filename of the executable.
+	 * @param args - array of command line arguments.
+	 * @return array of non-key arguments.
+	 */
+	std::vector<std::string> parse(const utki::span<const char*> args);
 
 	/**
 	 * @brief Parse command line arguments.
@@ -153,11 +161,11 @@ public:
 	 * Zeroth argument is the filename of the executable.
 	 * @param argc - number of arguments.
 	 * @param argv - array of arguments.
-	 * @return list of non-key arguments.
+	 * @return array of non-key arguments.
 	 */
-	std::vector<std::string> parse(int argc, char** argv);
-
-	//TODO: use parse(utki::span)
+	std::vector<std::string> parse(int argc, const char* const* argv){
+		return this->parse(utki::make_span(argv, argc));
+	}
 
 	/**
 	 * @brief Get description of the arguments.
