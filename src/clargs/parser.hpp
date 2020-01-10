@@ -16,14 +16,6 @@ namespace clargs{
  * functions for each encountered known argument from command line.
  */
 class parser{
-	//TODO: remove
-	void add(
-			char short_key,
-			std::string&& long_key,
-			std::string&& description,
-			std::function<void(std::string&&)>&& value_handler,
-			std::function<void()>&& boolean_handler
-		);
 public:
 	/**
 	 * @brief Register command line argument.
@@ -41,8 +33,13 @@ public:
 			std::function<void(std::string&&)>&& value_handler
 		)
 	{
-		//TODO: call to add_Argument directly
-		this->add(short_key, std::move(long_key), std::move(description), std::move(value_handler), nullptr);
+		this->add_argument(
+				short_key,
+				std::move(long_key),
+				std::move(description),
+				std::move(value_handler),
+				nullptr
+			);
 	}
 
 	/**
@@ -78,8 +75,13 @@ public:
 			std::function<void()>&& default_value_handler = nullptr
 		)
 	{
-		//TODO: call to add_argument directly
-		this->add('\0', std::move(long_key), std::move(description), std::move(value_handler), std::move(default_value_handler));
+		this->add_argument(
+				'\0',
+				std::move(long_key),
+				std::move(description),
+				std::move(value_handler),
+				std::move(default_value_handler)
+			);
 	}
 
 	/**
@@ -97,7 +99,16 @@ public:
 			std::string&& long_key,
 			std::string&& description,
 			std::function<void()>&& boolean_handler
-		);
+		)
+	{
+		this->add_argument(
+				short_key,
+				std::move(long_key),
+				std::move(description),
+				nullptr,
+				std::move(boolean_handler)
+			);
+	}
 
 	/**
 	 * @brief Register command line argument.

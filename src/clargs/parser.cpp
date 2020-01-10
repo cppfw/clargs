@@ -231,37 +231,3 @@ void parser::parse_long_key_argument(const std::string& arg) {
 	ss << "Unknown argument: " << arg;
 	throw std::invalid_argument(ss.str());
 }
-
-void parser::add(
-		char short_key,
-		std::string&& long_key,
-		std::string&& description,
-		std::function<void(std::string&&)>&& value_handler,
-		std::function<void()>&& boolean_handler
-	)
-{
-	this->add_argument(
-			short_key,
-			std::move(long_key),
-			std::move(description),
-			std::move(value_handler),
-			std::move(boolean_handler)
-		);
-}
-
-//TODO: move to hpp
-void parser::add(
-		char short_key,
-		std::string&& long_key,
-		std::string&& description,
-		std::function<void()>&& value_handler
-	)
-{
-	this->add_argument(
-			short_key,
-			std::move(long_key),
-			std::move(description),
-			nullptr,
-			std::move(value_handler)
-		);
-}
