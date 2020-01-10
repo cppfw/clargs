@@ -7,6 +7,11 @@
                                         a key which has optional value
       --another-key-with-optional-value[=VALUE]
                                         a key which has optional value, another one
+      --key-to-test-quoted-value=VALUE  a key to test passing in quoted value as long key argumeent
+  -q VALUE                              a key to test passing in quoted value as short key argument
+  -d VALUE                              a key to test passing in quoted value as short key argument, with space
+      --boolean-long-key-without-short-one
+                                        a boolean long key without short key
 a = true
 removeSomething = 10
 keyWithoutShortOne = trololo
@@ -14,5 +19,9 @@ keyWithoutLongOne = hello
 key_empty_value = 
 key_with_optional_value = qwerty
 another_key_with_optional_value = another_key_with_optional_value_DEFAULT_VALUE
+key_to_test_long_key_quoted_value = expected long key quoted value
+key_to_test_short_key_quoted_value = expected short key quoted value
+key_to_test_short_key_space_quoted_value = expected short key space quoted value
+boolean_long_key_without_short_one = true
 extrra1
 extra/321jh

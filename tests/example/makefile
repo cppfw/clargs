@@ -45,6 +45,10 @@ $(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src/build $(d)./tests \
         --key-with-optional-value=qwerty \
         --another-key-with-optional-value \
         --key-empty-value= \
+        --key-to-test-quoted-value="expected long key quoted value" \
+        --boolean-long-key-without-short-one \
+        -q"expected short key quoted value" \
+        -d "expected short key space quoted value" \
         \
         | sed 's/\x0D//' > $(d)out.txt
 $(.RECIPEPREFIX)$(Q)cmp $(d)out.txt $(d)out.txt.cmp; \
