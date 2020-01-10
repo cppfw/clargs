@@ -6,7 +6,15 @@
 		{
 			"label": "build",
 			"type": "shell",
-			"command": "make aj=t",
+			"command": "make autojob=true",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "build_debug",
+			"type": "shell",
+			"command": "make autojob=true debug=true",
 			"problemMatcher": [
 				"$gcc"
 			]
@@ -14,15 +22,30 @@
 		{
 			"label": "test",
 			"type": "shell",
-			"command": "make aj=t test",
+			"command": "make test",
 			"problemMatcher": [
 				"$gcc"
-			]
+			],
+			"dependsOn": "build"
+		},
+		{
+			"label": "test_debug",
+			"type": "shell",
+			"command": "make test debug=true",
+			"dependsOn": "build_debug",
+			"problemMatcher": []
+		},
+		{
+			"label": "test_errors_debug",
+			"type": "shell",
+			"command": "make -C tests/errors test debug=true --no-print-directory",
+			"dependsOn": "build_debug",
+			"problemMatcher": []
 		},
 		{
 			"label": "clean",
 			"type": "shell",
-			"command": "make aj=t clean",
+			"command": "make autojob=true clean",
 			"problemMatcher": []
 		}
 	]

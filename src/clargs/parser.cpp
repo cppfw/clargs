@@ -78,24 +78,26 @@ void parser::add_argument(
 		this->argument_descriptions.pop_back();
 	});
 
-	auto k = this->add_short_to_long_mapping(short_key, std::move(long_key));
+	auto actual_key = this->add_short_to_long_mapping(short_key, std::move(long_key));
+	ASSERT(!actual_key.empty())
 	utki::scope_exit mapping_scope_exit([this, short_key](){
 		this->short_to_long_map.erase(short_key);
 	});
 
 	auto res = this->arguments.insert(std::make_pair(
-			std::move(k),
+			actual_key,
 			argument_callbacks{std::move(value_handler), std::move(boolean_handler)}
 		));
 	
 	if(!res.second){
 		std::stringstream ss;
 		ss << "argument with ";
-		if(!k.empty() && k.front() == ' '){
-			ASSERT(k.size() == 2)
-			ss << "short key '" << k[1] << "'";
+		ASSERT(!actual_key.empty())
+		if(actual_key.front() == ' '){
+			ASSERT(actual_key.size() == 2)
+			ss << "short key '" << actual_key[1] << "'";
 		}else{
-			ss << "long key '" << k << "'";
+			ss << "long key '" << actual_key << "'";
 		}
 		ss << " already exists";
 		throw utki::invalid_state(ss.str());
@@ -178,7 +180,7 @@ std::vector<std::string> parser::parse(const utki::span<const char*> args) {
 			}
 
 			if(iter->second.boolean_handler){
-				ASSERT(!iter->second.value)
+				ASSERT(!iter->second.value_handler)
 				iter->second.boolean_handler();
 				continue;
 			}

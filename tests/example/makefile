@@ -12,7 +12,9 @@ this_cxxflags += -std=c++11
 
 this_srcs += main.cpp
 
-this_ldlibs += $(d)../../src/libclargs$(soext) -lstdc++
+this_clargs_lib := $(d)../../src/build/libclargs$(dot_so)
+
+this_ldlibs += $(this_clargs_lib) -lstdc++
 
 ifeq ($(os), macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
@@ -32,7 +34,7 @@ define this_rules
 test:: $(prorab_this_name)
 $(.RECIPEPREFIX)@myci-running-test.sh $(this_test)
 $(.RECIPEPREFIX)$(Q)cp $(d)../../src/*.dll . > /dev/null 2>&1 || true
-$(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src $(d)./tests \
+$(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src/build $(d)./tests \
         -a \
         -r10 \
         -b \
@@ -47,12 +49,12 @@ $(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src $(d)./tests \
         | sed 's/\x0D//' > $(d)out.txt
 $(.RECIPEPREFIX)$(Q)cmp $(d)out.txt $(d)out.txt.cmp; \
         if [ $$$$? -ne 0 ]; then echo "out.txt = "; cat $(d)out.txt; myci-error.sh "test program output was not as expected"; exit 1; fi
-	@myci-passed.sh
+$(.RECIPEPREFIX)@myci-passed.sh
 endef
 $(eval $(this_rules))
 
 
 # add dependency on libclargs
-$(prorab_this_name): $(abspath $(d)../../src/libclargs$(soext))
+$(prorab_this_name): $(abspath $(this_clargs_lib))
 
-$(eval $(call prorab-try-include,$(d)../../src/makefile))
+$(eval $(call prorab-include, ../../src/makefile))
