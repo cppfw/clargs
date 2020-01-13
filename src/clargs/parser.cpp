@@ -79,7 +79,7 @@ void parser::add_argument(
 	});
 
 	auto actual_key = this->add_short_to_long_mapping(short_key, std::move(long_key));
-	ASSERT(!actual_key.empty())
+
 	utki::scope_exit mapping_scope_exit([this, short_key](){
 		this->short_to_long_map.erase(short_key);
 	});
@@ -170,7 +170,7 @@ void parser::parse(const utki::span<const char*> args, std::function<void(std::s
 			auto iter = this->arguments.find(actual_key);
 			if(iter == this->arguments.end()){
 				std::stringstream ss;
-				ss << "Unknown argument: " << arg;
+				ss << "unknown argument: " << arg;
 				throw std::invalid_argument(ss.str());
 			}
 
@@ -221,7 +221,11 @@ void parser::parse_long_key_argument(const std::string& arg) {
 
 		auto i = this->arguments.find(key);
 		if(i != this->arguments.end()){
-			ASSERT(i->second.value_handler)
+			if(!i->second.value_handler){
+				std::stringstream ss;
+				ss << "key argument '" << key << "' is a boolean argument and cannot have value";
+				throw std::invalid_argument(ss.str());
+			}
 			i->second.value_handler(std::move(value));
 			return;
 		}
@@ -238,9 +242,8 @@ void parser::parse_long_key_argument(const std::string& arg) {
 			this->enable_key_parsing(false);
 			return;
 		}
-
 	}
 	std::stringstream ss;
-	ss << "Unknown argument: " << arg;
+	ss << "unknown argument: " << arg;
 	throw std::invalid_argument(ss.str());
 }

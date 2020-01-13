@@ -214,5 +214,103 @@ int main(int argc, char** argv){
 		ASSERT_INFO_ALWAYS(res.size() == 0, "res.size() = " << res.size())
 	}
 
+	// test parsing of unadded '--=' argument
+	{
+		clargs::parser p;
+
+		unsigned a = 0;
+		
+		p.add('a', "aaa", "description", [&a](){++a;});
+
+		std::vector<const char*> args = {{
+			"program_executable",
+			"-a",
+			"--aaa",
+			"--=",
+			"-a",
+			"--aaa",
+			"-a",
+			"--aaa"
+		}};
+
+		bool exception_caught = false;
+		try{
+			p.parse(utki::make_span(args));
+			ASSERT_ALWAYS(false)
+		}catch(std::invalid_argument& e){
+			exception_caught = true;
+			ASSERT_INFO_ALWAYS(std::string(e.what()) == "unknown argument: --=", "e.what() = " << e.what())
+		}
+
+		ASSERT_ALWAYS(exception_caught)
+	}
+
+	// test parsing of added '--=' boolean argument
+	{
+		clargs::parser p;
+
+		unsigned a = 0;
+		
+		bool boolean_equals_handled = false;
+
+		p.add('a', "aaa", "description", [&a](){++a;});
+		p.add("", "description", [&boolean_equals_handled](){boolean_equals_handled = true;});
+
+		std::vector<const char*> args = {{
+			"program_executable",
+			"-a",
+			"--aaa",
+			"--=",
+			"-a",
+			"--aaa",
+			"-a",
+			"--aaa"
+		}};
+
+		bool exception_caught = false;
+		try{
+			p.parse(utki::make_span(args));
+		}catch(std::invalid_argument& e){
+			exception_caught = true;
+			ASSERT_INFO_ALWAYS(std::string(e.what()) == "key argument '' is a boolean argument and cannot have value", "e.what() = " << e.what())
+		}
+
+		ASSERT_ALWAYS(!boolean_equals_handled)
+		ASSERT_ALWAYS(exception_caught)
+	}
+
+	// test parsing of added '--=' value argument
+	{
+		clargs::parser p;
+
+		unsigned a = 0;
+
+		std::vector<std::string> res;
+
+		p.add('a', "aaa", "description", [&a](){++a;});
+		p.add("", "description", [&res](std::string&& str){res.push_back(std::move(str));});
+
+		std::vector<const char*> args = {{
+			"program_executable",
+			"-a",
+			"--aaa",
+			"--=",
+			"-a",
+			"--=blah blah",
+			"--aaa",
+			"-a",
+			"--aaa"
+		}};
+
+		try{
+			p.parse(utki::make_span(args));
+		}catch(std::invalid_argument& e){
+			ASSERT_INFO_ALWAYS(false, "e.what() = " << e.what())
+		}
+		ASSERT_INFO_ALWAYS(res.size() == 2, "res.size() = " << res.size())
+		ASSERT_INFO_ALWAYS(res[0] == "", "res[0] = " << res[0])
+		ASSERT_INFO_ALWAYS(res[1] == "blah blah", "res[1] = " << res[1])
+	}
+
 	return 0;
 }
