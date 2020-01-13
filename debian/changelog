@@ -1,3 +1,9 @@
+libclargs (0.2.6) unstable; urgency=medium
+
+  * added short keys batch parsing
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 13 Jan 2020 20:06:15 +0200
+
 libclargs (0.2.5) unstable; urgency=medium
 
   * renamed main class to parser
