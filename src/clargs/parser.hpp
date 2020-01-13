@@ -228,6 +228,10 @@ private:
 		);
 
 	void parse_long_key_argument(const std::string& arg);
+
+	// returns pointer to last argument's value handler in case value is the next argument.
+	// returns nullptr otherwise.
+	std::function<void(std::string&&)>* parse_short_keys_batch(const std::string& arg);
 };
 
 }

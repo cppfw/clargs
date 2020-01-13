@@ -155,45 +155,18 @@ void parser::parse(const utki::span<const char*> args, std::function<void(std::s
 		if(this->is_key_parsing_enabled && arg.size() >= long_key_prefix.size() && arg.find(long_key_prefix) == 0){
 			this->parse_long_key_argument(arg);
 		}else if(this->is_key_parsing_enabled && arg.size() >= short_key_argument_size && arg[0] == '-'){
-			auto key = arg[1];
+			auto h = this->parse_short_keys_batch(arg);
 
-			std::string actual_key;
-			{
-				auto iter = this->short_to_long_map.find(key);
-				if(iter != this->short_to_long_map.end()){
-					actual_key = iter->second;
-				}else{
-					actual_key = std::string(1, ' ') + key;
-				}
-			}
-
-			auto iter = this->arguments.find(actual_key);
-			if(iter == this->arguments.end()){
-				std::stringstream ss;
-				ss << "unknown argument: " << arg;
-				throw std::invalid_argument(ss.str());
-			}
-
-			if(iter->second.boolean_handler){
-				ASSERT(!iter->second.value_handler)
-				iter->second.boolean_handler();
-				continue;
-			}
-			ASSERT(iter->second.value_handler)
-			
-			std::string value;
-			if(arg.size() == short_key_argument_size){
+			if(h){
 				// value is the next argument
 				++i;
 				if(i == args.size()){
-					break;
+					std::stringstream ss;
+					ss << "argument '" << arg.back() << "' requires value";
+					throw std::invalid_argument(ss.str());
 				}
-				value = args[i];
-			}else{
-				ASSERT(arg.size() > short_key_argument_size)
-				value = arg.substr(short_key_argument_size);
+				(*h)(args[i]);
 			}
-			iter->second.value_handler(std::move(value));
 		}else{
 			if(non_key_handler){
 				non_key_handler(std::move(arg));
@@ -246,4 +219,44 @@ void parser::parse_long_key_argument(const std::string& arg) {
 	std::stringstream ss;
 	ss << "unknown argument: " << arg;
 	throw std::invalid_argument(ss.str());
+}
+
+std::function<void(std::string&&)>* parser::parse_short_keys_batch(const std::string& arg){
+	ASSERT(arg.size() > 1)
+	for(unsigned i = 1; i != arg.size(); ++i){
+		auto key = arg[i];
+
+		std::string actual_key;
+		{
+			auto iter = this->short_to_long_map.find(key);
+			if(iter != this->short_to_long_map.end()){
+				actual_key = iter->second;
+			}else{
+				actual_key = std::string(1, ' ') + key;
+			}
+		}
+
+		auto iter = this->arguments.find(actual_key);
+		if(iter == this->arguments.end()){
+			std::stringstream ss;
+			ss << "unknown argument: " << arg;
+			throw std::invalid_argument(ss.str());
+		}
+
+		auto& h = iter->second;
+
+		if(!h.boolean_handler){
+			ASSERT(h.value_handler)
+			++i;
+			if(i == arg.size()){
+				return &h.value_handler;
+			}
+			ASSERT(i < arg.size())
+			h.value_handler(arg.substr(i));
+			break;
+		}
+		ASSERT(!iter->second.value_handler)
+		iter->second.boolean_handler();
+	}
+	return nullptr;
 }

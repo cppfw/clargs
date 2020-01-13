@@ -333,5 +333,52 @@ int main(int argc, char** argv){
 		ASSERT_INFO_ALWAYS(res[1] == "trololo", "res[1] = " << res[1])
 	}
 
+	// test parsing of concatenated boolean arguments
+	{
+		clargs::parser p;
+
+		std::vector<std::string> res;
+
+		p.add('a', "aaa", "description", [&res](){res.push_back("a");});
+		p.add('b', "description", [&res](){res.push_back("b");});
+		p.add('c', "ccc", "description", [&res](){res.push_back("c");});
+
+		std::vector<const char*> args = {{
+			"program_executable",
+			"-abc"
+		}};
+
+		p.parse(utki::make_span(args));
+
+		ASSERT_INFO_ALWAYS(res.size() == 3, "res.size() = " << res.size())
+		ASSERT_INFO_ALWAYS(res[0] == "a", "res[0] = " << res[0])
+		ASSERT_INFO_ALWAYS(res[1] == "b", "res[1] = " << res[1])
+		ASSERT_INFO_ALWAYS(res[2] == "c", "res[2] = " << res[2])
+	}
+
+	// test parsing of concatenated boolean and value arguments
+	{
+		clargs::parser p;
+
+		std::vector<std::string> res;
+
+		p.add('a', "aaa", "description", [&res](){res.push_back("a");});
+		p.add('b', "description", [&res](){res.push_back("b");});
+		p.add('c', "ccc", "description", [&res](std::string&& str){res.push_back(std::string("c = ") + std::move(str));});
+		p.add('d', "ddd", "description", [&res](){res.push_back("d");});
+
+		std::vector<const char*> args = {{
+			"program_executable",
+			"-abcdkg"
+		}};
+
+		p.parse(utki::make_span(args));
+
+		ASSERT_INFO_ALWAYS(res.size() == 3, "res.size() = " << res.size())
+		ASSERT_INFO_ALWAYS(res[0] == "a", "res[0] = " << res[0])
+		ASSERT_INFO_ALWAYS(res[1] == "b", "res[1] = " << res[1])
+		ASSERT_INFO_ALWAYS(res[2] == "c = dkg", "res[2] = " << res[2])
+	}
+
 	return 0;
 }
