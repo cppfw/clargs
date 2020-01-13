@@ -312,5 +312,26 @@ int main(int argc, char** argv){
 		ASSERT_INFO_ALWAYS(res[1] == "blah blah", "res[1] = " << res[1])
 	}
 
+	// test parsing of concatenated short argument and its value
+	{
+		clargs::parser p;
+
+		std::vector<std::string> res;
+
+		p.add('a', "aaa", "description", [&res](std::string&& str){res.push_back(std::move(str));});
+
+		std::vector<const char*> args = {{
+			"program_executable",
+			"-ablah",
+			"-atrololo"
+		}};
+
+		p.parse(utki::make_span(args));
+
+		ASSERT_INFO_ALWAYS(res.size() == 2, "res.size() = " << res.size())
+		ASSERT_INFO_ALWAYS(res[0] == "blah", "res[0] = " << res[0])
+		ASSERT_INFO_ALWAYS(res[1] == "trololo", "res[1] = " << res[1])
+	}
+
 	return 0;
 }

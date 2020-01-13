@@ -154,7 +154,7 @@ void parser::parse(const utki::span<const char*> args, std::function<void(std::s
 
 		if(this->is_key_parsing_enabled && arg.size() >= long_key_prefix.size() && arg.find(long_key_prefix) == 0){
 			this->parse_long_key_argument(arg);
-		}else if(this->is_key_parsing_enabled && arg.size() >= short_key_argument_size && arg.find("-") == 0){
+		}else if(this->is_key_parsing_enabled && arg.size() >= short_key_argument_size && arg[0] == '-'){
 			auto key = arg[1];
 
 			std::string actual_key;
