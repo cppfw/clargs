@@ -147,9 +147,7 @@ namespace{
 const std::string long_key_prefix("--");
 }
 
-std::vector<std::string> parser::parse(const utki::span<const char*> args) {
-	std::vector<std::string> extras;
-
+void parser::parse(const utki::span<const char*> args, std::function<void(std::string&&)> non_key_handler){
 	const unsigned short_key_argument_size = 2;
 
 	// first argument is the filename of the executable
@@ -200,11 +198,21 @@ std::vector<std::string> parser::parse(const utki::span<const char*> args) {
 			}
 			iter->second.value_handler(std::move(value));
 		}else{
-			extras.emplace_back(std::move(arg));
+			if(non_key_handler){
+				non_key_handler(std::move(arg));
+			}
 		}
 	}
+}
 
-	return extras;
+std::vector<std::string> parser::parse(const utki::span<const char*> args){
+	std::vector<std::string> ret;
+	this->parse(
+			args,
+			[&ret](std::string&& str){
+				ret.push_back(std::move(str));
+			});
+	return ret;
 }
 
 

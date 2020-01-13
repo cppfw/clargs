@@ -151,6 +151,15 @@ public:
 	 * Parses the command line arguments as they passed in to main() function.
 	 * Zeroth argument is the filename of the executable.
 	 * @param args - array of command line arguments.
+	 * @param non_key_handler - handler callback for non-key arguments. Can be nullptr.
+	 */
+	void parse(const utki::span<const char*> args, std::function<void(std::string&&)> non_key_handler);
+
+	/**
+	 * @brief Parse command line arguments.
+	 * Parses the command line arguments as they passed in to main() function.
+	 * Zeroth argument is the filename of the executable.
+	 * @param args - array of command line arguments.
 	 * @return array of non-key arguments.
 	 */
 	std::vector<std::string> parse(const utki::span<const char*> args);

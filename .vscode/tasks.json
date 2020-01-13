@@ -36,9 +36,9 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "test_errors_debug",
+			"label": "test_basic_debug",
 			"type": "shell",
-			"command": "make -C tests/errors test debug=true --no-print-directory",
+			"command": "make -C tests/basic test debug=true --no-print-directory",
 			"dependsOn": "build_debug",
 			"problemMatcher": []
 		},
