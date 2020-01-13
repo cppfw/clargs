@@ -147,6 +147,19 @@ public:
 	}
 
 	/**
+	 * @brief Enable or disable key arguments parsing.
+	 * By default key arguments parsing is enabled.
+	 * If key arguments parsing is disabled, then all the arguments will be treated as non-key arguments.
+	 * By default, after encountering '--' argument the key arguments parsing is disabled, user can override this
+	 * behaviour by overriding handling of long-name-only argument with empty long name.
+	 * It is ok to call this function from within the arguments handling callback functions.
+	 * @param enable - if true, key arguments parsing will be enabled, otherwise - disabled.
+	 */
+	void enable_key_parsing(bool enable)noexcept{
+		this->is_key_parsing_enabled = enable;
+	}
+
+	/**
 	 * @brief Parse command line arguments.
 	 * Parses the command line arguments as they passed in to main() function.
 	 * Zeroth argument is the filename of the executable.
@@ -183,6 +196,8 @@ public:
 	std::string description();
 
 private:
+	bool is_key_parsing_enabled = true;
+
 	struct argument_callbacks{
 		std::function<void(std::string&&)> value_handler;
 		std::function<void()> boolean_handler;
