@@ -109,10 +109,7 @@ void parser::add_argument(
 
 std::string parser::add_short_to_long_mapping(char short_key, std::string&& long_key) {
 	std::string ret;
-	if(long_key.empty()){
-		if(short_key == '\0'){
-			throw std::invalid_argument("both short and long key names are empty");
-		}
+	if(long_key.empty() && short_key != '\0'){
 		// key name cannot have spaces, so starting a long name with space makes
 		// sure it will not clash with another long name of one letter
 		std::stringstream ss;
@@ -235,7 +232,13 @@ void parser::parse_long_key_argument(const std::string& arg) {
 			ASSERT(i->second.boolean_handler)
 			i->second.boolean_handler();
 			return;
+		}else if(arg.size() == 2){
+			ASSERT(arg == "--")
+			// default handling of '--' argument is disabling key arguments parsing
+			this->enable_key_parsing(false);
+			return;
 		}
+
 	}
 	std::stringstream ss;
 	ss << "Unknown argument: " << arg;

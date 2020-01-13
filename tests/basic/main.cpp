@@ -157,5 +157,62 @@ int main(int argc, char** argv){
 		ASSERT_INFO_ALWAYS(res[2] == "-a", "res[2] = " << res[2])
 	}
 
+	// test that -- argument disables key arguments parsing
+	{
+		clargs::parser p;
+
+		unsigned a = 0;
+		
+		p.add('a', "aaa", "description", [&a](){
+			++a;
+		});
+
+		std::vector<const char*> args = {{
+			"program_executable",
+			"-a",
+			"--aaa",
+			"--",
+			"-a",
+			"--aaa",
+			"-a",
+			"--aaa"
+		}};
+
+		auto res = p.parse(utki::make_span(args));
+
+		ASSERT_INFO_ALWAYS(a == 2, "a = " << a)
+		ASSERT_INFO_ALWAYS(res.size() == 4, "res.size() = " << res.size())
+		ASSERT_INFO_ALWAYS(res[0] == "-a", "res[0] = " << res[0])
+		ASSERT_INFO_ALWAYS(res[1] == "--aaa", "res[1] = " << res[1])
+		ASSERT_INFO_ALWAYS(res[2] == "-a", "res[2] = " << res[2])
+		ASSERT_INFO_ALWAYS(res[3] == "--aaa", "res[3] = " << res[3])
+	}
+
+	// test overriding the '--' argument handling
+	{
+		clargs::parser p;
+
+		unsigned a = 0;
+		
+		p.add('a', "aaa", "description", [&a](){++a;});
+		p.add("", "", [](){});
+
+		std::vector<const char*> args = {{
+			"program_executable",
+			"-a",
+			"--aaa",
+			"--",
+			"-a",
+			"--aaa",
+			"-a",
+			"--aaa"
+		}};
+
+		auto res = p.parse(utki::make_span(args));
+
+		ASSERT_INFO_ALWAYS(a == 6, "a = " << a)
+		ASSERT_INFO_ALWAYS(res.size() == 0, "res.size() = " << res.size())
+	}
+
 	return 0;
 }
