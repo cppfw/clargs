@@ -1,17 +1,26 @@
-  -a, --add-something                   adds something to somewhere
-  -r, --remove-something=VALUE          removes something from somewhere
-      --key-without-short-one=VALUE     a key which has no short version, only the long one
-  -b VALUE                              a key which has only a short version and does not have a long version
-      --key-empty-value=VALUE           a key to test passing in an empty value
+  -a, --add-something         adds something to somewhere
+  -r, --remove-something=VALUE
+                              removes something from somewhere
+      --key-without-short-one=VALUE
+                              a key which has no short version, only the long
+                              one
+  -b VALUE                    a key which has only a short version and does not
+                              have a long version
+      --key-empty-value=VALUE
+                              a key to test passing in an empty value
       --key-with-optional-value[=VALUE]
-                                        a key which has optional value
+                              a key which has optional value
       --another-key-with-optional-value[=VALUE]
-                                        a key which has optional value, another one
-      --key-to-test-quoted-value=VALUE  a key to test passing in quoted value as long key argumeent
-  -q VALUE                              a key to test passing in quoted value as short key argument
-  -d VALUE                              a key to test passing in quoted value as short key argument, with space
+                              a key which has optional value, another one
+      --key-to-test-quoted-value=VALUE
+                              a key to test passing in quoted value as long key
+                              argumeent
+  -q VALUE                    a key to test passing in quoted value as short
+                              key argument
+  -d VALUE                    a key to test passing in quoted value as short
+                              key argument, with space
       --boolean-long-key-without-short-one
-                                        a boolean long key without short key
+                              a boolean long key without short key
 a = true
 removeSomething = 10
 keyWithoutShortOne = trololo

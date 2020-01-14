@@ -1,5 +1,6 @@
 #include <sstream>
 
+#include <utki/string.hpp>
 #include <utki/exception.hpp>
 
 #include "parser.hpp"
@@ -125,18 +126,25 @@ std::string parser::add_short_to_long_mapping(char short_key, std::string&& long
 std::string parser::description(unsigned keys_width, unsigned width){
 	std::stringstream ss;
 
+	auto indentation = std::string(keys_width + 2, ' ');
 	for(auto& d : this->key_descriptions){
 		ss << d.key_names;
 
 		if(d.key_names.size() > keys_width){
-			ss << std::endl << std::string(keys_width, ' ');
+			ss << std::endl << indentation;
 		}else{
-			ss << std::string(keys_width - d.key_names.size(), ' ');
+			ss << std::string(keys_width - d.key_names.size(), ' ') << "  ";
 		}
 
-		ss << "  " << d.description;
+		auto lines = utki::word_wrap(d.description, width);
 
-		ss << std::endl;
+		ASSERT(lines.size() >= 1)
+		
+		ss << lines.front() << std::endl;
+
+		for(auto i = std::next(lines.begin()); i != lines.end(); ++i){
+			ss << indentation << (*i) << std::endl;
+		}
 	}
 
 	return ss.str();

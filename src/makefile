@@ -35,7 +35,7 @@ ifeq ($(gprof), true)
     this_ldflags += -pg
 endif
 
-this_ldlibs += -lstdc++
+this_ldlibs += -lutki -lstdc++
 
 ifeq ($(os),linux)
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code

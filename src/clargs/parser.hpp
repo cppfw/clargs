@@ -196,7 +196,7 @@ public:
 	 * @param width - width in characters of key description area.
 	 * @return Formatted description of all the registered arguments.
 	 */
-	std::string description(unsigned keys_width = 38, unsigned width = 40);
+	std::string description(unsigned keys_width = 28, unsigned width = 50);
 
 private:
 	bool is_key_parsing_enabled = true;
