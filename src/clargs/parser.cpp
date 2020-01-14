@@ -41,20 +41,12 @@ void parser::push_back_description(
 		}
 	}
 
-	const unsigned description_newline_threshold = 38;
+	auto key_names = ss.str();
 
-	unsigned keys_length = ss.tellp();
-	if(keys_length > description_newline_threshold){
-		ss << std::endl << std::string(description_newline_threshold, ' ');
-	}else{
-		ss << std::string(description_newline_threshold - keys_length, ' ');
-	}
-
-	ss << "  " << description;
-
-	ss << std::endl;
-
-	this->argument_descriptions.push_back(ss.str());
+	this->key_descriptions.push_back({
+		ss.str(),
+		std::move(description)
+	});
 }
 
 void parser::add_argument(
@@ -75,7 +67,7 @@ void parser::add_argument(
 			boolean_handler != nullptr
 		);
 	utki::scope_exit description_scope_exit([this](){
-		this->argument_descriptions.pop_back();
+		this->key_descriptions.pop_back();
 	});
 
 	auto actual_key = this->add_short_to_long_mapping(short_key, std::move(long_key));
@@ -130,11 +122,21 @@ std::string parser::add_short_to_long_mapping(char short_key, std::string&& long
 	return ret;
 }
 
-std::string parser::description() {
+std::string parser::description(unsigned keys_width, unsigned width){
 	std::stringstream ss;
 
-	for(auto& s : this->argument_descriptions){
-		ss << s;
+	for(auto& d : this->key_descriptions){
+		ss << d.key_names;
+
+		if(d.key_names.size() > keys_width){
+			ss << std::endl << std::string(keys_width, ' ');
+		}else{
+			ss << std::string(keys_width - d.key_names.size(), ' ');
+		}
+
+		ss << "  " << d.description;
+
+		ss << std::endl;
 	}
 
 	return ss.str();

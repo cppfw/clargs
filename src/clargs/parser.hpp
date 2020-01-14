@@ -191,9 +191,12 @@ public:
 
 	/**
 	 * @brief Get description of the arguments.
+	 * There will be 2 characters gap between key names and key description.
+	 * @param keys_width - width in characters of the key names area.
+	 * @param width - width in characters of key description area.
 	 * @return Formatted description of all the registered arguments.
 	 */
-	std::string description();
+	std::string description(unsigned keys_width = 38, unsigned width = 40);
 
 private:
 	bool is_key_parsing_enabled = true;
@@ -207,7 +210,12 @@ private:
 
 	std::unordered_map<char, std::string> short_to_long_map;
 
-	std::vector<std::string> argument_descriptions;
+	struct key_description{
+		std::string key_names;
+		std::string description;
+	};
+
+	std::vector<key_description> key_descriptions;
 
 	std::string add_short_to_long_mapping(char short_key, std::string&& long_key);
 
