@@ -1,3 +1,9 @@
+libclargs (0.2.7) unstable; urgency=medium
+
+  * debian/buster i386 packages
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 17 Jan 2020 18:50:09 +0200
+
 libclargs (0.2.6) unstable; urgency=medium
 
   * added short keys batch parsing
