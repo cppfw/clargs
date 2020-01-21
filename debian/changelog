@@ -1,3 +1,9 @@
+libclargs (0.2.8) unstable; urgency=medium
+
+  * msys2 build fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 21 Jan 2020 14:31:41 +0200
+
 libclargs (0.2.7) unstable; urgency=medium
 
   * debian/buster i386 packages
