@@ -1,3 +1,9 @@
+libclargs (0.2.10) unstable; urgency=medium
+
+  * build for ubuntu eoan
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 18 Jun 2020 21:04:28 +0300
+
 libclargs (0.2.9) unstable; urgency=medium
 
   * update to latest utki
