@@ -1,8 +1,6 @@
 #include "../../src/clargs/parser.hpp"
 
 #include <utki/debug.hpp>
-#include <utki/exception.hpp>
-
 
 int main(int argc, char** argv){
 	// test adding same key twice (only short key)
@@ -15,7 +13,7 @@ int main(int argc, char** argv){
 
 		try{
 			p.add('a', "description 2", [](std::string&&){});
-		}catch(utki::invalid_state& e){
+		}catch(std::logic_error& e){
 			exception_caught = true;
 			ASSERT_INFO_ALWAYS(std::string(e.what()) == "argument with short key 'a' already exists", e.what())
 		}
@@ -32,7 +30,7 @@ int main(int argc, char** argv){
 
 		try{
 			p.add("abrakadabra", "description 2", [](std::string&&){});
-		}catch(utki::invalid_state& e){
+		}catch(std::logic_error& e){
 			exception_caught = true;
 			ASSERT_INFO_ALWAYS(std::string(e.what()) == "argument with long key 'abrakadabra' already exists", e.what())
 		}
@@ -49,7 +47,7 @@ int main(int argc, char** argv){
 
 		try{
 			p.add('a', "simsalabim", "description 2", [](std::string&&){});
-		}catch(utki::invalid_state& e){
+		}catch(std::logic_error& e){
 			exception_caught = true;
 			ASSERT_INFO_ALWAYS(std::string(e.what()) == "argument with short key 'a' already exists", e.what())
 		}
@@ -66,7 +64,7 @@ int main(int argc, char** argv){
 
 		try{
 			p.add('b', "abrakadabra", "description 2", [](std::string&&){});
-		}catch(utki::invalid_state& e){
+		}catch(std::logic_error& e){
 			exception_caught = true;
 			ASSERT_INFO_ALWAYS(std::string(e.what()) == "argument with long key 'abrakadabra' already exists", e.what())
 		}
@@ -81,7 +79,7 @@ int main(int argc, char** argv){
 
 		try{
 			p.add('b', "c", "description 2", [](std::string&&){});
-		}catch(utki::invalid_state& e){
+		}catch(std::logic_error& e){
 			ASSERT_ALWAYS(false)
 		}
 	}

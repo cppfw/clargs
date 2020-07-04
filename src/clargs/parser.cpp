@@ -1,7 +1,6 @@
 #include <sstream>
 
 #include <utki/string.hpp>
-#include <utki/exception.hpp>
 
 #include "parser.hpp"
 
@@ -93,7 +92,7 @@ void parser::add_argument(
 			ss << "long key '" << actual_key << "'";
 		}
 		ss << " already exists";
-		throw utki::invalid_state(ss.str());
+		throw std::logic_error(ss.str());
 	}
 
 	mapping_scope_exit.reset();
@@ -116,7 +115,7 @@ std::string parser::add_short_to_long_mapping(char short_key, std::string&& long
 			if(!i.second){
 				std::stringstream ss;
 				ss << "argument with short key '" << short_key << "' already exists";
-				throw utki::invalid_state(ss.str());
+				throw std::logic_error(ss.str());
 			}
 		}
 	}

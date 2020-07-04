@@ -60,9 +60,9 @@ build() {
 check() {
 	cd "$rootDir"
 	# TODO: enable tests for MINGW32 as well when compiler g++ is fixed (currently produces faulty code when throwing exception)
-	if [ "$MSYSTEM" == "MINGW64" ]; then
+	# if [ "$MSYSTEM" == "MINGW64" ]; then
 		make test
-	fi
+	# fi
 }
 
 package() {
