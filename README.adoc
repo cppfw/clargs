@@ -1,0 +1,13 @@
+:name: clargs
+
+= {name}
+
+|====
+| link:https://github.com/cppfw/{name}/releases[image:https://img.shields.io/github/tag/cppfw/{name}.svg[releases]] | link:https://github.com/cppfw/{name}/actions[image:https://github.com/cppfw/{name}/workflows/ci/badge.svg[ci status]]
+|====
+
+Command line arguments parser in C++, cross platform.
+
+= Installation
+
+See link:wiki/Main.adoc[WiKi]

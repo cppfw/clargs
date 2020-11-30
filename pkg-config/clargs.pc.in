@@ -1,7 +1,7 @@
 Name: clargs   # human-readable name
 Description: Command line parsing library in C++ # human-readable description
 Version: $(version)
-URL: https://github.com/igagis/clargs
+URL: https://github.com/cppfw/clargs
 Requires:
 Conflicts:
 Libs: -lclargs
