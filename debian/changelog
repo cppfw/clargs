@@ -1,3 +1,9 @@
+libclargs (0.2.12) unstable; urgency=medium
+
+  * github actions
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 30 Nov 2020 22:40:34 +0200
+
 libclargs (0.2.11) unstable; urgency=medium
 
   * update to altest libs
