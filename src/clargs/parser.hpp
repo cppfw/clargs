@@ -166,7 +166,7 @@ public:
 	 * @param args - array of command line arguments.
 	 * @param non_key_handler - handler callback for non-key arguments. Can be nullptr.
 	 */
-	void parse(utki::span<const char* const> args, std::function<void(std::string&&)> non_key_handler);
+	void parse(utki::span<const char* const> args, const std::function<void(std::string&&)>& non_key_handler);
 
 	/**
 	 * @brief Parse command line arguments.

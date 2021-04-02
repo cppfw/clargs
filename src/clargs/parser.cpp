@@ -153,7 +153,7 @@ namespace{
 const std::string long_key_prefix("--");
 }
 
-void parser::parse(utki::span<const char* const> args, std::function<void(std::string&&)> non_key_handler){
+void parser::parse(utki::span<const char* const> args, const std::function<void(std::string&&)>& non_key_handler){
 	const unsigned short_key_argument_size = 2;
 
 	// first argument is the filename of the executable
