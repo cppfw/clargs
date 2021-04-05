@@ -141,12 +141,14 @@ int main(int argc, char** argv){
 
 		std::vector<std::string> res;
 
-		p.parse(utki::make_span(args), [&res, &p](std::string&& str){
+		p.add([&res, &p](std::string&& str){
 			res.push_back(std::move(str));
 			if(res.size() == 3){
 				p.enable_key_parsing(true);
 			}
 		});
+
+		p.parse(utki::make_span(args));
 
 		ASSERT_INFO_ALWAYS(a == 3, "a = " << a)
 		ASSERT_INFO_ALWAYS(res.size() == 3, "res.size() = " << res.size())

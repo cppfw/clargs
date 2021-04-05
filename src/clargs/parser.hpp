@@ -147,11 +147,23 @@ public:
 	}
 
 	/**
+	 * @brief Add handler for non-key arguments.
+	 * @param non_key_handler - handler callback for non-key arguments.
+	 */
+	void add(std::function<void(std::string&&)>&& non_key_handler){
+		if(this->non_key_handler){
+			throw std::logic_error("non-key handler is already added");
+		}
+		this->non_key_handler = std::move(non_key_handler);
+	}
+
+	/**
 	 * @brief Enable or disable key arguments parsing.
 	 * By default key arguments parsing is enabled.
 	 * If key arguments parsing is disabled, then all the arguments will be treated as non-key arguments.
 	 * By default, after encountering '--' argument the key arguments parsing is disabled, user can override this
-	 * behaviour by overriding handling of long-name-only argument with empty long name.
+	 * behaviour by overriding handling of long-name-only argument with empty long name and disable the key
+	 * parsing from within the handling callback.
 	 * It is ok to call this function from within the arguments handling callback functions.
 	 * @param enable - if true, key arguments parsing will be enabled, otherwise - disabled.
 	 */
@@ -164,16 +176,8 @@ public:
 	 * Parses the command line arguments as they passed in to main() function.
 	 * Zeroth argument is the filename of the executable.
 	 * @param args - array of command line arguments.
-	 * @param non_key_handler - handler callback for non-key arguments. Can be nullptr.
-	 */
-	void parse(utki::span<const char* const> args, const std::function<void(std::string&&)>& non_key_handler);
-
-	/**
-	 * @brief Parse command line arguments.
-	 * Parses the command line arguments as they passed in to main() function.
-	 * Zeroth argument is the filename of the executable.
-	 * @param args - array of command line arguments.
-	 * @return array of non-key arguments.
+	 * @return array of non-key arguments, in case the non-key arguments handler is not added.
+	 * @return empty vector, in case the non-key arguments handler is added.
 	 */
 	std::vector<std::string> parse(utki::span<const char* const> args);
 
@@ -214,6 +218,10 @@ private:
 		std::string key_names;
 		std::string description;
 	};
+
+	std::function<void(std::string&&)> non_key_handler;
+
+	std::function<void(std::string&&, utki::span<const char* const>)> subcommand_handler;
 
 	std::vector<key_description> key_descriptions;
 

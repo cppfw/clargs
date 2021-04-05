@@ -150,11 +150,12 @@ std::string parser::description(unsigned keys_width, unsigned width){
 }
 
 namespace{
-const std::string long_key_prefix("--");
+const std::string long_key_prefix = "--";
+const unsigned short_key_argument_size = 2;
 }
 
-void parser::parse(utki::span<const char* const> args, const std::function<void(std::string&&)>& non_key_handler){
-	const unsigned short_key_argument_size = 2;
+std::vector<std::string> parser::parse(utki::span<const char* const> args){
+	std::vector<std::string> ret;
 
 	// first argument is the filename of the executable
 
@@ -177,23 +178,16 @@ void parser::parse(utki::span<const char* const> args, const std::function<void(
 				(*h)(args[i]);
 			}
 		}else{
-			if(non_key_handler){
-				non_key_handler(std::move(arg));
+			if(this->non_key_handler){
+				this->non_key_handler(std::move(arg));
+			}else{
+				ret.push_back(std::move(arg));
 			}
 		}
 	}
-}
 
-std::vector<std::string> parser::parse(utki::span<const char* const> args){
-	std::vector<std::string> ret;
-	this->parse(
-			args,
-			[&ret](std::string&& str){
-				ret.push_back(std::move(str));
-			});
 	return ret;
 }
-
 
 void parser::parse_long_key_argument(const std::string& arg) {
 	auto equals_pos = arg.find("=");
