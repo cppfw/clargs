@@ -157,7 +157,7 @@ const unsigned short_key_argument_size = 2;
 std::vector<std::string> parser::parse(utki::span<const char* const> args){
 	std::vector<std::string> ret;
 
-	// first argument is the filename of the executable
+	ASSERT(!args.empty()) // first argument is the filename of the executable
 
 	for(size_t i = 1; i < args.size(); ++i){
 		std::string arg(args[i]);
@@ -178,10 +178,16 @@ std::vector<std::string> parser::parse(utki::span<const char* const> args){
 				(*h)(args[i]);
 			}
 		}else{
-			if(this->non_key_handler){
-				this->non_key_handler(std::move(arg));
+			if(this->is_key_parsing_enabled && this->subcommand_handler){
+				this->subcommand_handler(args.subspan(i));
+				ASSERT(ret.empty())
+				return ret;
 			}else{
-				ret.push_back(std::move(arg));
+				if(this->non_key_handler){
+					this->non_key_handler(std::move(arg));
+				}else{
+					ret.push_back(std::move(arg));
+				}
 			}
 		}
 	}

@@ -380,5 +380,106 @@ int main(int argc, char** argv){
 		ASSERT_INFO_ALWAYS(res[2] == "c = dkg", "res[2] = " << res[2])
 	}
 
+	// test parsing of subcommands
+	{
+		clargs::parser p;
+
+		std::vector<std::string> res;
+		std::vector<std::string> subres;
+
+		std::vector<const char*> args = {
+			"program_executable",
+			"-abcdkg",
+			"subcommand",
+			"-f f_val",
+			"--hhh=h_val"
+		};
+
+		p.add('a', "aaa", "description", [&res](){res.push_back("a");});
+		p.add('b', "description", [&res](){res.push_back("b");});
+		p.add('c', "ccc", "description", [&res](std::string&& str){res.push_back(std::string("c = ") + std::move(str));});
+		p.add('d', "ddd", "description", [&res](){res.push_back("d");});
+
+		p.add([&res = subres](utki::span<const char* const> args){
+			ASSERT_ALWAYS(!args.empty())
+			res.push_back(args.front());
+			clargs::parser sp;
+
+			sp.add('f', "fff", "description of fff", [&res](std::string&& v){res.push_back(std::string("f = ") + std::move(v));});
+			sp.add('g', "ggg", "description of ggg", [&res](std::string&& v){res.push_back(std::string("g = ") + std::move(v));});
+			sp.add('h', "hhh", "description of hhh", [&res](std::string&& v){res.push_back(std::string("h = ") + std::move(v));});
+
+			sp.parse(args);
+		});
+
+		p.parse(utki::make_span(args));
+
+		std::vector<std::string> expected = {
+			"a",
+			"b",
+			"c = dkg"
+		};
+
+		ASSERT_ALWAYS(res == expected)
+
+		std::vector<std::string> subexpected = {
+			"subcommand",
+			"f =  f_val",
+			"h = h_val"
+		};
+
+		ASSERT_INFO_ALWAYS(subres == subexpected, "subres.size() = " << subres.size() << ", subexpected.size() = " << subexpected.size())
+	}
+
+	// test parsing of subcommands when key parsing is disabled
+	{
+		clargs::parser p;
+
+		std::vector<std::string> res;
+		std::vector<std::string> subres;
+
+		std::vector<const char*> args = {
+			"program_executable",
+			"-abcdkg",
+			"subcommand",
+			"-f f_val",
+			"--hhh=h_val"
+		};
+
+		p.add('a', "aaa", "description", [&res](){res.push_back("a");});
+		p.add('b', "description", [&res](){res.push_back("b");});
+		p.add('c', "ccc", "description", [&res](std::string&& str){res.push_back(std::string("c = ") + std::move(str));});
+		p.add('d', "ddd", "description", [&res](){res.push_back("d");});
+
+		p.add([&res](std::string&& v){res.push_back(std::move(v));});
+
+		p.add([&res = subres](utki::span<const char* const> args){
+			ASSERT_ALWAYS(!args.empty())
+			res.push_back(args.front());
+			clargs::parser sp;
+
+			sp.add('f', "fff", "description of fff", [&res](std::string&& v){res.push_back(std::string("f = ") + std::move(v));});
+			sp.add('g', "ggg", "description of ggg", [&res](std::string&& v){res.push_back(std::string("g = ") + std::move(v));});
+			sp.add('h', "hhh", "description of hhh", [&res](std::string&& v){res.push_back(std::string("h = ") + std::move(v));});
+
+			sp.parse(args);
+		});
+
+		p.enable_key_parsing(false);
+
+		p.parse(utki::make_span(args));
+
+		std::vector<std::string> expected = {
+			"-abcdkg",
+			"subcommand",
+			"-f f_val",
+			"--hhh=h_val"
+		};
+
+		ASSERT_ALWAYS(res == expected)
+
+		ASSERT_INFO_ALWAYS(subres.empty(), "subres.size() = " << subres.size())
+	}
+
 	return 0;
 }

@@ -158,6 +158,25 @@ public:
 	}
 
 	/**
+	 * @brief Add subcommand handler.
+	 * The subcommand is a first non-key argument which goes before the '--' delimeter.
+	 * In case the subcommand handler is set, during parsing the handler will be called for the
+	 * first non-kye argument before '--' delimeter. The argument of the callback will be
+	 * a span of the remaining arguments, the zeroth argument in the span will be the subcommand itself,
+	 * i.e. the span will have at least 1 element.
+	 * After handling the subcommand, the parsing will be stopped and the parse() function will return.
+	 * In the subcommand handler the user can set up a new parser instance and continue parsing
+	 * arguments of the subcommand.
+	 * @param subcommand_handler - handler callback for subcommand.
+	 */
+	void add(std::function<void(utki::span<const char* const>)>&& subcommand_handler){
+		if(this->subcommand_handler){
+			throw std::logic_error("subcommand handler is already added");
+		}
+		this->subcommand_handler = std::move(subcommand_handler);
+	}
+
+	/**
 	 * @brief Enable or disable key arguments parsing.
 	 * By default key arguments parsing is enabled.
 	 * If key arguments parsing is disabled, then all the arguments will be treated as non-key arguments.
@@ -221,7 +240,7 @@ private:
 
 	std::function<void(std::string&&)> non_key_handler;
 
-	std::function<void(std::string&&, utki::span<const char* const>)> subcommand_handler;
+	std::function<void(utki::span<const char* const>)> subcommand_handler;
 
 	std::vector<key_description> key_descriptions;
 

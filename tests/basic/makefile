@@ -8,7 +8,7 @@ this_cxxflags += -Wno-format #no warnings about format
 this_cxxflags += -Wno-format-security #no warnings about format
 this_cxxflags += -DDEBUG
 this_cxxflags += -fstrict-aliasing #strict aliasing!!!
-this_cxxflags += -std=c++11
+this_cxxflags += -std=c++17
 
 this_srcs += main.cpp
 
