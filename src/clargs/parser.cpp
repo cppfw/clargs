@@ -159,8 +159,8 @@ std::vector<std::string> parser::parse(utki::span<const char* const> args){
 
 	ASSERT(!args.empty()) // first argument is the filename of the executable
 
-	for(size_t i = 1; i < args.size(); ++i){
-		std::string arg(args[i]);
+	for(auto i = std::next(args.begin()); i != args.end(); ++i){
+		std::string arg(*i);
 
 		if(this->is_key_parsing_enabled && arg.size() >= long_key_prefix.size() && arg.find(long_key_prefix) == 0){
 			this->parse_long_key_argument(arg);
@@ -170,16 +170,16 @@ std::vector<std::string> parser::parse(utki::span<const char* const> args){
 			if(h){
 				// value is the next argument
 				++i;
-				if(i == args.size()){
+				if(i == args.end()){
 					std::stringstream ss;
 					ss << "argument '" << arg.back() << "' requires value";
 					throw std::invalid_argument(ss.str());
 				}
-				(*h)(args[i]);
+				(*h)(*i);
 			}
 		}else{
 			if(this->is_key_parsing_enabled && this->subcommand_handler){
-				this->subcommand_handler(args.subspan(i));
+				this->subcommand_handler(args.subspan(std::distance(args.begin(), i)));
 				ASSERT(ret.empty())
 				return ret;
 			}else{
