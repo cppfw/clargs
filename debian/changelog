@@ -1,3 +1,9 @@
+libclargs (0.2.17) unstable; urgency=medium
+
+  * add subcommands support
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 05 Apr 2021 14:10:19 +0300
+
 libclargs (0.2.16) unstable; urgency=medium
 
   * make non_key_handler passed by reference
