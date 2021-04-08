@@ -1,3 +1,9 @@
+libclargs (0.2.19) unstable; urgency=medium
+
+  * deploy to jfrog
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 08 Apr 2021 19:22:57 +0300
+
 libclargs (0.2.18) unstable; urgency=medium
 
   * use iterators instead of indices
