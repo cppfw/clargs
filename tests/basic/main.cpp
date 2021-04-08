@@ -15,9 +15,9 @@ int main(int argc, char** argv){
 			p.add('a', "description 2", [](std::string&&){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
-			ASSERT_INFO_ALWAYS(std::string(e.what()) == "argument with short key 'a' already exists", e.what())
+			utki::assert(std::string(e.what()) == "argument with short key 'a' already exists", [&](auto&o){o << e.what();}, SL);
 		}
-		ASSERT_ALWAYS(exception_caught)	
+		utki::assert(exception_caught, SL);
 	}
 	
 	// test adding same key twice (only long key)
@@ -32,9 +32,9 @@ int main(int argc, char** argv){
 			p.add("abrakadabra", "description 2", [](std::string&&){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
-			ASSERT_INFO_ALWAYS(std::string(e.what()) == "argument with long key 'abrakadabra' already exists", e.what())
+			utki::assert(std::string(e.what()) == "argument with long key 'abrakadabra' already exists", [&](auto&o){o << e.what();}, SL);
 		}
-		ASSERT_ALWAYS(exception_caught)	
+		utki::assert(exception_caught, SL);
 	}
 
 	// test adding same key twice (same short key and different long key)
@@ -49,9 +49,9 @@ int main(int argc, char** argv){
 			p.add('a', "simsalabim", "description 2", [](std::string&&){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
-			ASSERT_INFO_ALWAYS(std::string(e.what()) == "argument with short key 'a' already exists", e.what())
+			utki::assert(std::string(e.what()) == "argument with short key 'a' already exists", [&](auto&o){o << e.what();}, SL);
 		}
-		ASSERT_ALWAYS(exception_caught)	
+		utki::assert(exception_caught, SL);
 	}
 
 	// test adding same key twice (different short key and same long key)
@@ -66,9 +66,9 @@ int main(int argc, char** argv){
 			p.add('b', "abrakadabra", "description 2", [](std::string&&){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
-			ASSERT_INFO_ALWAYS(std::string(e.what()) == "argument with long key 'abrakadabra' already exists", e.what())
+			utki::assert(std::string(e.what()) == "argument with long key 'abrakadabra' already exists", [&](auto&o){o << e.what();}, SL);
 		}
-		ASSERT_ALWAYS(exception_caught)	
+		utki::assert(exception_caught, SL);
 	}
 
 	// test adding long key of one letter
@@ -80,7 +80,7 @@ int main(int argc, char** argv){
 		try{
 			p.add('b', "c", "description 2", [](std::string&&){});
 		}catch(std::logic_error& e){
-			ASSERT_ALWAYS(false)
+			utki::assert(false, SL);
 		}
 	}
 
@@ -109,11 +109,11 @@ int main(int argc, char** argv){
 
 		auto res = p.parse(utki::make_span(args));
 
-		ASSERT_INFO_ALWAYS(a == 3, "a = " << a)
-		ASSERT_INFO_ALWAYS(res.size() == 3, "res.size() = " << res.size())
-		ASSERT_INFO_ALWAYS(res[0] == "--aaa", "res[0] = " << res[0])
-		ASSERT_INFO_ALWAYS(res[1] == "-a", "res[1] = " << res[1])
-		ASSERT_INFO_ALWAYS(res[2] == "--aaa", "res[2] = " << res[2])
+		utki::assert(a == 3, [&](auto&o){o << "a = " << a;}, SL);
+		utki::assert(res.size() == 3, [&](auto&o){o << "res.size() = " << res.size();}, SL);
+		utki::assert(res[0] == "--aaa", [&](auto&o){o << "res[0] = " << res[0];}, SL);
+		utki::assert(res[1] == "-a", [&](auto&o){o << "res[1] = " << res[1];}, SL);
+		utki::assert(res[2] == "--aaa", [&](auto&o){o << "res[2] = " << res[2];}, SL);
 	}
 
 	// test enabling of key arguemnts parsing
@@ -150,11 +150,11 @@ int main(int argc, char** argv){
 
 		p.parse(utki::make_span(args));
 
-		ASSERT_INFO_ALWAYS(a == 3, "a = " << a)
-		ASSERT_INFO_ALWAYS(res.size() == 3, "res.size() = " << res.size())
-		ASSERT_INFO_ALWAYS(res[0] == "-a", "res[0] = " << res[0])
-		ASSERT_INFO_ALWAYS(res[1] == "--aaa", "res[1] = " << res[1])
-		ASSERT_INFO_ALWAYS(res[2] == "-a", "res[2] = " << res[2])
+		utki::assert(a == 3, [&](auto&o){o << "a = " << a;}, SL);
+		utki::assert(res.size() == 3, [&](auto&o){o << "res.size() = " << res.size();}, SL);
+		utki::assert(res[0] == "-a", [&](auto&o){o << "res[0] = " << res[0];}, SL);
+		utki::assert(res[1] == "--aaa", [&](auto&o){o << "res[1] = " << res[1];}, SL);
+		utki::assert(res[2] == "-a", [&](auto&o){o << "res[2] = " << res[2];}, SL);
 	}
 
 	// test that -- argument disables key arguments parsing
@@ -180,12 +180,12 @@ int main(int argc, char** argv){
 
 		auto res = p.parse(utki::make_span(args));
 
-		ASSERT_INFO_ALWAYS(a == 2, "a = " << a)
-		ASSERT_INFO_ALWAYS(res.size() == 4, "res.size() = " << res.size())
-		ASSERT_INFO_ALWAYS(res[0] == "-a", "res[0] = " << res[0])
-		ASSERT_INFO_ALWAYS(res[1] == "--aaa", "res[1] = " << res[1])
-		ASSERT_INFO_ALWAYS(res[2] == "-a", "res[2] = " << res[2])
-		ASSERT_INFO_ALWAYS(res[3] == "--aaa", "res[3] = " << res[3])
+		utki::assert(a == 2, [&](auto&o){o << "a = " << a;}, SL);
+		utki::assert(res.size() == 4, [&](auto&o){o << "res.size() = " << res.size();}, SL);
+		utki::assert(res[0] == "-a", [&](auto&o){o << "res[0] = " << res[0];}, SL);
+		utki::assert(res[1] == "--aaa", [&](auto&o){o << "res[1] = " << res[1];}, SL);
+		utki::assert(res[2] == "-a", [&](auto&o){o << "res[2] = " << res[2];}, SL);
+		utki::assert(res[3] == "--aaa", [&](auto&o){o << "res[3] = " << res[3];}, SL);
 	}
 
 	// test overriding the '--' argument handling
@@ -210,8 +210,8 @@ int main(int argc, char** argv){
 
 		auto res = p.parse(utki::make_span(args));
 
-		ASSERT_INFO_ALWAYS(a == 6, "a = " << a)
-		ASSERT_INFO_ALWAYS(res.size() == 0, "res.size() = " << res.size())
+		utki::assert(a == 6, [&](auto&o){o << "a = " << a;}, SL);
+		utki::assert(res.size() == 0, [&](auto&o){o << "res.size() = " << res.size();}, SL);
 	}
 
 	// test parsing of unadded '--=' argument
@@ -236,13 +236,13 @@ int main(int argc, char** argv){
 		bool exception_caught = false;
 		try{
 			p.parse(utki::make_span(args));
-			ASSERT_ALWAYS(false)
+			utki::assert(false, SL);
 		}catch(std::invalid_argument& e){
 			exception_caught = true;
-			ASSERT_INFO_ALWAYS(std::string(e.what()) == "unknown argument: --=", "e.what() = " << e.what())
+			utki::assert(std::string(e.what()) == "unknown argument: --=", [&](auto&o){o << "e.what() = " << e.what();}, SL);
 		}
 
-		ASSERT_ALWAYS(exception_caught)
+		utki::assert(exception_caught, SL);
 	}
 
 	// test parsing of added '--=' boolean argument
@@ -272,11 +272,11 @@ int main(int argc, char** argv){
 			p.parse(utki::make_span(args));
 		}catch(std::invalid_argument& e){
 			exception_caught = true;
-			ASSERT_INFO_ALWAYS(std::string(e.what()) == "key argument '' is a boolean argument and cannot have value", "e.what() = " << e.what())
+			utki::assert(std::string(e.what()) == "key argument '' is a boolean argument and cannot have value", [&](auto&o){o << "e.what() = " << e.what();}, SL);
 		}
 
-		ASSERT_ALWAYS(!boolean_equals_handled)
-		ASSERT_ALWAYS(exception_caught)
+		utki::assert(!boolean_equals_handled, SL);
+		utki::assert(exception_caught, SL);
 	}
 
 	// test parsing of added '--=' value argument
@@ -305,11 +305,11 @@ int main(int argc, char** argv){
 		try{
 			p.parse(utki::make_span(args));
 		}catch(std::invalid_argument& e){
-			ASSERT_INFO_ALWAYS(false, "e.what() = " << e.what())
+			utki::assert(false, [&](auto&o){o << "e.what() = " << e.what();}, SL);
 		}
-		ASSERT_INFO_ALWAYS(res.size() == 2, "res.size() = " << res.size())
-		ASSERT_INFO_ALWAYS(res[0] == "", "res[0] = " << res[0])
-		ASSERT_INFO_ALWAYS(res[1] == "blah blah", "res[1] = " << res[1])
+		utki::assert(res.size() == 2, [&](auto&o){o << "res.size() = " << res.size();}, SL);
+		utki::assert(res[0] == "", [&](auto&o){o << "res[0] = " << res[0];}, SL);
+		utki::assert(res[1] == "blah blah", [&](auto&o){o << "res[1] = " << res[1];}, SL);
 	}
 
 	// test parsing of concatenated short argument and its value
@@ -328,9 +328,9 @@ int main(int argc, char** argv){
 
 		p.parse(utki::make_span(args));
 
-		ASSERT_INFO_ALWAYS(res.size() == 2, "res.size() = " << res.size())
-		ASSERT_INFO_ALWAYS(res[0] == "blah", "res[0] = " << res[0])
-		ASSERT_INFO_ALWAYS(res[1] == "trololo", "res[1] = " << res[1])
+		utki::assert(res.size() == 2, [&](auto&o){o << "res.size() = " << res.size();}, SL);
+		utki::assert(res[0] == "blah", [&](auto&o){o << "res[0] = " << res[0];}, SL);
+		utki::assert(res[1] == "trololo", [&](auto&o){o << "res[1] = " << res[1];}, SL);
 	}
 
 	// test parsing of concatenated boolean arguments
@@ -350,10 +350,10 @@ int main(int argc, char** argv){
 
 		p.parse(utki::make_span(args));
 
-		ASSERT_INFO_ALWAYS(res.size() == 3, "res.size() = " << res.size())
-		ASSERT_INFO_ALWAYS(res[0] == "a", "res[0] = " << res[0])
-		ASSERT_INFO_ALWAYS(res[1] == "b", "res[1] = " << res[1])
-		ASSERT_INFO_ALWAYS(res[2] == "c", "res[2] = " << res[2])
+		utki::assert(res.size() == 3, [&](auto&o){o << "res.size() = " << res.size();}, SL);
+		utki::assert(res[0] == "a", [&](auto&o){o << "res[0] = " << res[0];}, SL);
+		utki::assert(res[1] == "b", [&](auto&o){o << "res[1] = " << res[1];}, SL);
+		utki::assert(res[2] == "c", [&](auto&o){o << "res[2] = " << res[2];}, SL);
 	}
 
 	// test parsing of concatenated boolean and value arguments
@@ -374,10 +374,10 @@ int main(int argc, char** argv){
 
 		p.parse(utki::make_span(args));
 
-		ASSERT_INFO_ALWAYS(res.size() == 3, "res.size() = " << res.size())
-		ASSERT_INFO_ALWAYS(res[0] == "a", "res[0] = " << res[0])
-		ASSERT_INFO_ALWAYS(res[1] == "b", "res[1] = " << res[1])
-		ASSERT_INFO_ALWAYS(res[2] == "c = dkg", "res[2] = " << res[2])
+		utki::assert(res.size() == 3, [&](auto&o){o << "res.size() = " << res.size();}, SL);
+		utki::assert(res[0] == "a", [&](auto&o){o << "res[0] = " << res[0];}, SL);
+		utki::assert(res[1] == "b", [&](auto&o){o << "res[1] = " << res[1];}, SL);
+		utki::assert(res[2] == "c = dkg", [&](auto&o){o << "res[2] = " << res[2];}, SL);
 	}
 
 	// test parsing of subcommands
@@ -401,7 +401,7 @@ int main(int argc, char** argv){
 		p.add('d', "ddd", "description", [&res](){res.push_back("d");});
 
 		p.add([&res = subres](utki::span<const char* const> args){
-			ASSERT_ALWAYS(!args.empty())
+			utki::assert(!args.empty(), SL);
 			res.push_back(args.front());
 			clargs::parser sp;
 
@@ -420,7 +420,7 @@ int main(int argc, char** argv){
 			"c = dkg"
 		};
 
-		ASSERT_ALWAYS(res == expected)
+		utki::assert(res == expected, SL);
 
 		std::vector<std::string> subexpected = {
 			"subcommand",
@@ -428,7 +428,7 @@ int main(int argc, char** argv){
 			"h = h_val"
 		};
 
-		ASSERT_INFO_ALWAYS(subres == subexpected, "subres.size() = " << subres.size() << ", subexpected.size() = " << subexpected.size())
+		utki::assert(subres == subexpected, [&](auto&o){o << "subres.size() = " << subres.size() << ", subexpected.size() = " << subexpected.size();}, SL);
 	}
 
 	// test parsing of subcommands when key parsing is disabled
@@ -454,7 +454,7 @@ int main(int argc, char** argv){
 		p.add([&res](std::string&& v){res.push_back(std::move(v));});
 
 		p.add([&res = subres](utki::span<const char* const> args){
-			ASSERT_ALWAYS(!args.empty())
+			utki::assert(!args.empty(), SL);
 			res.push_back(args.front());
 			clargs::parser sp;
 
@@ -476,9 +476,9 @@ int main(int argc, char** argv){
 			"--hhh=h_val"
 		};
 
-		ASSERT_ALWAYS(res == expected)
+		utki::assert(res == expected, SL);
 
-		ASSERT_INFO_ALWAYS(subres.empty(), "subres.size() = " << subres.size())
+		utki::assert(subres.empty(), [&](auto&o){o << "subres.size() = " << subres.size();}, SL);
 	}
 
 	return 0;
