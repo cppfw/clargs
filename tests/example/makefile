@@ -1,27 +1,14 @@
 include prorab.mk
 
+$(eval $(call prorab-config, ../../config))
+
 this_name := tests
 
-this_cxxflags += -g
-this_cxxflags += -Wall
-this_cxxflags += -Wno-format #no warnings about format
-this_cxxflags += -Wno-format-security #no warnings about format
-this_cxxflags += -DDEBUG
-this_cxxflags += -fstrict-aliasing #strict aliasing!!!
-this_cxxflags += -std=c++11
+this_srcs += $(call prorab-src-dir, .)
 
-this_srcs += main.cpp
+this_clargs_lib = $(d)../../src/out/$(c)/libclargs$(dot_so)
 
-this_clargs_lib = $(d)../../src/build/libclargs$(dot_so)
-
-this_ldlibs += $(this_clargs_lib) -lstdc++
-
-ifeq ($(os), macosx)
-    this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
-    this_ldlibs += -lc++
-else ifeq ($(os), windows)
-
-endif
+this_ldlibs += $(this_clargs_lib)
 
 this_no_install := true
 
@@ -33,8 +20,8 @@ this_test := $(word $(words $(this_dirs)),$(this_dirs))
 define this_rules
 test:: $(prorab_this_name)
 $(.RECIPEPREFIX)@myci-running-test.sh $(this_test)
-$(.RECIPEPREFIX)$(Q)cp $(d)../../src/build/*.dll . > /dev/null 2>&1 || true
-$(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src/build $(d)./tests \
+$(.RECIPEPREFIX)$(Q)cp $(d)../../src/out/$(c)/*.dll . > /dev/null 2>&1 || true
+$(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src/out/$(c) $(d)out/$(c)/tests \
         -a \
         -r10 \
         -b \

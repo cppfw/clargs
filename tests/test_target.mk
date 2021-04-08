@@ -1,10 +1,10 @@
 ifeq ($(os),windows)
     # to avoid /C converted to C:\ need to escape it as //C
-    this_test_cmd := (cd $(d) && cmd //C 'set PATH=../../src/build;%PATH% && $$(notdir $$^)')
+    this_test_cmd := (cd $(d) && cmd //C 'set PATH=../../src/out/$(c);%PATH% && out\$(c)\$$(notdir $$^)')
 else ifeq ($(os),macosx)
-    this_test_cmd := (cd $(d) && DYLD_LIBRARY_PATH=../../src/build ./$$(notdir $$^))
+    this_test_cmd := (cd $(d) && DYLD_LIBRARY_PATH=../../src/out/$(c) out/$(c)/$$(notdir $$^))
 else ifeq ($(os),linux)
-    this_test_cmd := (cd $(d) && LD_LIBRARY_PATH=../../src/build ./$$(notdir $$^))
+    this_test_cmd := (cd $(d) && LD_LIBRARY_PATH=../../src/out/$(c) out/$(c)/$$(notdir $$^))
 else
     $(error "Unknown OS")
 endif
@@ -20,17 +20,14 @@ $(.RECIPEPREFIX)@myci-passed.sh
 endef
 $(eval $(this_rule))
 
-
-
 ifeq ($(os),windows)
     # to avoid /C converted to C:\ need to escape it as //C
-    this_gdb_cmd := (cd $(d) && cmd //C 'set PATH=../../src/build;%PATH% && gdb $$(notdir $$^)')
+    this_gdb_cmd := (cd $(d) && cmd //C 'set PATH=../../src/out/$(c);%PATH% && gdb out\$(c)\$$(notdir $$^)')
 else ifeq ($(os),macosx)
-    this_gdb_cmd := (cd $(d) && DYLD_LIBRARY_PATH=../../src/build gdb ./$$(notdir $$^))
+    this_gdb_cmd := (cd $(d) && DYLD_LIBRARY_PATH=../../src/out/$(c) gdb out/$(c)/$$(notdir $$^))
 else ifeq ($(os),linux)
-    this_gdb_cmd := (cd $(d) && LD_LIBRARY_PATH=../../src/build gdb ./$$(notdir $$^))
+    this_gdb_cmd := (cd $(d) && LD_LIBRARY_PATH=../../src/out/$(c) gdb out/$(c)/$$(notdir $$^))
 endif
-
 
 define this_rule
 gdb:: $(prorab_this_name)
