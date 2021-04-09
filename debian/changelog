@@ -1,3 +1,9 @@
+libclargs (0.2.20) unstable; urgency=medium
+
+  * make parser::description() const
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 10 Apr 2021 00:17:02 +0300
+
 libclargs (0.2.19) unstable; urgency=medium
 
   * deploy to jfrog
