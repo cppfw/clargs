@@ -122,7 +122,7 @@ std::string parser::add_short_to_long_mapping(char short_key, std::string&& long
 	return ret;
 }
 
-std::string parser::description(unsigned keys_width, unsigned width){
+std::string parser::description(unsigned keys_width, unsigned width)const{
 	std::stringstream ss;
 
 	auto indentation = std::string(keys_width + 2, ' ');
@@ -195,7 +195,7 @@ std::vector<std::string> parser::parse(utki::span<const char* const> args){
 	return ret;
 }
 
-void parser::parse_long_key_argument(const std::string& arg) {
+void parser::parse_long_key_argument(const std::string& arg){
 	auto equals_pos = arg.find("=");
 	if(equals_pos != std::string::npos){
 		auto value = arg.substr(equals_pos + 1);
