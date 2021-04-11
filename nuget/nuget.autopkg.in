@@ -1,0 +1,102 @@
+configurations {
+	UserPlatformToolset {
+		// Needed because autopackage lacks VS2015+ support
+		key = "PlatformToolset";
+		choices: "v140,v141,v142";
+	};
+
+	RuntimeLibrary {
+		key = "RuntimeLibrary"; // This is the key you can find in .vcxproj file
+		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL"; // these choices must be valid values for .vcxproj file
+	};
+}
+
+nuget{
+	nuspec{
+		id = libclargs;
+		version : $(version);
+		title: command line arguments parsing C++ library;
+		authors: {Ivan Gagis};
+		owners: {Ivan Gagis};
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/clargs/master/LICENSE";
+		projectUrl: "https://github.com/cppfw/clargs";
+		iconUrl: "https://github.com/cppfw/clargs/blob/master/logo.svg";
+		requireLicenseAcceptance:false;
+		summary: C++ command line arguments parsing library;
+
+		description: @"C++ command line arguments parsing library";
+		releaseNotes: "Initial release";
+		copyright: Copyright 2021 Ivan Gagis;
+		tags: { native };
+	}
+	dependencies {
+		packages : {
+			libutki/1.0.124;
+		};
+	}
+	files {
+		// this is needed to put headers in the base folder
+		nestedInclude: {
+			#destination = ${d_include}clargs;
+			"..\src\clargs\**\*.hpp"
+		};
+
+		//==== v140 tools ====
+/*
+		[x86,v140,release] {
+			lib: ..\msvs_solution\v140_Release\libclargs.lib;
+		}
+		[x86,v140,debug] {
+			lib: ..\msvs_solution\v140_Debug\libclargs.lib;
+		}
+		[x64,v140,release] {
+			lib: ..\msvs_solution\x64\v140_Release\libclargs.lib;
+		}
+		[x64,v140,debug] {
+			lib: ..\msvs_solution\x64\v140_Debug\libclargs.lib;
+		}
+*/
+		//==== v141 tools ====
+/*
+		[x86,v141,release] {
+			lib: ..\msvs_solution\v141_Release\libclargs.lib;
+		}
+		[x86,v141,debug] {
+			lib: ..\msvs_solution\v141_Debug\libclargs.lib;
+		}
+		[x64,v141,release] {
+			lib: ..\msvs_solution\x64\v141_Release\libclargs.lib;
+		}
+		[x64,v141,debug] {
+			lib: ..\msvs_solution\x64\v141_Debug\libclargs.lib;
+		}
+*/
+		//==== v142 tools ====
+
+		[x86,v142,release,MultiThreaded] {
+			lib: ..\msvs_solution\v142_Release_MT\libclargs.lib;
+		}
+		[x86,v142,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\v142_Debug_MT\libclargs.lib;
+		}
+		[x64,v142,release,MultiThreaded] {
+			lib: ..\msvs_solution\x64\v142_Release_MT\libclargs.lib;
+		}
+		[x64,v142,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\x64\v142_Debug_MT\libclargs.lib;
+		}
+		[x86,v142,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\v142_Release_MD\libclargs.lib;
+		}
+		[x86,v142,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\v142_Debug_MD\libclargs.lib;
+		}
+		[x64,v142,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\x64\v142_Release_MD\libclargs.lib;
+		}
+		[x64,v142,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\x64\v142_Debug_MD\libclargs.lib;
+		}
+
+	}
+}
