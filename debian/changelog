@@ -1,3 +1,9 @@
+libclargs (0.2.22) unstable; urgency=medium
+
+  * deploy to conan
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 19 Apr 2021 01:35:37 +0300
+
 libclargs (0.2.21) unstable; urgency=medium
 
   * nuget
