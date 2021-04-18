@@ -26,7 +26,7 @@ $(eval $(prorab-build-app))
 $(prorab_this_name): $(abspath $(this_clargs_lib))
 
 this_test_deps := $(prorab_this_name)
-this_test_ld_path := $(subst $(prorab_space),:,../../src/out/$(c) $(CONAN_LIB_DIRS))
+this_test_ld_path := ../../src/out/$(c) $(CONAN_LIB_DIRS)
 
 this_test_cmd := $(prorab_this_name) \
         -a \

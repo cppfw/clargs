@@ -2,11 +2,14 @@ name: ci
 on: [push, pull_request]
 env:
   PACKAGE_NAME: ${{ github.event.repository.name }}
+  PACKAGE_VERSION: ${{ github.sha }}
   MYCI_JFROG_USERNAME: ivan.gagis@gmail.com
   MYCI_JFROG_PASSWORD: ${{ secrets.MYCI_JFROG_PASSWORD }}
   MYCI_GIT_USERNAME: igagis
   MYCI_GIT_PASSWORD: ${{ secrets.MYCI_GIT_ACCESS_TOKEN }}
   CONAN_REMOTE: https://cppfw.jfrog.io/artifactory/api/conan/conan
+  CONAN_V2_MODE: 1
+  CONAN_REVISIONS_ENABLED: 1
 jobs:
 ##### linux #####
   linux:
@@ -145,10 +148,6 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
 ##### conan - linux #####
   conan-linux:
-    env:
-      CONAN_V2_MODE: 1
-      CONAN_REVISIONS_ENABLED: 1
-      PACKAGE_VERSION: ${{ github.sha }}
     strategy:
       fail-fast: false
       matrix:
@@ -194,11 +193,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
 ##### conan - macosx #####
   conan-macosx:
-    name: conan - macosx 
-    env:
-      CONAN_V2_MODE: 1
-      CONAN_REVISIONS_ENABLED: 1
-      PACKAGE_VERSION: ${{ github.sha }}
+    name: conan - macosx
     runs-on: macos-latest
     steps:
       - name: git clone

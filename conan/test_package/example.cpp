@@ -7,7 +7,5 @@ int main(int argc, const char** argv){
 
 	p.add("help", "show help information", [&help](){help = true;});
 
-	if(help){
-		std::cout << p.description() << '\n';
-	}
+	std::cout << p.description() << '\n';
 }
