@@ -158,7 +158,7 @@ jobs:
           - {os: raspbian, codename: buster, image_owner: igagis/, arch: armhf, labels: [arm,docker]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
-    name: conan - linux - ${{ matrix.image_owner }}${{ matrix.arch }}
+    name: conan - linux - ${{ matrix.arch }}
     steps:
       - name: git clone
         uses: actions/checkout@v1
