@@ -182,12 +182,13 @@ jobs:
       - name: prepare conanfile
         run: myci-apply-version.sh -v $PACKAGE_VERSION conan/conanfile.py.in
       - name: build
-        run: conan create conan
+        run: |
+          conan remote add cppfw $CONAN_REMOTE
+          conan create conan
       - name: deploy conan package
         env:
           CONAN_REVISIONS_ENABLED: 1
         run: |
-          conan remote add cppfw $CONAN_REMOTE
           conan user --remote cppfw --password $MYCI_JFROG_PASSWORD $MYCI_JFROG_USERNAME
           conan upload --remote cppfw --all $PACKAGE_NAME/$PACKAGE_VERSION@
         if: startsWith(github.ref, 'refs/tags/')
@@ -214,12 +215,13 @@ jobs:
       - name: prepare conanfile
         run: myci-apply-version.sh -v $PACKAGE_VERSION conan/conanfile.py.in
       - name: build
-        run: conan create conan
+        run: |
+          conan remote add cppfw $CONAN_REMOTE
+          conan create conan
       - name: deploy conan package
         env:
           CONAN_REVISIONS_ENABLED: 1
         run: |
-          conan remote add cppfw $CONAN_REMOTE
           conan user --remote cppfw --password $MYCI_JFROG_PASSWORD $MYCI_JFROG_USERNAME
           conan upload --remote cppfw --all $PACKAGE_NAME/$PACKAGE_VERSION@
         if: startsWith(github.ref, 'refs/tags/')

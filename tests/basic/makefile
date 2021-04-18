@@ -1,4 +1,5 @@
 include prorab.mk
+include prorab-test.mk
 include myci.mk
 
 $(eval $(call myci-try-include, $(CONANBUILDINFO_DIR)/conanbuildinfo.mak))
@@ -24,6 +25,9 @@ $(eval $(prorab-build-app))
 # add dependency on libclargs
 $(prorab_this_name): $(abspath $(this_clargs_lib))
 
-include $(d)../test_target.mk
+this_test_cmd := $(prorab_this_name)
+this_test_deps := $(prorab_this_name)
+this_test_ld_path := $(subst $(prorab_space),:,../../src/out/$(c) $(CONAN_LIB_DIRS))
+$(eval $(prorab-test))
 
 $(eval $(call prorab-include, ../../src/makefile))
