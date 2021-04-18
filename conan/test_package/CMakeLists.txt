@@ -6,7 +6,7 @@ conan_basic_setup()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
-set(CMAKE_VERBOSE_MAKEFILE on)
+# set(CMAKE_VERBOSE_MAKEFILE on)
 
 add_executable(example example.cpp)
 target_link_libraries(example ${CONAN_LIBS})
