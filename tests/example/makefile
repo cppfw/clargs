@@ -1,4 +1,8 @@
 include prorab.mk
+include prorab-test.mk
+include myci.mk
+
+$(eval $(call myci-try-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
 
 $(eval $(call prorab-config, ../../config))
 
@@ -8,20 +12,23 @@ this_srcs += $(call prorab-src-dir, .)
 
 this_clargs_lib = $(d)../../src/out/$(c)/libclargs$(dot_so)
 
-this_ldlibs += $(this_clargs_lib)
+this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
+
+this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
+
+this_ldlibs += $(this_clargs_lib) -lutki
 
 this_no_install := true
 
 $(eval $(prorab-build-app))
 
-this_dirs := $(subst /, ,$(d))
-this_test := $(word $(words $(this_dirs)),$(this_dirs))
+# add dependency on libclargs
+$(prorab_this_name): $(abspath $(this_clargs_lib))
 
-define this_rules
-test:: $(prorab_this_name)
-$(.RECIPEPREFIX)@myci-running-test.sh $(this_test)
-$(.RECIPEPREFIX)$(Q)cp $(d)../../src/out/$(c)/*.dll . > /dev/null 2>&1 || true
-$(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src/out/$(c) $(d)out/$(c)/tests \
+this_test_deps := $(prorab_this_name)
+this_test_ld_path := ../../src/out/$(c) $(CONAN_LIB_DIRS)
+
+this_test_cmd := $(prorab_this_name) \
         -a \
         -r10 \
         -b \
@@ -37,15 +44,10 @@ $(.RECIPEPREFIX)$(Q)LD_LIBRARY_PATH=$(d)../../src/out/$(c) $(d)out/$(c)/tests \
         -q"expected short key quoted value" \
         -d "expected short key space quoted value" \
         \
-        | sed 's/\x0D//' > $(d)out.txt
-$(.RECIPEPREFIX)$(Q)cmp $(d)out.txt $(d)out.txt.cmp; \
+        | sed 's/\x0D//' > $(d)out.txt && \
+        cmp $(d)out.txt $(d)out.txt.cmp; \
         if [ $$$$? -ne 0 ]; then echo "out.txt = "; cat $(d)out.txt; myci-error.sh "test program output was not as expected"; exit 1; fi
-$(.RECIPEPREFIX)@myci-passed.sh
-endef
-$(eval $(this_rules))
 
-
-# add dependency on libclargs
-$(prorab_this_name): $(abspath $(this_clargs_lib))
+$(eval $(prorab-test))
 
 $(eval $(call prorab-include, ../../src/makefile))
