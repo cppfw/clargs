@@ -1,3 +1,9 @@
+libclargs (0.2.25) unstable; urgency=medium
+
+  * relink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 26 May 2021 22:10:29 +0300
+
 libclargs (0.2.24) unstable; urgency=medium
 
   * relink to latest utki
