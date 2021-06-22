@@ -1,3 +1,9 @@
+libclargs (0.2.27) unstable; urgency=medium
+
+  * build for debian buster arm
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 23 Jun 2021 01:54:52 +0300
+
 libclargs (0.2.26) unstable; urgency=medium
 
   * relink to latest utki
