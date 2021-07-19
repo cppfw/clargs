@@ -1,3 +1,9 @@
+libclargs (0.2.29) unstable; urgency=medium
+
+  * deploy to own repo
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 19 Jul 2021 18:51:01 +0300
+
 libclargs (0.2.28) unstable; urgency=medium
 
   * build for debian buster arm
