@@ -1,3 +1,9 @@
+libclargs (0.2.30) unstable; urgency=medium
+
+  * fix msys2 deploy
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 19 Jul 2021 18:59:57 +0300
+
 libclargs (0.2.29) unstable; urgency=medium
 
   * deploy to own repo
