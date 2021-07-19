@@ -11,7 +11,7 @@ class Libclargs < Formula
 
   def install
     ENV['PATH'] += ':/usr/local/bin'
-    system "make", "-C", "src", "install", "PREFIX=#{prefix}"
+    system "make", "install", "PREFIX=#{prefix}"
   end
 
   test do
