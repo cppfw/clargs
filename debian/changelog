@@ -1,3 +1,9 @@
+libclargs (0.2.31) unstable; urgency=medium
+
+  * use latest make in homebrew formulae
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 10 Aug 2021 23:24:38 +0300
+
 libclargs (0.2.30) unstable; urgency=medium
 
   * fix msys2 deploy
