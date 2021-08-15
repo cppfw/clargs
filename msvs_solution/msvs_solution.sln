@@ -7,6 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libclargs", "libclargs\libc
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		v141_Debug|x64 = v141_Debug|x64
+		v141_Debug|x86 = v141_Debug|x86
+		v141_Release|x64 = v141_Release|x64
+		v141_Release|x86 = v141_Release|x86
 		v142_Debug_MD|x64 = v142_Debug_MD|x64
 		v142_Debug_MD|x86 = v142_Debug_MD|x86
 		v142_Debug_MT|x64 = v142_Debug_MT|x64
@@ -17,6 +21,14 @@ Global
 		v142_Release_MT|x86 = v142_Release_MT|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{769AB892-543C-4480-830D-243EF01BC597}.v141_Debug|x64.ActiveCfg = v141_Debug|x64
+		{769AB892-543C-4480-830D-243EF01BC597}.v141_Debug|x64.Build.0 = v141_Debug|x64
+		{769AB892-543C-4480-830D-243EF01BC597}.v141_Debug|x86.ActiveCfg = v141_Debug|Win32
+		{769AB892-543C-4480-830D-243EF01BC597}.v141_Debug|x86.Build.0 = v141_Debug|Win32
+		{769AB892-543C-4480-830D-243EF01BC597}.v141_Release|x64.ActiveCfg = v141_Release|x64
+		{769AB892-543C-4480-830D-243EF01BC597}.v141_Release|x64.Build.0 = v141_Release|x64
+		{769AB892-543C-4480-830D-243EF01BC597}.v141_Release|x86.ActiveCfg = v141_Release|Win32
+		{769AB892-543C-4480-830D-243EF01BC597}.v141_Release|x86.Build.0 = v141_Release|Win32
 		{769AB892-543C-4480-830D-243EF01BC597}.v142_Debug_MD|x64.ActiveCfg = v142_Debug_MD|x64
 		{769AB892-543C-4480-830D-243EF01BC597}.v142_Debug_MD|x64.Build.0 = v142_Debug_MD|x64
 		{769AB892-543C-4480-830D-243EF01BC597}.v142_Debug_MD|x86.ActiveCfg = v142_Debug_MD|Win32
