@@ -1,3 +1,9 @@
+libclargs (0.2.34) unstable; urgency=medium
+
+  * build for debian bullseye
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 29 Aug 2021 21:59:19 +0300
+
 libclargs (0.2.33) unstable; urgency=medium
 
   * msvs: build for v141 tools
