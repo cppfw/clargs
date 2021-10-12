@@ -95,8 +95,8 @@ void parser::add_argument(
 		throw std::logic_error(ss.str());
 	}
 
-	mapping_scope_exit.reset();
-	description_scope_exit.reset();
+	mapping_scope_exit.release();
+	description_scope_exit.release();
 }
 
 std::string parser::add_short_to_long_mapping(char short_key, std::string&& long_key) {
