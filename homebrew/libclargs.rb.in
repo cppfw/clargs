@@ -9,12 +9,13 @@ class Libclargs < Formula
   depends_on "myci" => :build
   depends_on "libutki"
 
+  # use gmake here because otherwise homebrew uses default Mac's make which is of too old version 3.81
   def install
     ENV['PATH'] += ':/usr/local/bin'
-    system "make", "-C", "src", "install", "PREFIX=#{prefix}"
+    system "/usr/local/opt/make/libexec/gnubin/make", "install", "PREFIX=#{prefix}"
   end
 
   test do
-    system "make", "test"
+    system "/usr/local/opt/make/libexec/gnubin/make", "test"
   end
 end

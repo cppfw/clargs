@@ -1,3 +1,39 @@
+libclargs (0.2.34) unstable; urgency=medium
+
+  * build for debian bullseye
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 29 Aug 2021 21:59:19 +0300
+
+libclargs (0.2.33) unstable; urgency=medium
+
+  * msvs: build for v141 tools
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 15 Aug 2021 14:47:57 +0300
+
+libclargs (0.2.32) unstable; urgency=medium
+
+  * re-release
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 11 Aug 2021 13:20:06 +0300
+
+libclargs (0.2.31) unstable; urgency=medium
+
+  * use latest make in homebrew formulae
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 10 Aug 2021 23:24:38 +0300
+
+libclargs (0.2.30) unstable; urgency=medium
+
+  * fix msys2 deploy
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 19 Jul 2021 18:59:57 +0300
+
+libclargs (0.2.29) unstable; urgency=medium
+
+  * deploy to own repo
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 19 Jul 2021 18:51:01 +0300
+
 libclargs (0.2.28) unstable; urgency=medium
 
   * build for debian buster arm
