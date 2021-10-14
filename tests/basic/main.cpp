@@ -5,187 +5,42 @@
 int main(int argc, char** argv){
 	// test adding same key twice (only short key)
 	{
-		clargs::parser p;
-
-		p.add('a', "description", [](){});
-
-		bool exception_caught = false;
-
-		try{
-			p.add('a', "description 2", [](std::string&&){});
-		}catch(std::logic_error& e){
-			exception_caught = true;
-			utki::assert(std::string(e.what()) == "argument with short key 'a' already exists", [&](auto&o){o << e.what();}, SL);
-		}
-		utki::assert(exception_caught, SL);
+		
 	}
 	
 	// test adding same key twice (only long key)
 	{
-		clargs::parser p;
-
-		p.add("abrakadabra", "description", [](){});
-
-		bool exception_caught = false;
-
-		try{
-			p.add("abrakadabra", "description 2", [](std::string&&){});
-		}catch(std::logic_error& e){
-			exception_caught = true;
-			utki::assert(std::string(e.what()) == "argument with long key 'abrakadabra' already exists", [&](auto&o){o << e.what();}, SL);
-		}
-		utki::assert(exception_caught, SL);
+		
 	}
 
 	// test adding same key twice (same short key and different long key)
 	{
-		clargs::parser p;
-
-		p.add('a', "abrakadabra", "description", [](){});
-
-		bool exception_caught = false;
-
-		try{
-			p.add('a', "simsalabim", "description 2", [](std::string&&){});
-		}catch(std::logic_error& e){
-			exception_caught = true;
-			utki::assert(std::string(e.what()) == "argument with short key 'a' already exists", [&](auto&o){o << e.what();}, SL);
-		}
-		utki::assert(exception_caught, SL);
+		
 	}
 
 	// test adding same key twice (different short key and same long key)
 	{
-		clargs::parser p;
-
-		p.add('a', "abrakadabra", "description", [](){});
-
-		bool exception_caught = false;
-
-		try{
-			p.add('b', "abrakadabra", "description 2", [](std::string&&){});
-		}catch(std::logic_error& e){
-			exception_caught = true;
-			utki::assert(std::string(e.what()) == "argument with long key 'abrakadabra' already exists", [&](auto&o){o << e.what();}, SL);
-		}
-		utki::assert(exception_caught, SL);
+		
 	}
 
 	// test adding long key of one letter
 	{
-		clargs::parser p;
 
-		p.add('a', "b", "description", [](){});
-
-		try{
-			p.add('b', "c", "description 2", [](std::string&&){});
-		}catch(std::logic_error& e){
-			utki::assert(false, SL);
-		}
 	}
 
 	// test disabling of key arguemnts parsing
 	{
-		clargs::parser p;
-
-		unsigned a = 0;
 		
-		p.add('a', "aaa", "description", [&a, &p](){
-			++a;
-			if(a == 3){
-				p.enable_key_parsing(false);
-			}
-		});
-
-		std::vector<const char*> args = {{
-			"program_executable",
-			"-a",
-			"--aaa",
-			"-a",
-			"--aaa",
-			"-a",
-			"--aaa"
-		}};
-
-		auto res = p.parse(utki::make_span(args));
-
-		utki::assert(a == 3, [&](auto&o){o << "a = " << a;}, SL);
-		utki::assert(res.size() == 3, [&](auto&o){o << "res.size() = " << res.size();}, SL);
-		utki::assert(res[0] == "--aaa", [&](auto&o){o << "res[0] = " << res[0];}, SL);
-		utki::assert(res[1] == "-a", [&](auto&o){o << "res[1] = " << res[1];}, SL);
-		utki::assert(res[2] == "--aaa", [&](auto&o){o << "res[2] = " << res[2];}, SL);
 	}
 
 	// test enabling of key arguemnts parsing
 	{
-		clargs::parser p;
-
-		unsigned a = 0;
 		
-		p.add('a', "aaa", "description", [&a, &p](){
-			++a;
-			if(a == 2){
-				p.enable_key_parsing(false);
-			}
-		});
-
-		std::vector<const char*> args = {{
-			"program_executable",
-			"-a",
-			"--aaa",
-			"-a",
-			"--aaa",
-			"-a",
-			"--aaa"
-		}};
-
-		std::vector<std::string> res;
-
-		p.add([&res, &p](std::string&& str){
-			res.push_back(std::move(str));
-			if(res.size() == 3){
-				p.enable_key_parsing(true);
-			}
-		});
-
-		p.parse(utki::make_span(args));
-
-		utki::assert(a == 3, [&](auto&o){o << "a = " << a;}, SL);
-		utki::assert(res.size() == 3, [&](auto&o){o << "res.size() = " << res.size();}, SL);
-		utki::assert(res[0] == "-a", [&](auto&o){o << "res[0] = " << res[0];}, SL);
-		utki::assert(res[1] == "--aaa", [&](auto&o){o << "res[1] = " << res[1];}, SL);
-		utki::assert(res[2] == "-a", [&](auto&o){o << "res[2] = " << res[2];}, SL);
 	}
 
 	// test that -- argument disables key arguments parsing
 	{
-		clargs::parser p;
-
-		unsigned a = 0;
 		
-		p.add('a', "aaa", "description", [&a](){
-			++a;
-		});
-
-		std::vector<const char*> args = {{
-			"program_executable",
-			"-a",
-			"--aaa",
-			"--",
-			"-a",
-			"--aaa",
-			"-a",
-			"--aaa"
-		}};
-
-		auto res = p.parse(utki::make_span(args));
-
-		utki::assert(a == 2, [&](auto&o){o << "a = " << a;}, SL);
-		utki::assert(res.size() == 4, [&](auto&o){o << "res.size() = " << res.size();}, SL);
-		utki::assert(res[0] == "-a", [&](auto&o){o << "res[0] = " << res[0];}, SL);
-		utki::assert(res[1] == "--aaa", [&](auto&o){o << "res[1] = " << res[1];}, SL);
-		utki::assert(res[2] == "-a", [&](auto&o){o << "res[2] = " << res[2];}, SL);
-		utki::assert(res[3] == "--aaa", [&](auto&o){o << "res[3] = " << res[3];}, SL);
 	}
 
 	// test overriding the '--' argument handling
