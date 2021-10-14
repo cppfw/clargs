@@ -1,0 +1,5 @@
+[submodule "tests/harness/tst"]
+	path = tests/harness/tst
+	url = git@github.com:cppfw/tst
+	branch = master
+#	ignore = dirty
