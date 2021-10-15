@@ -18,7 +18,7 @@ this_harness_ld_paths := $(abspath $(d)../harness/tst/src/out/$(tst_cfg))
 
 this_cxxflags += -I ../harness/tst/src -I ../../src
 this_ldflags += $(addprefix -L,$(this_harness_ld_paths))
-this_ldlibs += $(this_libclargs) -ltst -lm
+this_ldlibs += $(this_libclargs) -ltst -lutki
 
 $(eval $(prorab-build-app))
 
