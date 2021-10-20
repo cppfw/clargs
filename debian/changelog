@@ -1,3 +1,9 @@
+libclargs (0.2.36) unstable; urgency=medium
+
+  * fix homebrew recipe
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 20 Oct 2021 13:18:32 +0300
+
 libclargs (0.2.35) unstable; urgency=medium
 
   * do not use deprecated stuff
