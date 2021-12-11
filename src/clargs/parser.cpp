@@ -227,19 +227,13 @@ std::vector<std::string> parser::parse(utki::span<const char* const> args){
 	return ret;
 }
 
-void parser::parse_long_key_argument(const std::string& arg){
+void parser::parse_long_key_argument(std::string_view arg){
 	auto equals_pos = arg.find("=");
 	if(equals_pos != std::string::npos){
 		auto value = arg.substr(equals_pos + 1);
-		auto key = arg.substr(long_key_prefix.size(), equals_pos - long_key_prefix.size());
+		auto key = std::string(arg.substr(long_key_prefix.size(), equals_pos - long_key_prefix.size()));
 
-		auto i = std::find_if(
-				this->arguments.begin(),
-				this->arguments.end(),
-				[&key](const auto& v){
-					return v.first == key;
-				}
-			);
+		auto i = this->arguments.find(key);
 		if(i != this->arguments.end()){
 			if(!i->second.value_handler){
 				std::stringstream ss;
@@ -250,7 +244,7 @@ void parser::parse_long_key_argument(const std::string& arg){
 			return;
 		}
 	}else{
-		auto key = arg.substr(long_key_prefix.size());
+		auto key = std::string(arg.substr(long_key_prefix.size()));
 		auto i = this->arguments.find(key);
 		if(i != this->arguments.end()){
 			ASSERT(i->second.boolean_handler)
@@ -268,7 +262,7 @@ void parser::parse_long_key_argument(const std::string& arg){
 	throw std::invalid_argument(ss.str());
 }
 
-std::function<void(std::string_view)>* parser::parse_short_keys_batch(const std::string& arg){
+std::function<void(std::string_view)>* parser::parse_short_keys_batch(std::string_view arg){
 	ASSERT(arg.size() > 1)
 	for(unsigned i = 1; i != arg.size(); ++i){
 		auto key = arg[i];
