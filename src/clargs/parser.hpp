@@ -63,7 +63,9 @@ public:
 				short_key,
 				std::move(long_key),
 				std::move(description),
-				std::move(value_handler),
+				[f = std::move(value_handler)](std::string_view v){
+					f(std::string(v));
+				},
 				nullptr
 			);
 	}
@@ -105,7 +107,9 @@ public:
 				'\0',
 				std::move(long_key),
 				std::move(description),
-				std::move(value_handler),
+				[f = std::move(value_handler)](std::string_view v){
+					f(std::string(v));
+				},
 				std::move(default_value_handler)
 			);
 	}
@@ -251,7 +255,7 @@ private:
 	bool is_key_parsing_enabled = true;
 
 	struct argument_callbacks{
-		std::function<void(std::string&&)> value_handler;
+		std::function<void(std::string_view)> value_handler;
 		std::function<void()> boolean_handler;
 	};
 
@@ -284,7 +288,7 @@ private:
 			char short_key,
 			std::string&& long_key,
 			std::string&& description,
-			std::function<void(std::string&&)>&& value_handler,
+			std::function<void(std::string_view)>&& value_handler,
 			std::function<void()>&& boolean_handler
 		);
 
@@ -292,7 +296,7 @@ private:
 
 	// returns pointer to last argument's value handler in case value is the next argument.
 	// returns nullptr otherwise.
-	std::function<void(std::string&&)>* parse_short_keys_batch(const std::string& arg);
+	std::function<void(std::string_view)>* parse_short_keys_batch(const std::string& arg);
 };
 
 }

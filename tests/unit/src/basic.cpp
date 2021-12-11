@@ -483,17 +483,17 @@ tst::set set("basic", [](tst::suite& suite){
 			"-b"
 		};
 
-		try{
+		// try{
 			p.parse(args);
 			tst::check(false, SL);
-		}catch(const std::exception& e){
-			try{
-				std::rethrow_if_nested(e);
-				tst::check(false, SL);
-			}catch(const std::exception& e){
-				print_exception(e, level+1);
-			}catch(...){}
-		}
+		// }catch(const std::exception& e){
+		// 	try{
+		// 		std::rethrow_if_nested(e);
+		// 		tst::check(false, SL);
+		// 	}catch(const std::exception& e){
+		// 		print_exception(e, level+1);
+		// 	}catch(...){}
+		// }
 	});
 
 	suite.add("throw_exception_from_string_key_handler", []{
