@@ -1,3 +1,9 @@
+libclargs (0.2.38) unstable; urgency=medium
+
+  * rebuild for conan
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 12 Dec 2021 18:36:33 +0200
+
 libclargs (0.2.37) unstable; urgency=medium
 
   * fix homebrew recipe
