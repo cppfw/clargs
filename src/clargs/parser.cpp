@@ -151,7 +151,7 @@ std::string parser::get_long_key_for_short_key(char short_key, std::string&& lon
 		return ss.str();
 	}
 
-	return long_key;
+	return std::move(long_key);
 }
 
 std::string parser::description(unsigned keys_width, unsigned width)const{
