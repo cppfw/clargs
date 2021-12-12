@@ -102,15 +102,7 @@ void parser::add_argument(
 		this->short_to_long_map.erase(short_key);
 	});
 
-	auto res = this->arguments.insert(std::make_pair(
-			actual_key,
-			argument_callbacks{
-				std::move(value_handler),
-				std::move(boolean_handler)
-			}
-		));
-	
-	if(!res.second){
+	if(this->arguments.find(actual_key) != this->arguments.end()){
 		std::stringstream ss;
 		ss << "argument with ";
 		ASSERT(!actual_key.empty())
@@ -124,11 +116,24 @@ void parser::add_argument(
 		throw std::logic_error(ss.str());
 	}
 
+#ifdef DEBUG
+	auto res =
+#endif
+	this->arguments.insert(std::make_pair(
+			std::move(actual_key),
+			argument_callbacks{
+				std::move(value_handler),
+				std::move(boolean_handler)
+			}
+		));
+	
+	ASSERT(res.second)
+
 	mapping_scope_exit.release();
 	description_scope_exit.release();
 }
 
-std::string parser::add_short_to_long_mapping(char short_key, std::string&& long_key) {
+std::string parser::add_short_to_long_mapping(char short_key, std::string&& long_key){
 	std::string ret;
 	if(long_key.empty() && short_key != '\0'){
 		// key name cannot have spaces, so starting a long name with space makes
@@ -267,13 +272,18 @@ std::function<void(std::string_view)>* parser::parse_short_keys_batch(std::strin
 	for(unsigned i = 1; i != arg.size(); ++i){
 		auto key = arg[i];
 
-		std::string actual_key;
+		std::array<char, 2> no_long_key_actual_key = {' '};
+		std::string_view actual_key;
 		{
 			auto iter = this->short_to_long_map.find(key);
 			if(iter != this->short_to_long_map.end()){
 				actual_key = iter->second;
 			}else{
-				actual_key = std::string(1, ' ') + key;
+				no_long_key_actual_key[1] = key; // make key name starting with space
+				actual_key = std::string_view(
+						no_long_key_actual_key.data(),
+						no_long_key_actual_key.size()
+					);
 			}
 		}
 
