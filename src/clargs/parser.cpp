@@ -291,7 +291,7 @@ std::function<void(std::string_view)>* parser::parse_short_keys_batch(std::strin
 		auto iter = this->arguments.find(actual_key);
 		if(iter == this->arguments.end()){
 			std::stringstream ss;
-			ss << "unknown argument: " << arg;
+			ss << "unknown argument: " << std::string(arg); // MSVC: no operator<<(std::string_view)
 			throw std::invalid_argument(ss.str());
 		}
 
