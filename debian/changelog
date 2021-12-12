@@ -1,3 +1,9 @@
+libclargs (0.2.39) unstable; urgency=medium
+
+  * remove deprecated methods
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 13 Dec 2021 00:39:58 +0200
+
 libclargs (0.2.38) unstable; urgency=medium
 
   * rebuild for conan
