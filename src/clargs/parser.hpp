@@ -56,6 +56,23 @@ public:
 			char short_key,
 			std::string&& long_key,
 			std::string&& description,
+			std::function<void(std::string_view)>&& value_handler
+		)
+	{
+		this->add_argument(
+				short_key,
+				std::move(long_key),
+				std::move(description),
+				std::move(value_handler),
+				nullptr
+			);
+	}
+
+	// this method is deprecated
+	void add(
+			char short_key,
+			std::string&& long_key,
+			std::string&& description,
 			std::function<void(std::string&&)>&& value_handler
 		)
 	{
@@ -83,6 +100,16 @@ public:
 	void add(
 			char short_key,
 			std::string&& description,
+			std::function<void(std::string_view)>&& value_handler
+		)
+	{
+		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
+	}
+
+	// this method is deprecated
+	void add(
+			char short_key,
+			std::string&& description,
 			std::function<void(std::string&&)>&& value_handler
 		)
 	{
@@ -96,8 +123,25 @@ public:
 	 * @param long_key - long, dash separated argument name.
 	 * @param description - argument description.
 	 * @param value_handler - callback function which is called to handle value of the argument.
-	 * @param default_value_handler - callback function which is called when the argument has not value given.
+	 * @param default_value_handler - callback function which is called when the argument has no value given.
 	 */
+	void add(
+			std::string&& long_key,
+			std::string&& description,
+			std::function<void(std::string_view)>&& value_handler,
+			std::function<void()>&& default_value_handler = nullptr
+		)
+	{
+		this->add_argument(
+				'\0',
+				std::move(long_key),
+				std::move(description),
+				std::move(value_handler),
+				std::move(default_value_handler)
+			);
+	}
+
+	// this method is deprecated
 	void add(
 			std::string&& long_key,
 			std::string&& description,
@@ -167,26 +211,36 @@ public:
 	 * This argument does not have a value.
 	 * @param long_key - long, dash separated argument name.
 	 * @param description - argument description.
-	 * @param value_handler - callback function which is called to handle the argument presence in the command line.
+	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
 	void add(
 			std::string&& long_key,
 			std::string&& description,
-			std::function<void()>&& value_handler
+			std::function<void()>&& boolean_handler
 		)
 	{
-		this->add('\0', std::move(long_key), std::move(description), std::move(value_handler));
+		this->add('\0', std::move(long_key), std::move(description), std::move(boolean_handler));
 	}
 
 	/**
 	 * @brief Add handler for non-key arguments.
 	 * @param non_key_handler - handler callback for non-key arguments.
 	 */
-	void add(std::function<void(std::string&&)>&& non_key_handler){
+	void add(std::function<void(std::string_view)>&& non_key_handler){
 		if(this->non_key_handler){
 			throw std::logic_error("non-key handler is already added");
 		}
 		this->non_key_handler = std::move(non_key_handler);
+	}
+
+	// this method is deprecated
+	void add(std::function<void(std::string&&)>&& non_key_handler){
+		if(this->non_key_handler){
+			throw std::logic_error("non-key handler is already added");
+		}
+		this->non_key_handler = [f = std::move(non_key_handler)](std::string_view v){
+			f(std::string(v));
+		};
 	}
 
 	/**
@@ -267,6 +321,7 @@ private:
 			std::less<>
 		> arguments;
 
+	// TODO: map to string_view?
 	std::unordered_map<char, std::string> short_to_long_map;
 
 	struct key_description{
@@ -274,7 +329,7 @@ private:
 		std::string description;
 	};
 
-	std::function<void(std::string&&)> non_key_handler;
+	std::function<void(std::string_view)> non_key_handler;
 
 	std::function<void(utki::span<const char* const>)> subcommand_handler;
 
