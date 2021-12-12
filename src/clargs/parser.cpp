@@ -242,7 +242,8 @@ void parser::parse_long_key_argument(std::string_view arg){
 		if(i != this->arguments.end()){
 			if(!i->second.value_handler){
 				std::stringstream ss;
-				ss << "key argument '" << std::string(key) << "' is a boolean argument and cannot have value";
+				ss << "key argument '" << std::string(key); // MSVC: no operator<<(std::string_view)
+				ss << "' is a boolean argument and cannot have value";
 				throw std::invalid_argument(ss.str());
 			}
 			i->second.value_handler(std::move(value));
@@ -263,7 +264,7 @@ void parser::parse_long_key_argument(std::string_view arg){
 		}
 	}
 	std::stringstream ss;
-	ss << "unknown argument: " << arg;
+	ss << "unknown argument: " << std:string_view(arg); // MSVC: no operator<<(std::string_view)
 	throw std::invalid_argument(ss.str());
 }
 
