@@ -68,27 +68,6 @@ public:
 			);
 	}
 
-	// this method is deprecated
-	void add(
-			char short_key,
-			std::string&& long_key,
-			std::string&& description,
-			std::function<void(std::string&&)>&& value_handler
-		)
-	{
-		this->add_argument(
-				short_key,
-				std::move(long_key),
-				std::move(description),
-				[f = std::move(value_handler)](std::string_view v){
-					f(std::string(v));
-				},
-				nullptr
-			);
-	}
-
-	// TODO: add add(... string_view ...) overloads
-
 	/**
 	 * @brief Register command line argument.
 	 * Registers command line agrument which has short one-letter name,
@@ -101,16 +80,6 @@ public:
 			char short_key,
 			std::string&& description,
 			std::function<void(std::string_view)>&& value_handler
-		)
-	{
-		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
-	}
-
-	// this method is deprecated
-	void add(
-			char short_key,
-			std::string&& description,
-			std::function<void(std::string&&)>&& value_handler
 		)
 	{
 		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
@@ -137,25 +106,6 @@ public:
 				std::move(long_key),
 				std::move(description),
 				std::move(value_handler),
-				std::move(default_value_handler)
-			);
-	}
-
-	// this method is deprecated
-	void add(
-			std::string&& long_key,
-			std::string&& description,
-			std::function<void(std::string&&)>&& value_handler,
-			std::function<void()>&& default_value_handler = nullptr
-		)
-	{
-		this->add_argument(
-				'\0',
-				std::move(long_key),
-				std::move(description),
-				[f = std::move(value_handler)](std::string_view v){
-					f(std::string(v));
-				},
 				std::move(default_value_handler)
 			);
 	}
@@ -231,16 +181,6 @@ public:
 			throw std::logic_error("non-key handler is already added");
 		}
 		this->non_key_handler = std::move(non_key_handler);
-	}
-
-	// this method is deprecated
-	void add(std::function<void(std::string&&)>&& non_key_handler){
-		if(this->non_key_handler){
-			throw std::logic_error("non-key handler is already added");
-		}
-		this->non_key_handler = [f = std::move(non_key_handler)](std::string_view v){
-			f(std::string(v));
-		};
 	}
 
 	/**

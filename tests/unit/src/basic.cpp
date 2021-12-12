@@ -15,7 +15,7 @@ tst::set set("basic", [](tst::suite& suite){
 		bool exception_caught = false;
 
 		try{
-			p.add('a', "description 2", [](std::string&&){});
+			p.add('a', "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
             tst::check_eq(std::string(e.what()), "argument with short key 'a' already exists"s, SL) << e.what();
@@ -31,7 +31,7 @@ tst::set set("basic", [](tst::suite& suite){
 		bool exception_caught = false;
 
 		try{
-			p.add("abrakadabra", "description 2", [](std::string&&){});
+			p.add("abrakadabra", "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
 			tst::check_eq(std::string(e.what()), "argument with long key 'abrakadabra' already exists"s, SL) << e.what();
@@ -47,7 +47,7 @@ tst::set set("basic", [](tst::suite& suite){
 		bool exception_caught = false;
 
 		try{
-			p.add('a', "simsalabim", "description 2", [](std::string&&){});
+			p.add('a', "simsalabim", "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
             tst::check_eq(std::string(e.what()), "argument with short key 'a' already exists"s, SL) << e.what();
@@ -63,7 +63,7 @@ tst::set set("basic", [](tst::suite& suite){
 		bool exception_caught = false;
 
 		try{
-			p.add('b', "abrakadabra", "description 2", [](std::string&&){});
+			p.add('b', "abrakadabra", "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
 			tst::check_eq(std::string(e.what()), "argument with long key 'abrakadabra' already exists"s, SL) << e.what();
@@ -77,7 +77,7 @@ tst::set set("basic", [](tst::suite& suite){
 		p.add('a', "b", "description", [](){});
 
 		try{
-			p.add('b', "c", "description 2", [](std::string&&){});
+			p.add('b', "c", "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			tst::check(false, SL);
 		}
@@ -138,8 +138,8 @@ tst::set set("basic", [](tst::suite& suite){
 
 		std::vector<std::string> res;
 
-		p.add([&res, &p](std::string&& str){
-			res.push_back(std::move(str));
+		p.add([&res, &p](std::string_view str){
+			res.push_back(std::string(str));
 			if(res.size() == 3){
 				p.enable_key_parsing(true);
 			}
@@ -283,7 +283,7 @@ tst::set set("basic", [](tst::suite& suite){
 		std::vector<std::string> res;
 
 		p.add('a', "aaa", "description", [&a](){++a;});
-		p.add("", "description", [&res](std::string&& str){res.push_back(std::move(str));});
+		p.add("", "description", [&res](std::string_view str){res.push_back(std::string(str));});
 
 		std::vector<const char*> args = {{
 			"program_executable",
@@ -312,7 +312,7 @@ tst::set set("basic", [](tst::suite& suite){
 
 		std::vector<std::string> res;
 
-		p.add('a', "aaa", "description", [&res](std::string&& str){res.push_back(std::move(str));});
+		p.add('a', "aaa", "description", [&res](std::string_view str){res.push_back(std::string(str));});
 
 		std::vector<const char*> args = {{
 			"program_executable",
@@ -356,7 +356,7 @@ tst::set set("basic", [](tst::suite& suite){
 
 		p.add('a', "aaa", "description", [&res](){res.push_back("a");});
 		p.add('b', "description", [&res](){res.push_back("b");});
-		p.add('c', "ccc", "description", [&res](std::string&& str){res.push_back(std::string("c = ") + std::move(str));});
+		p.add('c', "ccc", "description", [&res](std::string_view str){res.push_back("c = "s.append(str));});
 		p.add('d', "ddd", "description", [&res](){res.push_back("d");});
 
 		std::vector<const char*> args = {{
@@ -388,7 +388,7 @@ tst::set set("basic", [](tst::suite& suite){
 
 		p.add('a', "aaa", "description", [&res](){res.push_back("a");});
 		p.add('b', "description", [&res](){res.push_back("b");});
-		p.add('c', "ccc", "description", [&res](std::string&& str){res.push_back(std::string("c = ") + std::move(str));});
+		p.add('c', "ccc", "description", [&res](std::string_view str){res.push_back("c = "s.append(str));});
 		p.add('d', "ddd", "description", [&res](){res.push_back("d");});
 
 		p.add([&res = subres](utki::span<const char* const> args){
@@ -396,9 +396,9 @@ tst::set set("basic", [](tst::suite& suite){
 			res.push_back(args.front());
 			clargs::parser sp;
 
-			sp.add('f', "fff", "description of fff", [&res](std::string&& v){res.push_back(std::string("f = ") + std::move(v));});
-			sp.add('g', "ggg", "description of ggg", [&res](std::string&& v){res.push_back(std::string("g = ") + std::move(v));});
-			sp.add('h', "hhh", "description of hhh", [&res](std::string&& v){res.push_back(std::string("h = ") + std::move(v));});
+			sp.add('f', "fff", "description of fff", [&res](std::string_view v){res.push_back("f = "s.append(v));});
+			sp.add('g', "ggg", "description of ggg", [&res](std::string_view v){res.push_back("g = "s.append(v));});
+			sp.add('h', "hhh", "description of hhh", [&res](std::string_view v){res.push_back("h = "s.append(v));});
 
 			sp.parse(args);
 		});
@@ -438,19 +438,19 @@ tst::set set("basic", [](tst::suite& suite){
 
 		p.add('a', "aaa", "description", [&res](){res.push_back("a");});
 		p.add('b', "description", [&res](){res.push_back("b");});
-		p.add('c', "ccc", "description", [&res](std::string&& str){res.push_back(std::string("c = ") + std::move(str));});
+		p.add('c', "ccc", "description", [&res](std::string_view str){res.push_back("c = "s.append(str));});
 		p.add('d', "ddd", "description", [&res](){res.push_back("d");});
 
-		p.add([&res](std::string&& v){res.push_back(std::move(v));});
+		p.add([&res](std::string_view v){res.push_back(std::string(v));});
 
 		p.add([&res = subres](utki::span<const char* const> args){
 			tst::check(!args.empty(), SL);
 			res.push_back(args.front());
 			clargs::parser sp;
 
-			sp.add('f', "fff", "description of fff", [&res](std::string&& v){res.push_back(std::string("f = ") + std::move(v));});
-			sp.add('g', "ggg", "description of ggg", [&res](std::string&& v){res.push_back(std::string("g = ") + std::move(v));});
-			sp.add('h', "hhh", "description of hhh", [&res](std::string&& v){res.push_back(std::string("h = ") + std::move(v));});
+			sp.add('f', "fff", "description of fff", [&res](std::string_view v){res.push_back("f = "s.append(v));});
+			sp.add('g', "ggg", "description of ggg", [&res](std::string_view v){res.push_back("g = "s.append(v));});
+			sp.add('h', "hhh", "description of hhh", [&res](std::string_view v){res.push_back("h = "s.append(v));});
 
 			sp.parse(args);
 		});
