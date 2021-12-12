@@ -264,7 +264,7 @@ void parser::parse_long_key_argument(std::string_view arg){
 		}
 	}
 	std::stringstream ss;
-	ss << "unknown argument: " << std::string_view(arg); // MSVC: no operator<<(std::string_view)
+	ss << "unknown argument: " << std::string(arg); // MSVC: no operator<<(std::string_view)
 	throw std::invalid_argument(ss.str());
 }
 
