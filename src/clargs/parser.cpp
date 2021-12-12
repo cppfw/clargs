@@ -231,7 +231,7 @@ void parser::parse_long_key_argument(std::string_view arg){
 	auto equals_pos = arg.find("=");
 	if(equals_pos != std::string::npos){
 		auto value = arg.substr(equals_pos + 1);
-		auto key = std::string(arg.substr(long_key_prefix.size(), equals_pos - long_key_prefix.size()));
+		auto key = arg.substr(long_key_prefix.size(), equals_pos - long_key_prefix.size());
 
 		auto i = this->arguments.find(key);
 		if(i != this->arguments.end()){
@@ -244,7 +244,7 @@ void parser::parse_long_key_argument(std::string_view arg){
 			return;
 		}
 	}else{
-		auto key = std::string(arg.substr(long_key_prefix.size()));
+		auto key = arg.substr(long_key_prefix.size());
 		auto i = this->arguments.find(key);
 		if(i != this->arguments.end()){
 			ASSERT(i->second.boolean_handler)

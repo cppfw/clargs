@@ -261,7 +261,11 @@ private:
 		std::function<void()> boolean_handler;
 	};
 
-	std::unordered_map<std::string, argument_callbacks> arguments;
+	std::map<
+			std::string,
+			argument_callbacks,
+			std::less<>
+		> arguments;
 
 	std::unordered_map<char, std::string> short_to_long_map;
 

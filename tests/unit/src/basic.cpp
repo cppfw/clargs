@@ -470,45 +470,5 @@ tst::set set("basic", [](tst::suite& suite){
 
 		tst::check(subres.empty(), SL) << "subres.size() = " << subres.size();
 	});
-
-	suite.add("throw_exception_from_boolean_key_handler", []{
-		clargs::parser p;
-
-		p.add('b', "bool", "sample boolean agrument", [](){
-			throw std::runtime_error("some error handling boolean argument");
-		});
-
-		std::vector<const char*> args = {
-			"program_executable",
-			"-b"
-		};
-
-		// try{
-			p.parse(args);
-			tst::check(false, SL);
-		// }catch(const std::exception& e){
-		// 	try{
-		// 		std::rethrow_if_nested(e);
-		// 		tst::check(false, SL);
-		// 	}catch(const std::exception& e){
-		// 		print_exception(e, level+1);
-		// 	}catch(...){}
-		// }
-	});
-
-	suite.add("throw_exception_from_string_key_handler", []{
-		clargs::parser p;
-
-		p.add('s', "string", "sample string argument", [](std::string&& s){
-			throw std::invalid_argument("ivalid value for string argument");
-		});
-
-		std::vector<const char*> args = {
-			"program_executable",
-			"-s value"
-		};
-
-		p.parse(args);
-	});
 });
 }
