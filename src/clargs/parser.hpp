@@ -321,6 +321,7 @@ private:
 			std::less<>
 		> arguments;
 
+	// TODO: map to string_view from 'arguments' map?
 	std::unordered_map<char, std::string> short_to_long_map;
 
 	struct key_description{
