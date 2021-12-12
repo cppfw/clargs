@@ -261,8 +261,7 @@ private:
 			std::less<>
 		> arguments;
 
-	// TODO: map to string_view from 'arguments' map?
-	std::unordered_map<char, std::string> short_to_long_map;
+	std::unordered_map<char, std::string_view> short_to_long_map;
 
 	struct key_description{
 		std::string key_names;
@@ -275,7 +274,7 @@ private:
 
 	std::vector<key_description> key_descriptions;
 
-	std::string add_short_to_long_mapping(char short_key, std::string&& long_key);
+	std::string get_long_key_for_short_key(char short_key, std::string&& long_key);
 
 	void push_back_description(
 			char short_key,

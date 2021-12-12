@@ -96,11 +96,7 @@ void parser::add_argument(
 		this->key_descriptions.pop_back();
 	});
 
-	auto actual_key = this->add_short_to_long_mapping(short_key, std::move(long_key));
-
-	utki::scope_exit mapping_scope_exit([this, short_key](){
-		this->short_to_long_map.erase(short_key);
-	});
+	auto actual_key = this->get_long_key_for_short_key(short_key, std::move(long_key));
 
 	if(this->arguments.find(actual_key) != this->arguments.end()){
 		std::stringstream ss;
@@ -116,44 +112,46 @@ void parser::add_argument(
 		throw std::logic_error(ss.str());
 	}
 
-#ifdef DEBUG
-	auto res =
-#endif
-	this->arguments.insert(std::make_pair(
+	auto res = this->arguments.insert(std::make_pair(
 			std::move(actual_key),
 			argument_callbacks{
 				std::move(value_handler),
 				std::move(boolean_handler)
 			}
 		));
-	
 	ASSERT(res.second)
 
-	mapping_scope_exit.release();
+	utki::scope_exit argument_scope_exit([&res, this]{
+		this->arguments.erase(res.first);
+	});
+
+	// add short to long key mapping if there is a short key
+	if(short_key != '\0'){
+		auto i = this->short_to_long_map.insert(std::make_pair(
+				short_key,
+				std::string_view(res.first->first)
+			));
+		if(!i.second){
+			std::stringstream ss;
+			ss << "argument with short key '" << short_key << "' already exists";
+			throw std::logic_error(ss.str());
+		}
+	}
+
+	argument_scope_exit.release();
 	description_scope_exit.release();
 }
 
-std::string parser::add_short_to_long_mapping(char short_key, std::string&& long_key){
-	std::string ret;
+std::string parser::get_long_key_for_short_key(char short_key, std::string&& long_key){
 	if(long_key.empty() && short_key != '\0'){
 		// key name cannot have spaces, so starting a long name with space makes
 		// sure it will not clash with another long name of one letter
 		std::stringstream ss;
 		ss << ' ' << short_key;
-		ret = ss.str();
-	}else{
-		ret = std::move(long_key);
-
-		if(short_key != 0){
-			auto i = this->short_to_long_map.insert(std::make_pair(short_key, ret));
-			if(!i.second){
-				std::stringstream ss;
-				ss << "argument with short key '" << short_key << "' already exists";
-				throw std::logic_error(ss.str());
-			}
-		}
+		return ss.str();
 	}
-	return ret;
+
+	return long_key;
 }
 
 std::string parser::description(unsigned keys_width, unsigned width)const{
