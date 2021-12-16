@@ -1,3 +1,9 @@
+libclargs (0.2.40) unstable; urgency=medium
+
+  * build conan for different macos versions
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 16 Dec 2021 18:34:44 +0200
+
 libclargs (0.2.39) unstable; urgency=medium
 
   * remove deprecated methods
