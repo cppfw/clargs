@@ -1,3 +1,9 @@
+libclargs (0.2.41) unstable; urgency=medium
+
+  * build for debian arm64
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 05 Feb 2022 21:16:18 +0200
+
 libclargs (0.2.40) unstable; urgency=medium
 
   * build conan for different macos versions
