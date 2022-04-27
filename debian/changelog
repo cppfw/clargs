@@ -1,3 +1,9 @@
+libclargs (0.2.42) unstable; urgency=medium
+
+  * test release
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 27 Apr 2022 22:33:11 +0300
+
 libclargs (0.2.41) unstable; urgency=medium
 
   * build for debian arm64
