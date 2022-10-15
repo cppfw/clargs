@@ -1,3 +1,9 @@
+libclargs (0.2.43) unstable; urgency=medium
+
+  * build conan macos-12 package
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 16 Oct 2022 00:47:38 +0300
+
 libclargs (0.2.42) unstable; urgency=medium
 
   * test release
