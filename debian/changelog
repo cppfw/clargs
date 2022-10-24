@@ -1,3 +1,9 @@
+libclargs (0.2.44) unstable; urgency=medium
+
+  * build for ubuntu jammy
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 24 Oct 2022 17:42:54 +0300
+
 libclargs (0.2.43) unstable; urgency=medium
 
   * build conan macos-12 package
