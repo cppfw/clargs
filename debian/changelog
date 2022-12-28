@@ -1,3 +1,9 @@
+libclargs (0.2.45) unstable; urgency=medium
+
+  * msvs: build v143 configs
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 28 Dec 2022 14:12:51 +0200
+
 libclargs (0.2.44) unstable; urgency=medium
 
   * build for ubuntu jammy
