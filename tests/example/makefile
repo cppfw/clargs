@@ -10,7 +10,6 @@ this_srcs += $(call prorab-src-dir, .)
 this_clargs_lib = ../../src/out/$(c)/libclargs$(dot_so)
 
 this_ldlibs += $(this_clargs_lib) -lutki
-this_ldflags +=
 
 this_no_install := true
 
