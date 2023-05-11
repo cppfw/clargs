@@ -22,7 +22,7 @@
 			"group": "build"
 		},
 		{
-			"label": "test",
+			"label": "test_",
 			"type": "shell",
 			"command": "make test",
 			"problemMatcher": [
@@ -51,6 +51,13 @@
 			"label": "clean-all",
 			"type": "shell",
 			"command": "make clean-all",
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "format",
+			"type": "shell",
+			"command": "make apply-format",
 			"problemMatcher": [],
 			"group": "build"
 		}

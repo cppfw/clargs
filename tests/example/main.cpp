@@ -7,9 +7,9 @@ int main(int argc, char** argv){
 	clargs::parser args;
 
 	bool a = false;
-	std::string removeSomething;
-	std::string keyWithoutShortOne;
-	std::string keyWithoutLongOne;
+	std::string remove_something;
+	std::string key_without_short_one;
+	std::string key_without_long_one;
 	std::string key_empty_value = "ASSERT_should_be_empty!";
 	std::string key_with_optional_value;
 	std::string another_key_with_optional_value;
@@ -23,22 +23,22 @@ int main(int argc, char** argv){
 			'r',
 			"remove-something",
 			"removes something from somewhere",
-			[&removeSomething](std::string_view s){
-				removeSomething = s;
+			[&remove_something](std::string_view s){
+				remove_something = s;
 			}
 		);
 	args.add(
 			"key-without-short-one",
 			"a key which has no short version, only the long one",
-			[&keyWithoutShortOne](std::string_view s){
-				keyWithoutShortOne = s;
+			[&key_without_short_one](std::string_view s){
+				key_without_short_one = s;
 			}
 		);
 	args.add(
 			'b',
 			"a key which has only a short version and does not have a long version",
-			[&keyWithoutLongOne](std::string_view s){
-				keyWithoutLongOne = s;
+			[&key_without_long_one](std::string_view s){
+				key_without_long_one = s;
 			}
 		);
 	args.add(
@@ -90,9 +90,9 @@ int main(int argc, char** argv){
 	std::cout << args.description();
 
 	std::cout << "a = " << (a ? "true" : "false") << std::endl;
-	std::cout << "removeSomething = " << removeSomething << std::endl;
-	std::cout << "keyWithoutShortOne = " << keyWithoutShortOne << std::endl;
-	std::cout << "keyWithoutLongOne = " << keyWithoutLongOne << std::endl;
+	std::cout << "remove_something = " << remove_something << std::endl;
+	std::cout << "key_without_short_one = " << key_without_short_one << std::endl;
+	std::cout << "key_without_long_one = " << key_without_long_one << std::endl;
 	std::cout << "key_empty_value = " << key_empty_value << std::endl;
 	std::cout << "key_with_optional_value = " << key_with_optional_value << std::endl;
 	std::cout << "another_key_with_optional_value = " << another_key_with_optional_value << std::endl;

@@ -22,9 +22,9 @@
       --boolean-long-key-without-short-one
                               a boolean long key without short key
 a = true
-removeSomething = 10
-keyWithoutShortOne = trololo
-keyWithoutLongOne = hello
+remove_something = 10
+key_without_short_one = trololo
+key_without_long_one = hello
 key_empty_value = 
 key_with_optional_value = qwerty
 another_key_with_optional_value = another_key_with_optional_value_DEFAULT_VALUE

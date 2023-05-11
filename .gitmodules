@@ -2,3 +2,7 @@
 	path = tests/harness/tst
 	url = ../../cppfw/tst
 	branch = master
+[submodule "tool-configs"]
+	path = tool-configs
+	url = ../../cppfw/tool-configs
+	branch = master
