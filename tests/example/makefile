@@ -1,8 +1,6 @@
 include prorab.mk
 include prorab-test.mk
 
-$(eval $(call prorab-try-simple-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
-
 $(eval $(call prorab-config, ../../config))
 
 this_name := tests
@@ -10,9 +8,6 @@ this_name := tests
 this_srcs += $(call prorab-src-dir, .)
 
 this_clargs_lib = $(d)../../src/out/$(c)/libclargs$(dot_so)
-
-this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
-this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
 
 this_ldlibs += $(this_clargs_lib) -lutki
 
@@ -24,7 +19,7 @@ $(eval $(prorab-build-app))
 $(prorab_this_name): $(abspath $(this_clargs_lib))
 
 this_test_deps := $(prorab_this_name)
-this_test_ld_path := ../../src/out/$(c) $(CONAN_LIB_DIRS)
+this_test_ld_path := ../../src/out/$(c)
 
 this_test_cmd := $(prorab_this_name) \
         -a \
