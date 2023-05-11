@@ -1,7 +1,5 @@
 include prorab.mk
 
-$(eval $(call prorab-include, ../../src/makefile))
-
 tst_cfg := no_par_no_install
 
 # load config in order to resolve 'c' and 'config' in case of default config
@@ -19,3 +17,5 @@ LDFLAGS += -L$(d)../../src/out/$(c)
 $(eval $(call prorab-include, tst/src/makefile, $(tst_cfg)))
 CXXFLAGS := $(harness_old_cxxflags)
 LDFLAGS := $(harness_old_ldflags)
+
+$(eval $(call prorab-include, ../../src/makefile))

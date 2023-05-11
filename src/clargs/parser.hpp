@@ -235,6 +235,8 @@ private:
 
 	std::unordered_map<char, std::string_view> short_to_long_map;
 
+	// TODO: why does lint complain here on macos?
+	// NOLINTNEXTLINE(bugprone-exception-escape)
 	struct key_description {
 		std::string key_names;
 		std::string description;
