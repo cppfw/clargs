@@ -11,7 +11,7 @@ $(eval $(call prorab-depend, \
 	))
 
 harness_old_cxxflags := $(CXXFLAGS)
-harness_old_ldflags := $(LDLFAGS)
+harness_old_ldflags := $(LDFLAGS)
 CXXFLAGS += -I$(d)../../src
 LDFLAGS += -L$(d)../../src/out/$(c)
 $(eval $(call prorab-include, tst/src/makefile, $(tst_cfg)))
