@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-
+// NOLINTNEXTLINE(bugprone-exception-escape, "we want exceptions to go beyond main()")
 int main(int argc, char** argv){
 	clargs::parser args;
 
