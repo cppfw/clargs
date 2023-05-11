@@ -14,6 +14,7 @@ this_ldflags +=
 
 this_no_install := true
 
+$(info LDFLAGS__example = $(LDFLAGS))
 $(info this_ldflags__example = $(this_ldflags))
 
 $(eval $(prorab-build-app))

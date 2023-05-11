@@ -1,6 +1,11 @@
 include prorab.mk
 include prorab-test.mk
 
+# include harness for tst_cfg variable
+$(eval $(call prorab-include, ../harness/makefile))
+
+$(eval $(prorab-clear-this-vars))
+
 $(eval $(call prorab-config, ../../config))
 
 this_no_install := true
@@ -17,6 +22,7 @@ this_cxxflags += -I ../harness/tst/src -I ../../src
 this_ldflags += $(addprefix -L,$(this_harness_ld_paths))
 this_ldlibs += $(this_libclargs) -ltst -lutki
 
+$(info LDFLAGS__unit = $(LDFLAGS))
 $(info this_ldflags__unit = $(this_ldflags))
 
 $(eval $(prorab-build-app))
@@ -30,4 +36,3 @@ this_test_ld_path := $(dir $(this_libclargs)) $(this_harness_ld_paths) $(patsubs
 $(eval $(prorab-test))
 
 $(eval $(call prorab-include, ../../src/makefile))
-$(eval $(call prorab-include, ../harness/makefile))
