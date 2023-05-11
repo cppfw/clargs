@@ -20,6 +20,8 @@ this_cxxflags += -I ../harness/tst/src -I ../../src
 this_ldflags += $(addprefix -L,$(this_harness_ld_paths))
 this_ldlibs += $(this_libclargs) -ltst -lutki
 
+$(info this_ldflags__unit = $(this_ldflags))
+
 $(eval $(prorab-build-app))
 
 $(eval $(call prorab-depend, $(prorab_this_name), $(this_libclargs) ../harness/tst/src/out/$(tst_cfg)/libtst$(dot_so)))
