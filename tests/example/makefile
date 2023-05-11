@@ -7,7 +7,7 @@ this_name := tests
 
 this_srcs += $(call prorab-src-dir, .)
 
-this_clargs_lib = $(d)../../src/out/$(c)/libclargs$(dot_so)
+this_clargs_lib = ../../src/out/$(c)/libclargs$(dot_so)
 
 this_ldlibs += $(this_clargs_lib) -lutki
 
@@ -15,8 +15,7 @@ this_no_install := true
 
 $(eval $(prorab-build-app))
 
-# add dependency on libclargs
-$(prorab_this_name): $(abspath $(this_clargs_lib))
+$(eval $(call prorab-depend, $(prorab_this_name), $(this_clargs_lib)))
 
 this_test_deps := $(prorab_this_name)
 this_test_ld_path := ../../src/out/$(c)
