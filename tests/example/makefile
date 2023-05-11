@@ -13,9 +13,6 @@ this_ldlibs += $(this_clargs_lib) -lutki
 
 this_no_install := true
 
-$(info LDFLAGS__example = $(LDFLAGS))
-$(info this_ldflags__example = $(this_ldflags))
-
 $(eval $(prorab-build-app))
 
 $(eval $(call prorab-depend, $(prorab_this_name), $(this_clargs_lib)))
