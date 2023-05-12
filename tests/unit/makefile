@@ -28,8 +28,7 @@ $(eval $(call prorab-depend, $(prorab_this_name), $(this_libclargs) ../harness/t
 
 this_test_cmd := $(prorab_this_name) --junit-out=$(dir $(prorab_this_name))/junit.xml
 this_test_deps := $(prorab_this_name)
-# for conan get ld paths from LDFLAGS
-this_test_ld_path := $(dir $(this_libclargs)) $(this_harness_ld_paths) $(patsubst -L%,%,$(filter -L%,$(LDFLAGS)))
+this_test_ld_path := $(dir $(this_libclargs)) $(this_harness_ld_paths)
 $(eval $(prorab-test))
 
 $(eval $(call prorab-include, ../../src/makefile))
