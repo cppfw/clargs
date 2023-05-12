@@ -55,9 +55,9 @@ public:
 	 */
 	void add(
 		char short_key,
-		std::string&& long_key,
-		std::string&& description,
-		std::function<void(std::string_view)>&& value_handler
+		std::string long_key,
+		std::string description,
+		std::function<void(std::string_view)> value_handler
 	)
 	{
 		this->add_argument(short_key, std::move(long_key), std::move(description), std::move(value_handler), nullptr);
@@ -71,7 +71,7 @@ public:
 	 * @param description - argument description.
 	 * @param value_handler - callback function which is called to handle value of the argument.
 	 */
-	void add(char short_key, std::string&& description, std::function<void(std::string_view)>&& value_handler)
+	void add(char short_key, std::string description, std::function<void(std::string_view)> value_handler)
 	{
 		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
 	}
@@ -86,10 +86,10 @@ public:
 	 * @param default_value_handler - callback function which is called when the argument has no value given.
 	 */
 	void add(
-		std::string&& long_key,
-		std::string&& description,
-		std::function<void(std::string_view)>&& value_handler,
-		std::function<void()>&& default_value_handler = nullptr
+		std::string long_key,
+		std::string description,
+		std::function<void(std::string_view)> value_handler,
+		std::function<void()> default_value_handler = nullptr
 	)
 	{
 		this->add_argument(
@@ -111,7 +111,7 @@ public:
 	 * @param description - argument description.
 	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
-	void add(char short_key, std::string&& long_key, std::string&& description, std::function<void()>&& boolean_handler)
+	void add(char short_key, std::string long_key, std::string description, std::function<void()> boolean_handler)
 	{
 		this->add_argument(short_key, std::move(long_key), std::move(description), nullptr, std::move(boolean_handler));
 	}
@@ -125,7 +125,7 @@ public:
 	 * @param description - argument description.
 	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
-	void add(char short_key, std::string&& description, std::function<void()>&& boolean_handler)
+	void add(char short_key, std::string description, std::function<void()> boolean_handler)
 	{
 		this->add(short_key, std::string(), std::move(description), std::move(boolean_handler));
 	}
@@ -139,7 +139,7 @@ public:
 	 * @param description - argument description.
 	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
-	void add(std::string&& long_key, std::string&& description, std::function<void()>&& boolean_handler)
+	void add(std::string long_key, std::string description, std::function<void()> boolean_handler)
 	{
 		this->add('\0', std::move(long_key), std::move(description), std::move(boolean_handler));
 	}
@@ -148,7 +148,7 @@ public:
 	 * @brief Add handler for non-key arguments.
 	 * @param non_key_handler - handler callback for non-key arguments.
 	 */
-	void add(std::function<void(std::string_view)>&& non_key_handler)
+	void add(std::function<void(std::string_view)> non_key_handler)
 	{
 		if (this->non_key_handler) {
 			throw std::logic_error("non-key handler is already added");
@@ -168,7 +168,7 @@ public:
 	 * arguments of the subcommand.
 	 * @param subcommand_handler - handler callback for subcommand.
 	 */
-	void add(std::function<void(utki::span<const char* const>)>&& subcommand_handler)
+	void add(std::function<void(utki::span<const char* const>)> subcommand_handler)
 	{
 		if (this->subcommand_handler) {
 			throw std::logic_error("subcommand handler is already added");
