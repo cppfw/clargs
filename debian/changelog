@@ -1,3 +1,9 @@
+libclargs (0.2.49) unstable; urgency=medium
+
+  * use fPIC for linking
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 13 May 2023 20:31:33 +0300
+
 libclargs (0.2.48) unstable; urgency=medium
 
   * conan: transitive_libs
