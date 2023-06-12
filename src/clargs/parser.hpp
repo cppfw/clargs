@@ -27,6 +27,7 @@ SOFTWARE.
 #pragma once
 
 #include <functional>
+#include <map>
 #include <unordered_map>
 #include <vector>
 

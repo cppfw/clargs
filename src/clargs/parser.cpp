@@ -29,6 +29,7 @@ SOFTWARE.
 #include <sstream>
 
 #include <utki/string.hpp>
+#include <utki/util.hpp>
 
 using namespace clargs;
 
