@@ -1,3 +1,9 @@
+libclargs (0.2.51) unstable; urgency=medium
+
+  * fix lint issues
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Jun 2023 13:24:55 +0300
+
 libclargs (0.2.50) unstable; urgency=medium
 
   * conan: fetch latest commit
