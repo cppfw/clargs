@@ -6,7 +6,7 @@
 using namespace std::string_literals;
 
 namespace{
-tst::set set("basic", [](tst::suite& suite){
+const tst::set set("basic", [](tst::suite& suite){
     suite.add("add_same_key_twice__only_short_key", []{
         clargs::parser p;
 

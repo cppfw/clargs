@@ -215,6 +215,9 @@ public:
 		return this->parse(utki::make_span(argv, argc));
 	}
 
+	constexpr static auto default_keys_width = 28;
+	constexpr static auto default_description_width = 50;
+
 	/**
 	 * @brief Get description of the arguments.
 	 * There will be 2 characters gap between key names and key description.
@@ -222,7 +225,7 @@ public:
 	 * @param width - width in characters of key description area.
 	 * @return Formatted description of all the registered arguments.
 	 */
-	std::string description(unsigned keys_width = 28, unsigned width = 50) const;
+	std::string description(unsigned keys_width = default_keys_width, unsigned width = default_description_width) const;
 
 private:
 	bool is_key_parsing_enabled = true;
