@@ -1,3 +1,9 @@
+libclargs (0.2.52) unstable; urgency=medium
+
+  * macos: fix build
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 16 Jun 2023 13:03:51 +0300
+
 libclargs (0.2.51) unstable; urgency=medium
 
   * fix lint issues
