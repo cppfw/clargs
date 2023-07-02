@@ -1,3 +1,9 @@
+libclargs (0.2.53) unstable; urgency=medium
+
+  * relink
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 02 Jul 2023 22:21:29 +0300
+
 libclargs (0.2.52) unstable; urgency=medium
 
   * macos: fix build
