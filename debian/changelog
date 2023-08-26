@@ -1,3 +1,9 @@
+libclargs (0.2.55) unstable; urgency=medium
+
+  * archlinux: deploy to arch repos
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 26 Aug 2023 18:15:17 +0300
+
 libclargs (0.2.54) unstable; urgency=medium
 
   * deploy to archlinux
