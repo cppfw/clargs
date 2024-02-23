@@ -36,7 +36,7 @@ using namespace clargs;
 void parser::push_back_description(
 	char short_key,
 	const std::string& long_key,
-	std::string&& description,
+	std::string description,
 	bool is_boolean,
 	bool is_value_optional
 )
@@ -68,17 +68,15 @@ void parser::push_back_description(
 		}
 	}
 
-	auto key_names = ss.str();
-
 	this->key_descriptions.push_back({ss.str(), std::move(description)});
 }
 
 void parser::add_argument(
 	char short_key,
-	std::string&& long_key,
-	std::string&& description,
-	std::function<void(std::string_view)>&& value_handler,
-	std::function<void()>&& boolean_handler
+	std::string long_key,
+	std::string description,
+	std::function<void(std::string_view)> value_handler,
+	std::function<void()> boolean_handler
 )
 {
 	bool is_boolean = !value_handler && boolean_handler;

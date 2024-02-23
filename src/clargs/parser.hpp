@@ -257,17 +257,17 @@ private:
 	void push_back_description(
 		char short_key,
 		const std::string& long_key,
-		std::string&& description,
+		std::string description,
 		bool is_boolean,
 		bool is_value_optional
 	);
 
 	void add_argument(
 		char short_key,
-		std::string&& long_key,
-		std::string&& description,
-		std::function<void(std::string_view)>&& value_handler,
-		std::function<void()>&& boolean_handler
+		std::string long_key,
+		std::string description,
+		std::function<void(std::string_view)> value_handler,
+		std::function<void()> boolean_handler
 	);
 
 	void parse_long_key_argument(std::string_view arg);
