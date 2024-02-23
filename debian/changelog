@@ -1,3 +1,9 @@
+libclargs (0.2.56) unstable; urgency=medium
+
+  * bookworm
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 23 Feb 2024 14:35:09 +0200
+
 libclargs (0.2.55) unstable; urgency=medium
 
   * archlinux: deploy to arch repos
