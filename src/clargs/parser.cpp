@@ -313,3 +313,16 @@ void parser::stop()
 {
 	this->stop_parsing_requested = true;
 }
+
+void parser::add( //
+	std::function<void( //
+		std::string_view command,
+		utki::span<const char* const> args
+	)> subcommand_handler
+)
+{
+	if (this->subcommand_handler) {
+		throw std::logic_error("subcommand handler is already added");
+	}
+	this->subcommand_handler = std::move(subcommand_handler);
+}
