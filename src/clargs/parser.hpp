@@ -161,15 +161,15 @@ public:
 	 * @brief Add subcommand handler.
 	 * The subcommand is a first non-key argument which goes before the '--' delimeter.
 	 * In case the subcommand handler is set, during parsing the handler will be called for the
-	 * first non-kye argument before '--' delimeter. The argument of the callback will be
-	 * a span of the remaining arguments, the zeroth argument in the span will be the subcommand itself,
-	 * i.e. the span will have at least 1 element.
+	 * first non-key argument before '--' delimeter.
+	 * Arguments of the callback are the subcommand and a span of remaining arguments.
 	 * After handling the subcommand, the parsing will be stopped and the parse() function will return.
 	 * In the subcommand handler the user can set up a new parser instance and continue parsing
 	 * arguments of the subcommand.
+	 * Subcommand is only handled if key parsing is enabled, which is default (see enable_key_parsing()).
 	 * @param subcommand_handler - handler callback for subcommand.
 	 */
-	void add(std::function<void(utki::span<const char* const>)> subcommand_handler)
+	void add(std::function<void(std::string_view command, utki::span<const char* const>)> subcommand_handler)
 	{
 		if (this->subcommand_handler) {
 			throw std::logic_error("subcommand handler is already added");
@@ -194,9 +194,8 @@ public:
 
 	/**
 	 * @brief Parse command line arguments.
-	 * Parses the command line arguments as they passed in to main() function.
-	 * Zeroth argument is the filename of the executable.
-	 * @param args - array of command line arguments.
+	 * Parses the command line arguments.
+	 * @param args - array of command line arguments, NOT including the executable filename as first item.
 	 * @return array of non-key arguments, in case the non-key arguments handler is not added.
 	 * @return empty vector, in case the non-key arguments handler is added.
 	 */
@@ -207,13 +206,16 @@ public:
 	 * Parses the command line arguments as they passed in to main() function.
 	 * Zeroth argument is the filename of the executable.
 	 * @param argc - number of arguments.
-	 * @param argv - array of arguments.
+	 * @param argv - array of arguments, first item is the executable filename.
 	 * @return array of non-key arguments.
 	 */
-	std::vector<std::string> parse(int argc, const char* const* argv)
-	{
-		return this->parse(utki::make_span(argv, argc));
-	}
+	std::vector<std::string> parse(int argc, const char* const* argv);
+
+	/**
+	 * @brief Stop parsing.
+	 * Can be called from within arguement handler to stop further arguments parsing.
+	 */
+	void stop();
 
 	constexpr static auto default_keys_width = 28;
 	constexpr static auto default_description_width = 50;
@@ -228,6 +230,8 @@ public:
 	std::string description(unsigned keys_width = default_keys_width, unsigned width = default_description_width) const;
 
 private:
+	bool stop_parsing_requested = false;
+
 	bool is_key_parsing_enabled = true;
 
 	struct argument_callbacks {
@@ -248,7 +252,7 @@ private:
 
 	std::function<void(std::string_view)> non_key_handler;
 
-	std::function<void(utki::span<const char* const>)> subcommand_handler;
+	std::function<void(std::string_view command, utki::span<const char* const>)> subcommand_handler;
 
 	std::vector<key_description> key_descriptions;
 

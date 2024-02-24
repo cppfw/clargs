@@ -40,14 +40,6 @@
 			"group": "build"
 		},
 		{
-			"label": "test_basic_debug",
-			"type": "shell",
-			"command": "make -C tests/basic test config=dbg --no-print-directory",
-			"dependsOn": "build_dbg",
-			"problemMatcher": [],
-			"group": "build"
-		},
-		{
 			"label": "clean-all",
 			"type": "shell",
 			"command": "make clean-all",

@@ -96,7 +96,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		});
 
 		std::vector<const char*> args = {{
-			"program_executable",
 			"-a",
 			"--aaa",
 			"-a",
@@ -127,7 +126,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		});
 
 		std::vector<const char*> args = {{
-			"program_executable",
 			"-a",
 			"--aaa",
 			"-a",
@@ -164,7 +162,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		});
 
 		std::vector<const char*> args = {{
-			"program_executable",
 			"-a",
 			"--aaa",
 			"--",
@@ -193,7 +190,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add("", "", [](){});
 
 		std::vector<const char*> args = {{
-			"program_executable",
 			"-a",
 			"--aaa",
 			"--",
@@ -217,7 +213,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add('a', "aaa", "description", [&a](){++a;});
 
 		std::vector<const char*> args = {{
-			"program_executable",
 			"-a",
 			"--aaa",
 			"--=",
@@ -250,7 +245,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add("", "description", [&boolean_equals_handled](){boolean_equals_handled = true;});
 
 		std::vector<const char*> args = {{
-			"program_executable",
 			"-a",
 			"--aaa",
 			"--=",
@@ -286,7 +280,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add("", "description", [&res](std::string_view str){res.emplace_back(str);});
 
 		std::vector<const char*> args = {{
-			"program_executable",
 			"-a",
 			"--aaa",
 			"--=",
@@ -315,7 +308,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add('a', "aaa", "description", [&res](std::string_view str){res.emplace_back(str);});
 
 		std::vector<const char*> args = {{
-			"program_executable",
 			"-ablah",
 			"-atrololo"
 		}};
@@ -336,10 +328,9 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add('b', "description", [&res](){res.emplace_back("b");});
 		p.add('c', "ccc", "description", [&res](){res.emplace_back("c");});
 
-		std::vector<const char*> args = {{
-			"program_executable",
+		std::vector<const char*> args = {
 			"-abc"
-		}};
+		};
 
 		p.parse(utki::make_span(args));
 
@@ -359,10 +350,9 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add('c', "ccc", "description", [&res](std::string_view str){res.push_back("c = "s.append(str));});
 		p.add('d', "ddd", "description", [&res](){res.emplace_back("d");});
 
-		std::vector<const char*> args = {{
-			"program_executable",
+		std::vector<const char*> args = {
 			"-abcdkg"
-		}};
+		};
 
 		p.parse(utki::make_span(args));
 
@@ -379,7 +369,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		std::vector<std::string> subres;
 
 		std::vector<const char*> args = {
-			"program_executable",
 			"-abcdkg",
 			"subcommand",
 			"-f f_val",
@@ -391,9 +380,9 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add('c', "ccc", "description", [&res](std::string_view str){res.push_back("c = "s.append(str));});
 		p.add('d', "ddd", "description", [&res](){res.emplace_back("d");});
 
-		p.add([&res = subres](utki::span<const char* const> args){
+		p.add([&res = subres](std::string_view cmd, utki::span<const char* const> args){
 			tst::check(!args.empty(), SL);
-			res.emplace_back(args.front());
+			res.emplace_back(cmd);
 			clargs::parser sp;
 
 			sp.add('f', "fff", "description of fff", [&res](std::string_view v){res.push_back("f = "s.append(v));});
@@ -429,7 +418,6 @@ const tst::set set("basic", [](tst::suite& suite){
 		std::vector<std::string> subres;
 
 		std::vector<const char*> args = {
-			"program_executable",
 			"-abcdkg",
 			"subcommand",
 			"-f f_val",
@@ -443,9 +431,9 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		p.add([&res](std::string_view v){res.emplace_back(v);});
 
-		p.add([&res = subres](utki::span<const char* const> args){
+		p.add([&res = subres](std::string_view cmd, utki::span<const char* const> args){
 			tst::check(!args.empty(), SL);
-			res.emplace_back(args.front());
+			res.emplace_back(cmd);
 			clargs::parser sp;
 
 			sp.add('f', "fff", "description of fff", [&res](std::string_view v){res.push_back("f = "s.append(v));});
@@ -469,6 +457,32 @@ const tst::set set("basic", [](tst::suite& suite){
 		tst::check(res == expected, SL);
 
 		tst::check(subres.empty(), SL) << "subres.size() = " << subres.size();
+	});
+
+	suite.add("stop_parsing", [](){
+		clargs::parser p;
+
+		unsigned a = 0;
+		
+		p.add('a', "aaa", "description", [&a, &p](){
+			++a;
+			if(a == 3){
+				p.stop();
+			}
+		});
+
+		std::vector<const char*> args = {{
+			"-a",
+			"--aaa",
+			"-a",
+			"--aaa",
+			"-a",
+			"--aaa"
+		}};
+
+		p.parse(utki::make_span(args));
+
+		tst::check_eq(a, unsigned(3), SL) << "a = " << a;
 	});
 });
 }

@@ -171,6 +171,12 @@ const std::string long_key_prefix = "--";
 const unsigned short_key_argument_size = 2;
 } // namespace
 
+std::vector<std::string> parser::parse(int argc, const char* const* argv)
+{
+	ASSERT(argc >= 1)
+	return this->parse(utki::make_span(argv, argc).subspan(1));
+}
+
 std::vector<std::string> parser::parse(utki::span<const char* const> args)
 {
 	std::vector<std::string> ret;
@@ -180,7 +186,7 @@ std::vector<std::string> parser::parse(utki::span<const char* const> args)
 		throw std::logic_error("given arguments list is empty, it should contain at least executable file name");
 	}
 
-	for (auto i = std::next(args.begin()); i != args.end(); ++i) {
+	for (auto i = args.begin(); i != args.end() && !this->stop_parsing_requested; ++i) {
 		std::string arg(*i);
 
 		if (this->is_key_parsing_enabled && arg.size() >= long_key_prefix.size() && arg.find(long_key_prefix) == 0) {
@@ -200,7 +206,14 @@ std::vector<std::string> parser::parse(utki::span<const char* const> args)
 			}
 		} else {
 			if (this->is_key_parsing_enabled && this->subcommand_handler) {
-				this->subcommand_handler(args.subspan(std::distance(args.begin(), i)));
+				auto cmd_index = std::distance(args.begin(), i);
+				ASSERT(cmd_index >= 0)
+				ASSERT(size_t(cmd_index) < args.size())
+				++cmd_index;
+				this->subcommand_handler( //
+					std::string_view(*i),
+					args.subspan(cmd_index)
+				);
 				ASSERT(ret.empty())
 				return ret;
 			} else {
@@ -294,4 +307,9 @@ std::function<void(std::string_view)>* parser::parse_short_keys_batch(std::strin
 		iter->second.boolean_handler();
 	}
 	return nullptr;
+}
+
+void parser::stop()
+{
+	this->stop_parsing_requested = true;
 }
