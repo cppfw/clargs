@@ -181,11 +181,6 @@ std::vector<std::string> parser::parse(utki::span<const char* const> args)
 {
 	std::vector<std::string> ret;
 
-	// first argument is the filename of the executable, so args span should not be empty
-	if (args.empty()) {
-		throw std::logic_error("given arguments list is empty, it should contain at least executable file name");
-	}
-
 	for (auto i = args.begin(); i != args.end() && !this->stop_parsing_requested; ++i) {
 		std::string arg(*i);
 
