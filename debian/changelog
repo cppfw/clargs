@@ -1,3 +1,9 @@
+libclargs (0.2.57) unstable; urgency=medium
+
+  * improve subcommand handling
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 24 Feb 2024 12:52:13 +0200
+
 libclargs (0.2.56) unstable; urgency=medium
 
   * bookworm
