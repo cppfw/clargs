@@ -1,3 +1,9 @@
+libclargs (0.2.58) unstable; urgency=medium
+
+  * remove check for at least one argument
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 24 Feb 2024 22:11:20 +0200
+
 libclargs (0.2.57) unstable; urgency=medium
 
   * improve subcommand handling
