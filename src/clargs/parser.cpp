@@ -103,6 +103,7 @@ void parser::add_argument(
 	}
 
 	auto res = this->arguments.insert(
+		// NOLINTNEXTLINE(modernize-use-designated-initializers, "needs C++20, while we use C++17")
 		std::make_pair(std::move(actual_key), argument_callbacks{std::move(value_handler), std::move(boolean_handler)})
 	);
 	ASSERT(res.second)
