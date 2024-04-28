@@ -1,3 +1,9 @@
+libclargs (0.2.60) unstable; urgency=medium
+
+  * macos: set paths
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 28 Apr 2024 21:49:03 +0300
+
 libclargs (0.2.59) unstable; urgency=medium
 
   * aptian
