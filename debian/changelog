@@ -1,3 +1,9 @@
+libclargs (0.2.64) unstable; urgency=medium
+
+  * build for ubuntu noble
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 05 Jul 2024 14:43:34 +0300
+
 libclargs (0.2.63) unstable; urgency=medium
 
   * fix homebrew formulae
