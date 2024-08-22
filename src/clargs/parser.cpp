@@ -310,9 +310,9 @@ void parser::stop()
 	this->stop_parsing_requested = true;
 }
 
-void parser::add( //
-	std::function<void( //
-		std::string_view command,
+void parser::add(
+	std::function<void(
+		std::string_view command, //
 		utki::span<const char* const> args
 	)> subcommand_handler
 )
