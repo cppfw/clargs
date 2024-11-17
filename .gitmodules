@@ -1,8 +1,8 @@
 [submodule "tests/harness/tst"]
 	path = tests/harness/tst
 	url = ../../cppfw/tst
-	branch = master
+	branch = main
 [submodule "tool-configs"]
 	path = tool-configs
 	url = ../../cppfw/tool-configs
-	branch = master
+	branch = main

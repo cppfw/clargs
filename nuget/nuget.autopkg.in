@@ -18,9 +18,9 @@ nuget{
 		title: command line arguments parsing C++ library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/cppfw/clargs/master/LICENSE";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/clargs/main/LICENSE";
 		projectUrl: "https://github.com/cppfw/clargs";
-		iconUrl: "https://github.com/cppfw/clargs/blob/master/logo.svg";
+		iconUrl: "https://github.com/cppfw/clargs/blob/main/logo.svg";
 		requireLicenseAcceptance:false;
 		summary: C++ command line arguments parsing library;
 
