@@ -253,7 +253,7 @@ void parser::parse_long_key_argument(std::string_view arg)
 		} else if (arg.size() == 2) {
 			ASSERT(arg == "--")
 			// default handling of '--' argument is disabling key arguments parsing
-			this->enable_key_parsing(false);
+			this->set_key_parsing(false);
 			return;
 		}
 	}

@@ -91,7 +91,7 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add('a', "aaa", "description", [&a, &p](){
 			++a;
 			if(a == 3){
-				p.enable_key_parsing(false);
+				p.set_key_parsing(false);
 			}
 		});
 
@@ -121,7 +121,7 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add('a', "aaa", "description", [&a, &p](){
 			++a;
 			if(a == 2){
-				p.enable_key_parsing(false);
+				p.set_key_parsing(false);
 			}
 		});
 
@@ -139,7 +139,7 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add([&res, &p](std::string_view str){
 			res.emplace_back(str);
 			if(res.size() == 3){
-				p.enable_key_parsing(true);
+				p.set_key_parsing(true);
 			}
 		});
 
@@ -443,7 +443,7 @@ const tst::set set("basic", [](tst::suite& suite){
 			sp.parse(args);
 		});
 
-		p.enable_key_parsing(false);
+		p.set_key_parsing(false);
 
 		p.parse(utki::make_span(args));
 

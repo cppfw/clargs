@@ -166,7 +166,7 @@ public:
 	 * After handling the subcommand, the parsing will be stopped and the parse() function will return.
 	 * In the subcommand handler the user can set up a new parser instance and continue parsing
 	 * arguments of the subcommand.
-	 * Subcommand is only handled if key parsing is enabled, which is default (see enable_key_parsing()).
+	 * Subcommand is only handled if key parsing is enabled, which is default (see set_key_parsing()).
 	 * @param subcommand_handler - handler callback for subcommand.
 	 */
 	void add(
@@ -186,9 +186,15 @@ public:
 	 * It is ok to call this function from within the arguments handling callback functions.
 	 * @param enable - if true, key arguments parsing will be enabled, otherwise - disabled.
 	 */
-	void enable_key_parsing(bool enable) noexcept
+	void set_key_parsing(bool enable) noexcept
 	{
 		this->is_key_parsing_enabled = enable;
+	}
+
+	[[deprecated("use set_key_parsing(bool)")]]
+	void enable_key_parsing(bool enable) noexcept
+	{
+		this->set_key_parsing(enable);
 	}
 
 	/**
@@ -212,7 +218,7 @@ public:
 
 	/**
 	 * @brief Stop parsing.
-	 * Can be called from within arguement handler to stop further arguments parsing.
+	 * Can be called from within argument handler to stop further arguments parsing.
 	 */
 	void stop();
 
