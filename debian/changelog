@@ -1,3 +1,9 @@
+libclargs (0.2.66) unstable; urgency=medium
+
+  * vcpkgize
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 25 Nov 2024 22:42:04 +0200
+
 libclargs (0.2.65) unstable; urgency=medium
 
   * conan: rebuild
