@@ -20,6 +20,10 @@ class ClargsConan(ConanFile):
 	def requirements(self):
 		self.requires("utki/[>=1.1.202]@cppfw/main", transitive_headers=True, transitive_libs=True)
 
+	def build_requirements(self):
+		self.tool_requires("prorab/[>=2.0.27]@cppfw/main")
+		self.tool_requires("prorab-extra/[>=0.2.57]@cppfw/main")
+
 	def config_options(self):
 		if self.settings.os == "Windows":
 			del self.options.fPIC
@@ -44,8 +48,8 @@ class ClargsConan(ConanFile):
 		git.run("submodule update --init --remote --depth 1")
 
 	def build(self):
-		self.run("make lint=off")
-		self.run("make lint=off test")
+		self.run("make $MAKE_INCLUDE_DIRS_ARG lint=off")
+		self.run("make $MAKE_INCLUDE_DIRS_ARG lint=off test")
 
 	def package(self):
 		src_dir = os.path.join(self.build_folder, "src")
