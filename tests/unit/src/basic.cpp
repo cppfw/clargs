@@ -380,7 +380,7 @@ const tst::set set("basic", [](tst::suite& suite){
 		p.add('c', "ccc", "description", [&res](std::string_view str){res.push_back("c = "s.append(str));});
 		p.add('d', "ddd", "description", [&res](){res.emplace_back("d");});
 
-		p.add([&res = subres](std::string_view cmd, utki::span<const char* const> args){
+		p.add([&res = subres](std::string_view cmd, utki::span<std::string_view> args){
 			tst::check(!args.empty(), SL);
 			res.emplace_back(cmd);
 			clargs::parser sp;
@@ -431,7 +431,7 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		p.add([&res](std::string_view v){res.emplace_back(v);});
 
-		p.add([&res = subres](std::string_view cmd, utki::span<const char* const> args){
+		p.add([&res = subres](std::string_view cmd, utki::span<std::string_view> args){
 			tst::check(!args.empty(), SL);
 			res.emplace_back(cmd);
 			clargs::parser sp;

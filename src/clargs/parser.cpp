@@ -34,7 +34,7 @@ SOFTWARE.
 using namespace clargs;
 
 void parser::push_back_description(
-	char short_key,
+	char short_key, //
 	const std::string& long_key,
 	std::string description,
 	bool is_boolean,
@@ -72,7 +72,7 @@ void parser::push_back_description(
 }
 
 void parser::add_argument(
-	char short_key,
+	char short_key, //
 	std::string long_key,
 	std::string description,
 	std::function<void(std::string_view)> value_handler,
@@ -126,7 +126,10 @@ void parser::add_argument(
 	description_scope_exit.release();
 }
 
-std::string parser::get_long_key_for_short_key(char short_key, std::string&& long_key)
+std::string parser::get_long_key_for_short_key(
+	char short_key, //
+	std::string&& long_key
+)
 {
 	if (long_key.empty() && short_key != '\0') {
 		// key name cannot have spaces, so starting a long name with space makes
@@ -139,7 +142,10 @@ std::string parser::get_long_key_for_short_key(char short_key, std::string&& lon
 	return std::move(long_key);
 }
 
-std::string parser::description(unsigned keys_width, unsigned width) const
+std::string parser::description(
+	unsigned keys_width, //
+	unsigned width
+) const
 {
 	std::stringstream ss;
 
@@ -172,13 +178,28 @@ const std::string long_key_prefix = "--";
 const unsigned short_key_argument_size = 2;
 } // namespace
 
-std::vector<std::string> parser::parse(int argc, const char* const* argv)
+std::vector<std::string> parser::parse(
+	int argc, //
+	const char* const* argv
+)
 {
 	ASSERT(argc >= 1)
 	return this->parse(utki::make_span(argv, argc).subspan(1));
 }
 
 std::vector<std::string> parser::parse(utki::span<const char* const> args)
+{
+	std::vector<std::string_view> sv_args;
+	sv_args.reserve(args.size());
+
+	for (const auto& a : args) {
+		sv_args.emplace_back(a);
+	}
+
+	return this->parse(sv_args);
+}
+
+std::vector<std::string> parser::parse(utki::span<std::string_view> args)
 {
 	std::vector<std::string> ret;
 
@@ -313,7 +334,7 @@ void parser::stop()
 void parser::add(
 	std::function<void(
 		std::string_view command, //
-		utki::span<const char* const> args
+		utki::span<std::string_view> args
 	)> subcommand_handler
 )
 {

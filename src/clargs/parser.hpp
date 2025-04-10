@@ -55,13 +55,19 @@ public:
 	 * @param value_handler - callback function which is called to handle value of the argument.
 	 */
 	void add(
-		char short_key,
+		char short_key, //
 		std::string long_key,
 		std::string description,
 		std::function<void(std::string_view)> value_handler
 	)
 	{
-		this->add_argument(short_key, std::move(long_key), std::move(description), std::move(value_handler), nullptr);
+		this->add_argument(
+			short_key, //
+			std::move(long_key),
+			std::move(description),
+			std::move(value_handler),
+			nullptr
+		);
 	}
 
 	/**
@@ -72,9 +78,18 @@ public:
 	 * @param description - argument description.
 	 * @param value_handler - callback function which is called to handle value of the argument.
 	 */
-	void add(char short_key, std::string description, std::function<void(std::string_view)> value_handler)
+	void add(
+		char short_key, //
+		std::string description,
+		std::function<void(std::string_view)> value_handler
+	)
 	{
-		this->add(short_key, std::string(), std::move(description), std::move(value_handler));
+		this->add(
+			short_key, //
+			std::string(),
+			std::move(description),
+			std::move(value_handler)
+		);
 	}
 
 	/**
@@ -87,14 +102,14 @@ public:
 	 * @param default_value_handler - callback function which is called when the argument has no value given.
 	 */
 	void add(
-		std::string long_key,
+		std::string long_key, //
 		std::string description,
 		std::function<void(std::string_view)> value_handler,
 		std::function<void()> default_value_handler = nullptr
 	)
 	{
 		this->add_argument(
-			'\0',
+			'\0', //
 			std::move(long_key),
 			std::move(description),
 			std::move(value_handler),
@@ -112,9 +127,20 @@ public:
 	 * @param description - argument description.
 	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
-	void add(char short_key, std::string long_key, std::string description, std::function<void()> boolean_handler)
+	void add(
+		char short_key, //
+		std::string long_key,
+		std::string description,
+		std::function<void()> boolean_handler
+	)
 	{
-		this->add_argument(short_key, std::move(long_key), std::move(description), nullptr, std::move(boolean_handler));
+		this->add_argument(
+			short_key, //
+			std::move(long_key),
+			std::move(description),
+			nullptr,
+			std::move(boolean_handler)
+		);
 	}
 
 	/**
@@ -126,9 +152,18 @@ public:
 	 * @param description - argument description.
 	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
-	void add(char short_key, std::string description, std::function<void()> boolean_handler)
+	void add(
+		char short_key, //
+		std::string description,
+		std::function<void()> boolean_handler
+	)
 	{
-		this->add(short_key, std::string(), std::move(description), std::move(boolean_handler));
+		this->add(
+			short_key, //
+			std::string(),
+			std::move(description),
+			std::move(boolean_handler)
+		);
 	}
 
 	/**
@@ -140,9 +175,18 @@ public:
 	 * @param description - argument description.
 	 * @param boolean_handler - callback function which is called to handle the argument presence in the command line.
 	 */
-	void add(std::string long_key, std::string description, std::function<void()> boolean_handler)
+	void add(
+		std::string long_key, //
+		std::string description,
+		std::function<void()> boolean_handler
+	)
 	{
-		this->add('\0', std::move(long_key), std::move(description), std::move(boolean_handler));
+		this->add(
+			'\0', //
+			std::move(long_key),
+			std::move(description),
+			std::move(boolean_handler)
+		);
 	}
 
 	/**
@@ -172,7 +216,7 @@ public:
 	void add(
 		std::function<void(
 			std::string_view command, //
-			utki::span<const char* const> args
+			utki::span<std::string_view> args
 		)> subcommand_handler
 	);
 
@@ -196,6 +240,15 @@ public:
 	{
 		this->set_key_parsing(enable);
 	}
+
+	/**
+	 * @brief Parse command line arguments.
+	 * Parses the command line arguments.
+	 * @param args - array of command line arguments, NOT including the executable filename as first item.
+	 * @return array of non-key arguments, in case the non-key arguments handler is not added.
+	 * @return empty vector, in case the non-key arguments handler is added.
+	 */
+	std::vector<std::string> parse(utki::span<std::string_view> args);
 
 	/**
 	 * @brief Parse command line arguments.
@@ -232,7 +285,10 @@ public:
 	 * @param width - width in characters of key description area.
 	 * @return Formatted description of all the registered arguments.
 	 */
-	std::string description(unsigned keys_width = default_keys_width, unsigned width = default_description_width) const;
+	std::string description(
+		unsigned keys_width = default_keys_width, //
+		unsigned width = default_description_width
+	) const;
 
 private:
 	bool stop_parsing_requested = false;
@@ -257,14 +313,21 @@ private:
 
 	std::function<void(std::string_view)> non_key_handler;
 
-	std::function<void(std::string_view command, utki::span<const char* const>)> subcommand_handler;
+	std::function<void(
+		std::string_view command, //
+		utki::span<std::string_view>
+	)>
+		subcommand_handler;
 
 	std::vector<key_description> key_descriptions;
 
-	std::string get_long_key_for_short_key(char short_key, std::string&& long_key);
+	std::string get_long_key_for_short_key(
+		char short_key, //
+		std::string&& long_key
+	);
 
 	void push_back_description(
-		char short_key,
+		char short_key, //
 		const std::string& long_key,
 		std::string description,
 		bool is_boolean,
@@ -272,7 +335,7 @@ private:
 	);
 
 	void add_argument(
-		char short_key,
+		char short_key, //
 		std::string long_key,
 		std::string description,
 		std::function<void(std::string_view)> value_handler,
