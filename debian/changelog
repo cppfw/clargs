@@ -1,3 +1,9 @@
+libclargs (0.2.68) unstable; urgency=medium
+
+  * use string_view
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 10 Apr 2025 18:06:04 +0300
+
 libclargs (0.2.67) unstable; urgency=medium
 
   * conan: macos
