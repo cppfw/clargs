@@ -21,6 +21,7 @@ jobs:
         include:
           - {os: debian, codename: bookworm, image_owner: }
           - {os: debian, codename: bookworm, image_owner: arm32v7/, labels: [ubuntu-24.04-arm]}
+          - {os: debian, codename: bookworm, image_owner: arm64v8/, labels: [ubuntu-24.04-arm]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: sanitizer - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
@@ -73,7 +74,7 @@ jobs:
           - {os: ubuntu, codename: noble, image_owner: }
           # - {os: raspbian, codename: buster, image_owner: igagis/, labels: [ubuntu-24.04-arm]}
           # - {os: raspbian, codename: bullseye, image_owner: igagis/, labels: [ubuntu-24.04-arm]}
-          - {os: raspbian, codename: bookworm, image_owner: igagis/, labels: [ubuntu-24.04-arm]}
+          # - {os: raspbian, codename: bookworm, image_owner: igagis/, labels: [ubuntu-24.04-arm]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: linux - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
@@ -320,7 +321,7 @@ jobs:
           myci-vcpkg-prepare.sh --git-ref ${{ github.sha }}
       - name: test vcpkg port
         run: |
-          cd vcpkg/test
+          cd build/vcpkg/test
           cmake .
           make
           ./test
@@ -329,10 +330,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vcpkg_logs
-          path: vcpkg-installation/buildtrees/${{ env.PACKAGE_NAME }}/
+          path: |
+            vcpkg-installation/buildtrees/${{ env.PACKAGE_NAME }}/
+            build/vcpkg/**/*.log
       - name: deploy vcpkg port
         run: |
-          myci-deploy-vcpkg.sh --repo cppfw/vcpkg-repo --port-dir vcpkg/overlay/${PACKAGE_NAME}
+          myci-deploy-vcpkg.sh --repo cppfw/vcpkg-repo --port-dir build/vcpkg/overlay/${PACKAGE_NAME}
         if: startsWith(github.ref, 'refs/tags/')
 ##### conan - linux #####
   conan-linux:
@@ -343,8 +346,8 @@ jobs:
           # - {os: ubuntu, codename: noble, image_owner: }
           - {os: debian, codename: bookworm, image_owner: }
           # - {os: debian, codename: bookworm, image_owner: i386/, labels: [i386,docker]}
-          - {os: debian, codename: bookworm, image_owner: arm32v7/, labels: [ubuntu-24.04-arm]}
-          - {os: debian, codename: bookworm, image_owner: arm64v8/, labels: [ubuntu-24.04-arm]}
+          # - {os: debian, codename: bookworm, image_owner: arm32v7/, labels: [ubuntu-24.04-arm]}
+          # - {os: debian, codename: bookworm, image_owner: arm64v8/, labels: [ubuntu-24.04-arm]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: conan - linux | ${{ matrix.image_owner }}
