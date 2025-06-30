@@ -1,3 +1,9 @@
+libclargs (0.2.71) unstable; urgency=medium
+
+  * debian dbg package
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 30 Jun 2025 16:54:24 +0300
+
 libclargs (0.2.70) unstable; urgency=medium
 
   * cmake: config transient deps
