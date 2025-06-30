@@ -17,23 +17,42 @@ Standards-Version: 3.9.2
 Package: libclargs$(soname)
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends:
+	${shlibs:Depends},
+	${misc:Depends}
 Description: Cross-platform command line arguments parser library in C++.
- Library for easy parsing of command line arguments.
+	Library for easy parsing of command line arguments.
 
-Package: libclargs$(soname)-dbg
-Section: debug
+Package: libclargs-dbg$(soname)
+Section: libs
 Architecture: any
-Depends: libclargs$(soname) (= ${binary:Version}), ${misc:Depends}
-Description: debugging symbols for libclargs$(soname) package.
+Depends:
+	${shlibs:Depends},
+	${misc:Depends}
+Description: Cross-platform command line arguments parser library in C++.
+	Debug version of libclargs.
+
+Package: libclargs$(soname)-dbgsrc
+Section: debug
+Architecture: all
+Priority: extra
+Depends:
+	libclargs$(soname)-dbgsym (= ${binary:Version}),
+	libclargs-dbg$(soname)-dbgsym (= ${binary:Version}),
+	${misc:Depends}
+Description: debugging sources for libruis$(soname) package.
 
 Package: libclargs-dev
 Section: libdevel
 Architecture: any
-Depends: libutki-dev, libclargs$(soname) (= ${binary:Version}), libclargs$(soname)-dbg (= ${binary:Version}), ${misc:Depends}
+Depends:
+	libclargs$(soname) (= ${binary:Version}),
+	libclargs-dbg$(soname) (= ${binary:Version}),
+	${misc:Depends},
+	libutki-dev
 Suggests: libclargs-doc
 Description: Cross-platform command line arguments parser library in C++.
- Library for easy parsing of command line arguments.
+	Library for easy parsing of command line arguments.
 
 Package: libclargs-doc
 Section: doc

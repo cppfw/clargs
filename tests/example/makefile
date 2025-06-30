@@ -7,15 +7,14 @@ this_name := tests
 
 this_srcs += $(call prorab-src-dir, .)
 
-this_clargs_lib = ../../src/out/$(c)/libclargs$(dot_so)
+this__libclargs = ../../src/out/$(c)/libclargs$(this_dbg)$(dot_so)
 
-this_ldlibs += $(this_clargs_lib) -lutki
+this_ldlibs += -l utki$(this_dbg)
+this_ldlibs += $(this__libclargs)
 
 this_no_install := true
 
 $(eval $(prorab-build-app))
-
-$(eval $(call prorab-depend, $(prorab_this_name), $(this_clargs_lib)))
 
 this_test_deps := $(prorab_this_name)
 this_test_ld_path := ../../src/out/$(c)

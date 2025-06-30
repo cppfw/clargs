@@ -7,7 +7,7 @@ $(eval $(call prorab-config, ../../config))
 
 $(eval $(call prorab-depend, \
 		tst/src/out/$(tst_cfg)/libtst$(dot_so), \
-		../../src/out/$(c)/libclargs$(dot_so) \
+		../../src/out/$(c)/libclargs$(this_dbg)$(dot_so) \
 	))
 
 harness_old_cxxflags := $(CXXFLAGS)
