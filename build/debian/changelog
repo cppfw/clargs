@@ -1,3 +1,9 @@
+libclargs (0.2.72) unstable; urgency=medium
+
+  * debian trixie build
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 10 Aug 2025 00:44:12 +0300
+
 libclargs (0.2.71) unstable; urgency=medium
 
   * debian dbg package
