@@ -213,12 +213,10 @@ public:
 	 * Subcommand is only handled if key parsing is enabled, which is default (see set_key_parsing()).
 	 * @param subcommand_handler - handler callback for subcommand.
 	 */
-	void add(
-		std::function<void(
-			std::string_view command, //
-			utki::span<std::string_view> args
-		)> subcommand_handler
-	);
+	void add(std::function<void(
+				 std::string_view command,
+				 utki::span<std::string_view> args //
+			 )> subcommand_handler);
 
 	/**
 	 * @brief Enable or disable key arguments parsing.

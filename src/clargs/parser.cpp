@@ -331,12 +331,10 @@ void parser::stop()
 	this->stop_parsing_requested = true;
 }
 
-void parser::add(
-	std::function<void(
-		std::string_view command, //
-		utki::span<std::string_view> args
-	)> subcommand_handler
-)
+void parser::add(std::function<void(
+					 std::string_view command,
+					 utki::span<std::string_view> args //
+				 )> subcommand_handler)
 {
 	if (this->subcommand_handler) {
 		throw std::logic_error("subcommand handler is already added");
