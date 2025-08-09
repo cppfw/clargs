@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <clargs/parser.hpp>
 
 int main(int argc, const char** argv){
