@@ -1,3 +1,9 @@
+libclargs (0.2.73) unstable; urgency=medium
+
+  * vcpkg myci dep non-host
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 02 Nov 2025 22:02:15 +0200
+
 libclargs (0.2.72) unstable; urgency=medium
 
   * debian trixie build
