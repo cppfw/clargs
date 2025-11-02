@@ -10,4 +10,4 @@ Command line arguments parser in C++, cross platform.
 
 = Installation
 
-See link:wiki/Main.adoc[WiKi]
+See link:wiki/main.adoc[WiKi]
