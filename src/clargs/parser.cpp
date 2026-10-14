@@ -206,7 +206,11 @@ std::vector<std::string> parser::parse(utki::span<std::string_view> args)
 	for (auto i = args.begin(); i != args.end() && !this->stop_parsing_requested; ++i) {
 		std::string arg(*i);
 
-		if (this->is_key_parsing_enabled && arg.size() >= long_key_prefix.size() && arg.find(long_key_prefix) == 0) {
+		if (this->is_key_parsing_enabled &&
+			arg.size() >= long_key_prefix.size()
+			// NOLINTNEXTLINE(modernize-use-starts-ends-with, "std::string::starts_with is C++20, keep clargs C++17-compliant")
+			&& arg.find(long_key_prefix) == 0)
+		{
 			this->parse_long_key_argument(arg);
 		} else if (this->is_key_parsing_enabled && arg.size() >= short_key_argument_size && arg[0] == '-') {
 			auto h = this->parse_short_keys_batch(arg);
