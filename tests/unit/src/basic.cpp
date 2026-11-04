@@ -18,7 +18,7 @@ const tst::set set("basic", [](tst::suite& suite){
 			p.add('a', "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
-            tst::check_eq(std::string(e.what()), "argument with short key 'a' already exists"s, SL) << e.what();
+            tst::check_eq(std::string(e.what()), "argument with short key 'a' already exists"s, [&](auto& o){o << e.what();}, SL);
 		}
 		tst::check(exception_caught, SL);
     });
@@ -34,7 +34,7 @@ const tst::set set("basic", [](tst::suite& suite){
 			p.add("abrakadabra", "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
-			tst::check_eq(std::string(e.what()), "argument with long key 'abrakadabra' already exists"s, SL) << e.what();
+			tst::check_eq(std::string(e.what()), "argument with long key 'abrakadabra' already exists"s, [&](auto& o){o << e.what();}, SL);
 		}
 		tst::check(exception_caught, SL);
     });
@@ -50,7 +50,7 @@ const tst::set set("basic", [](tst::suite& suite){
 			p.add('a', "simsalabim", "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
-            tst::check_eq(std::string(e.what()), "argument with short key 'a' already exists"s, SL) << e.what();
+            tst::check_eq(std::string(e.what()), "argument with short key 'a' already exists"s, [&](auto& o){o << e.what();}, SL);
 		}
 		tst::check(exception_caught, SL);
     });
@@ -66,7 +66,7 @@ const tst::set set("basic", [](tst::suite& suite){
 			p.add('b', "abrakadabra", "description 2", [](std::string_view){});
 		}catch(std::logic_error& e){
 			exception_caught = true;
-			tst::check_eq(std::string(e.what()), "argument with long key 'abrakadabra' already exists"s, SL) << e.what();
+			tst::check_eq(std::string(e.what()), "argument with long key 'abrakadabra' already exists"s, [&](auto& o){o << e.what();}, SL);
 		}
 		tst::check(exception_caught, SL);
     });
@@ -106,11 +106,11 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		auto res = p.parse(utki::make_span(args));
 
-		tst::check_eq(a, unsigned(3), SL) << "a = " << a;
-		tst::check_eq(res.size(), size_t(3), SL) << " res.size() = " << res.size();
-		tst::check_eq(res[0], "--aaa"s, SL) << "res[0] = " << res[0];
-		tst::check_eq(res[1], "-a"s, SL) << "res[1] = " << res[1];
-		tst::check_eq(res[2], "--aaa"s, SL) << "res[2] = " << res[2];
+		tst::check_eq(a, unsigned(3), [&](auto& o){o << "a = " << a;}, SL);
+		tst::check_eq(res.size(), size_t(3), [&](auto& o){o << " res.size() = " << res.size();}, SL);
+		tst::check_eq(res[0], "--aaa"s, [&](auto& o){o << "res[0] = " << res[0];}, SL);
+		tst::check_eq(res[1], "-a"s, [&](auto& o){o << "res[1] = " << res[1];}, SL);
+		tst::check_eq(res[2], "--aaa"s, [&](auto& o){o << "res[2] = " << res[2];}, SL);
     });
 
     suite.add("enabling_of_key_arguemnts_parsing", []{
@@ -145,11 +145,11 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		p.parse(utki::make_span(args));
 
-		tst::check_eq(a, unsigned(3), SL) << "a = " << a;
-		tst::check_eq(res.size(), size_t(3), SL) << "res.size() = " << res.size();
-		tst::check_eq(res[0], "-a"s, SL) << "res[0] = " << res[0];
-		tst::check_eq(res[1], "--aaa"s, SL) << "res[1] = " << res[1];
-		tst::check_eq(res[2], "-a"s, SL) << "res[2] = " << res[2];
+		tst::check_eq(a, unsigned(3), [&](auto& o){o << "a = " << a;}, SL);
+		tst::check_eq(res.size(), size_t(3), [&](auto& o){o << "res.size() = " << res.size();}, SL);
+		tst::check_eq(res[0], "-a"s, [&](auto& o){o << "res[0] = " << res[0];}, SL);
+		tst::check_eq(res[1], "--aaa"s, [&](auto& o){o << "res[1] = " << res[1];}, SL);
+		tst::check_eq(res[2], "-a"s, [&](auto& o){o << "res[2] = " << res[2];}, SL);
     });
 
     suite.add("minus_minus_argument_disables_key_arguments_parsing", []{
@@ -173,12 +173,12 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		auto res = p.parse(utki::make_span(args));
 
-		tst::check_eq(a, unsigned(2), SL) << "a = " << a;
-		tst::check_eq(res.size(), size_t(4), SL) << "res.size() = " << res.size();
-		tst::check_eq(res[0], "-a"s, SL) << "res[0] = " << res[0];
-		tst::check_eq(res[1], "--aaa"s, SL) << "res[1] = " << res[1];
-		tst::check_eq(res[2], "-a"s, SL) << "res[2] = " << res[2];
-		tst::check_eq(res[3], "--aaa"s, SL) << "res[3] = " << res[3];
+		tst::check_eq(a, unsigned(2), [&](auto& o){o << "a = " << a;}, SL);
+		tst::check_eq(res.size(), size_t(4), [&](auto& o){o << "res.size() = " << res.size();}, SL);
+		tst::check_eq(res[0], "-a"s, [&](auto& o){o << "res[0] = " << res[0];}, SL);
+		tst::check_eq(res[1], "--aaa"s, [&](auto& o){o << "res[1] = " << res[1];}, SL);
+		tst::check_eq(res[2], "-a"s, [&](auto& o){o << "res[2] = " << res[2];}, SL);
+		tst::check_eq(res[3], "--aaa"s, [&](auto& o){o << "res[3] = " << res[3];}, SL);
     });
 
 	suite.add("override_minus_minus_argument_handling", []{
@@ -201,8 +201,8 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		auto res = p.parse(utki::make_span(args));
 
-		tst::check_eq(a, unsigned(6), SL) << "a = " << a;
-		tst::check_eq(res.size(), size_t(0), SL) << "res.size() = " << res.size();
+		tst::check_eq(a, unsigned(6), [&](auto& o){o << "a = " << a;}, SL);
+		tst::check_eq(res.size(), size_t(0), [&](auto& o){o << "res.size() = " << res.size();}, SL);
 	});
 
 	suite.add("parsing_of_unadded_minus_minus_equals_argument", []{
@@ -228,7 +228,7 @@ const tst::set set("basic", [](tst::suite& suite){
 			tst::check(false, SL);
 		}catch(std::invalid_argument& e){
 			exception_caught = true;
-			tst::check_eq(std::string(e.what()), "unknown argument: --="s, SL) << "e.what() = " << e.what();
+			tst::check_eq(std::string(e.what()), "unknown argument: --="s, [&](auto& o){o << "e.what() = " << e.what();}, SL);
 		}
 
 		tst::check(exception_caught, SL);
@@ -259,10 +259,7 @@ const tst::set set("basic", [](tst::suite& suite){
 			p.parse(utki::make_span(args));
 		}catch(std::invalid_argument& e){
 			exception_caught = true;
-			tst::check_eq(
-					std::string(e.what()),
-					"key argument '' is a boolean argument and cannot have value"s,
-				SL) << "e.what() = " << e.what();
+			tst::check_eq(std::string(e.what()), "key argument '' is a boolean argument and cannot have value"s, [&](auto& o){o << "e.what() = " << e.what();}, SL);
 		}
 
 		tst::check(!boolean_equals_handled, SL);
@@ -293,11 +290,11 @@ const tst::set set("basic", [](tst::suite& suite){
 		try{
 			p.parse(utki::make_span(args));
 		}catch(std::invalid_argument& e){
-			tst::check(false, SL) << "e.what() = " << e.what();
+			tst::check(false, [&](auto& o){o << "e.what() = " << e.what();}, SL);
 		}
-		tst::check_eq(res.size(), size_t(2), SL) << "res.size() = " << res.size();
-		tst::check_eq(res[0], ""s, SL) << "res[0] = " << res[0];
-		tst::check_eq(res[1], "blah blah"s, SL) << "res[1] = " << res[1];
+		tst::check_eq(res.size(), size_t(2), [&](auto& o){o << "res.size() = " << res.size();}, SL);
+		tst::check_eq(res[0], ""s, [&](auto& o){o << "res[0] = " << res[0];}, SL);
+		tst::check_eq(res[1], "blah blah"s, [&](auto& o){o << "res[1] = " << res[1];}, SL);
 	});
 
 	suite.add("parsing_of_concatenated_short_argument_and_its_value", []{
@@ -314,9 +311,9 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		p.parse(utki::make_span(args));
 
-		tst::check_eq(res.size(), size_t(2), SL) << "res.size() = " << res.size();
-		tst::check_eq(res[0], "blah"s, SL) << "res[0] = " << res[0];
-		tst::check_eq(res[1], "trololo"s, SL) << "res[1] = " << res[1];
+		tst::check_eq(res.size(), size_t(2), [&](auto& o){o << "res.size() = " << res.size();}, SL);
+		tst::check_eq(res[0], "blah"s, [&](auto& o){o << "res[0] = " << res[0];}, SL);
+		tst::check_eq(res[1], "trololo"s, [&](auto& o){o << "res[1] = " << res[1];}, SL);
 	});
 
 	suite.add("parsing_of_concatenated_boolean_arguments", []{
@@ -334,10 +331,10 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		p.parse(utki::make_span(args));
 
-		tst::check_eq(res.size(), size_t(3), SL) << "res.size() = " << res.size();
-		tst::check_eq(res[0], "a"s, SL) << "res[0] = " << res[0];
-		tst::check_eq(res[1], "b"s, SL) << "res[1] = " << res[1];
-		tst::check_eq(res[2], "c"s, SL) << "res[2] = " << res[2];
+		tst::check_eq(res.size(), size_t(3), [&](auto& o){o << "res.size() = " << res.size();}, SL);
+		tst::check_eq(res[0], "a"s, [&](auto& o){o << "res[0] = " << res[0];}, SL);
+		tst::check_eq(res[1], "b"s, [&](auto& o){o << "res[1] = " << res[1];}, SL);
+		tst::check_eq(res[2], "c"s, [&](auto& o){o << "res[2] = " << res[2];}, SL);
 	});
 
 	suite.add("parsing_of_concatenated_boolean_and_value_arguments", []{
@@ -356,10 +353,10 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		p.parse(utki::make_span(args));
 
-		tst::check_eq(res.size(), size_t(3), SL) << "res.size() = " << res.size();
-		tst::check_eq(res[0], "a"s, SL) << "res[0] = " << res[0];
-		tst::check_eq(res[1], "b"s, SL) << "res[1] = " << res[1];
-		tst::check_eq(res[2], "c = dkg"s, SL) << "res[2] = " << res[2];
+		tst::check_eq(res.size(), size_t(3), [&](auto& o){o << "res.size() = " << res.size();}, SL);
+		tst::check_eq(res[0], "a"s, [&](auto& o){o << "res[0] = " << res[0];}, SL);
+		tst::check_eq(res[1], "b"s, [&](auto& o){o << "res[1] = " << res[1];}, SL);
+		tst::check_eq(res[2], "c = dkg"s, [&](auto& o){o << "res[2] = " << res[2];}, SL);
 	});
 
 	suite.add("parsing_of_subcommands", []{
@@ -408,7 +405,7 @@ const tst::set set("basic", [](tst::suite& suite){
 			"h = h_val"
 		};
 
-		tst::check(subres == subexpected, SL) << "subres.size() = " << subres.size() << ", subexpected.size() = " << subexpected.size();
+		tst::check(subres == subexpected, [&](auto& o){o << "subres.size() = " << subres.size() << ", subexpected.size() = " << subexpected.size();}, SL);
 	});
 
 	suite.add("parsing_of_subcommands_when_key_parsing_is_disabled", []{
@@ -456,7 +453,7 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		tst::check(res == expected, SL);
 
-		tst::check(subres.empty(), SL) << "subres.size() = " << subres.size();
+		tst::check(subres.empty(), [&](auto& o){o << "subres.size() = " << subres.size();}, SL);
 	});
 
 	suite.add("stop_parsing", [](){
@@ -482,7 +479,7 @@ const tst::set set("basic", [](tst::suite& suite){
 
 		p.parse(utki::make_span(args));
 
-		tst::check_eq(a, unsigned(3), SL) << "a = " << a;
+		tst::check_eq(a, unsigned(3), [&](auto& o){o << "a = " << a;}, SL);
 	});
 });
 }
