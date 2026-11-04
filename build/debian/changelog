@@ -1,3 +1,9 @@
+libclargs (0.2.74) unstable; urgency=medium
+
+  * update
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 05 Nov 2026 01:30:01 +0200
+
 libclargs (0.2.73) unstable; urgency=medium
 
   * vcpkg myci dep non-host
