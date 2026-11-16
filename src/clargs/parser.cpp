@@ -91,9 +91,9 @@ void parser::add_argument(
 	if (this->arguments.find(actual_key) != this->arguments.end()) {
 		std::stringstream ss;
 		ss << "argument with ";
-		ASSERT(!actual_key.empty())
+		utki::assert(!actual_key.empty(), SL);
 		if (actual_key.front() == ' ') {
-			ASSERT(actual_key.size() == 2)
+			utki::assert(actual_key.size() == 2, SL);
 			ss << "short key '" << actual_key[1] << "'";
 		} else {
 			ss << "long key '" << actual_key << "'";
@@ -106,7 +106,7 @@ void parser::add_argument(
 		// NOLINTNEXTLINE(modernize-use-designated-initializers, "needs C++20, while we use C++17")
 		std::make_pair(std::move(actual_key), argument_callbacks{std::move(value_handler), std::move(boolean_handler)})
 	);
-	ASSERT(res.second)
+	utki::assert(res.second, SL);
 
 	utki::scope_exit argument_scope_exit([&res, this] {
 		this->arguments.erase(res.first);
@@ -161,7 +161,7 @@ std::string parser::description(
 
 		auto lines = utki::word_wrap(d.description, width);
 
-		ASSERT(lines.size() >= 1)
+		utki::assert(lines.size() >= 1, SL);
 
 		ss << lines.front() << std::endl;
 
@@ -183,7 +183,7 @@ std::vector<std::string> parser::parse(
 	const char* const* argv
 )
 {
-	ASSERT(argc >= 1)
+	utki::assert(argc >= 1, SL);
 	return this->parse(utki::make_span(argv, argc).subspan(1));
 }
 
@@ -228,14 +228,14 @@ std::vector<std::string> parser::parse(utki::span<std::string_view> args)
 		} else {
 			if (this->is_key_parsing_enabled && this->subcommand_handler) {
 				auto cmd_index = std::distance(args.begin(), i);
-				ASSERT(cmd_index >= 0)
-				ASSERT(size_t(cmd_index) < args.size())
+				utki::assert(cmd_index >= 0, SL);
+				utki::assert(size_t(cmd_index) < args.size(), SL);
 				++cmd_index;
 				this->subcommand_handler( //
 					std::string_view(*i),
 					args.subspan(cmd_index)
 				);
-				ASSERT(ret.empty())
+				utki::assert(ret.empty(), SL);
 				return ret;
 			} else {
 				if (this->non_key_handler) {
@@ -272,11 +272,11 @@ void parser::parse_long_key_argument(std::string_view arg)
 		auto key = arg.substr(long_key_prefix.size());
 		auto i = this->arguments.find(key);
 		if (i != this->arguments.end()) {
-			ASSERT(i->second.boolean_handler)
+			utki::assert(i->second.boolean_handler, SL);
 			i->second.boolean_handler();
 			return;
 		} else if (arg.size() == 2) {
-			ASSERT(arg == "--")
+			utki::assert(arg == "--", SL);
 			// default handling of '--' argument is disabling key arguments parsing
 			this->set_key_parsing(false);
 			return;
@@ -289,7 +289,7 @@ void parser::parse_long_key_argument(std::string_view arg)
 
 std::function<void(std::string_view)>* parser::parse_short_keys_batch(std::string_view arg)
 {
-	ASSERT(arg.size() > 1)
+	utki::assert(arg.size() > 1, SL);
 	for (unsigned i = 1; i != arg.size(); ++i) {
 		auto key = arg[i];
 
@@ -315,16 +315,16 @@ std::function<void(std::string_view)>* parser::parse_short_keys_batch(std::strin
 		auto& h = iter->second;
 
 		if (!h.boolean_handler) {
-			ASSERT(h.value_handler)
+			utki::assert(h.value_handler, SL);
 			++i;
 			if (i == arg.size()) {
 				return &h.value_handler;
 			}
-			ASSERT(i < arg.size())
+			utki::assert(i < arg.size(), SL);
 			h.value_handler(arg.substr(i));
 			break;
 		}
-		ASSERT(!iter->second.value_handler)
+		utki::assert(!iter->second.value_handler, SL);
 		iter->second.boolean_handler();
 	}
 	return nullptr;
