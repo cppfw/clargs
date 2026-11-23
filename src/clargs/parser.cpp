@@ -272,7 +272,7 @@ void parser::parse_long_key_argument(std::string_view arg)
 		auto key = arg.substr(long_key_prefix.size());
 		auto i = this->arguments.find(key);
 		if (i != this->arguments.end()) {
-			utki::assert(i->second.boolean_handler, SL);
+			utki::assert(i->second.boolean_handler != nullptr, SL);
 			i->second.boolean_handler();
 			return;
 		} else if (arg.size() == 2) {
@@ -315,7 +315,7 @@ std::function<void(std::string_view)>* parser::parse_short_keys_batch(std::strin
 		auto& h = iter->second;
 
 		if (!h.boolean_handler) {
-			utki::assert(h.value_handler, SL);
+			utki::assert(h.value_handler != nullptr, SL);
 			++i;
 			if (i == arg.size()) {
 				return &h.value_handler;
